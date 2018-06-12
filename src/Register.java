@@ -24,6 +24,11 @@ public class Register {
         this.default_value = "00000000000000000000000000000000";
     }
 
+    public Register() {
+        this.data_out = "00000000000000000000000000000000";
+        this.default_value = "00000000000000000000000000000000";
+    }
+
     public String getData_out() {
         return data_out;
     }
