@@ -36,6 +36,17 @@ public class ALU {
         return "00000000000000000000000000000000";
     }
 
+    public boolean N(String data) {
+        return data.charAt(0) == '1';
+    }
+
+    public boolean Z(String data) {
+        for (int i = 0; i < data.length(); i++)
+            if (data.charAt(i) == '1')
+                return false;
+        return true;
+    }
+
     // op = add | and | subtract | negate | or | not | sign extend
     // unary operations use data1
     private String operation(String data1, String data2, String op) {
