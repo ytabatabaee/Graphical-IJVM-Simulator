@@ -19,11 +19,11 @@ public class ALU {
         if (control.equals("110101"))
             return utility.operation(data2, "1", "add");
         if (control.equals("111111"))
-            return utility.operation(data2, data1, "subtract");
+            return utility.operation(data2, data1, "sub");
         if (control.equals("110110"))
-            return utility.operation(data2, "1", "subtract");
+            return utility.operation(data2, "1", "sub");
         if (control.equals("111011"))
-            return utility.operation(data1, data2, "negate");
+            return utility.operation(data1, data2, "neg");
         if (control.equals("001100"))
             return utility.operation(data1, data2, "and");
         if (control.equals("011100"))

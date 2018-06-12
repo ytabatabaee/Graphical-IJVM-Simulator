@@ -9,7 +9,7 @@ public class Register {
         else if (INC)
             data_out = utility.operation(data_out, "1", "add");
         else if (DEC)
-            data_out = utility.operation(data_out, "1", "subtract");
+            data_out = utility.operation(data_out, "1", "sub");
         else if (reset)
             data_out = default_value;
     }

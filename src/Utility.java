@@ -22,7 +22,7 @@ public class Utility {
         return res;
     }
 
-    // op = add | and | subtract | negate | or | not | sign extend
+    // op = add | and | sub | neg | or | not | sign extend
     // unary operations use data1
     public String operation(String data1, String data2, String op) {
         if (op.equals("not")) {
@@ -34,7 +34,7 @@ public class Utility {
                     res += '0';
             }
             return res;
-        } else if (op.equals("negate")) {
+        } else if (op.equals("neg")) {
             String res = operation(data1, data2, "not");
             res = operation(res, "1", "add");
             return res;
@@ -45,7 +45,7 @@ public class Utility {
             int res = 0;
             if (op.equals("add"))
                 res = dataInt1 + dataInt2;
-            else if (op.equals("subtract"))
+            else if (op.equals("sub"))
                 res = dataInt1 - dataInt2;
             else if (op.equals("and"))
                 res = dataInt1 & dataInt2;
