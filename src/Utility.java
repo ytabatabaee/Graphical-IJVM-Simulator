@@ -39,9 +39,8 @@ public class Utility {
             res = operation(res, "1", "add");
             return res;
         } else {
-            Utility utility = new Utility();
-            int dataInt1 = utility.binaryToInt(data1);
-            int dataInt2 = utility.binaryToInt(data2);
+            int dataInt1 = binaryToInt(data1);
+            int dataInt2 = binaryToInt(data2);
             int res = 0;
             if (op.equals("add"))
                 res = dataInt1 + dataInt2;
@@ -51,7 +50,7 @@ public class Utility {
                 res = dataInt1 & dataInt2;
             else if (op.equals("or"))
                 res = dataInt1 | dataInt2;
-            return utility.intToBinary(res);
+            return intToBinary(res);
         }
     }
 }
