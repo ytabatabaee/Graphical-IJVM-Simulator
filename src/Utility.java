@@ -12,14 +12,7 @@ public class Utility {
     }
 
     public String intToBinary(int dec) {
-        String res = "";
-        String binary = Integer.toBinaryString(dec);
-        int length = 32 - binary.length();
-        char c = dec < 0 ? '1' : '0';
-        for (int i = 0; i < length; i++)
-            res += c;
-        res += binary;
-        return res;
+        return extend(Integer.toBinaryString(dec), dec < 0);
     }
 
     // op = add | and | sub | neg | or | not
@@ -52,5 +45,15 @@ public class Utility {
                 res = dataInt1 | dataInt2;
             return intToBinary(res);
         }
+    }
+
+    public String extend(String data, boolean sign) {
+        String res = "";
+        int length = 32 - data.length();
+        char c = sign ? '1' : '0';
+        for (int i = 0; i < length; i++)
+            res += c;
+        res += data;
+        return res;
     }
 }
