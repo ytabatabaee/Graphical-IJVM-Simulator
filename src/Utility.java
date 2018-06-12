@@ -22,5 +22,37 @@ public class Utility {
         return res;
     }
 
+    // op = add | and | subtract | negate | or | not | sign extend
+    // unary operations use data1
+    public String operation(String data1, String data2, String op) {
+        if (op.equals("not")) {
+            String res = "";
+            for (int i = 0; i < data1.length(); i++) {
+                if (data1.charAt(i) == '0')
+                    res += '1';
+                else if (data1.charAt(i) == '1')
+                    res += '0';
+            }
+            return res;
+        } else if (op.equals("negate")) {
+            String res = operation(data1, data2, "not");
+            res = operation(res, "1", "add");
+            return res;
+        } else {
+            Utility utility = new Utility();
+            int dataInt1 = utility.binaryToInt(data1);
+            int dataInt2 = utility.binaryToInt(data2);
+            int res = 0;
+            if (op.equals("add"))
+                res = dataInt1 + dataInt2;
+            else if (op.equals("subtract"))
+                res = dataInt1 - dataInt2;
+            else if (op.equals("and"))
+                res = dataInt1 & dataInt2;
+            else if (op.equals("or"))
+                res = dataInt1 | dataInt2;
+            return utility.intToBinary(res);
+        }
+    }
 
 }
