@@ -54,5 +54,4 @@ public class Utility {
             return utility.intToBinary(res);
         }
     }
-
 }
