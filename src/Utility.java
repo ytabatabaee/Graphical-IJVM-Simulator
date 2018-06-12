@@ -22,7 +22,7 @@ public class Utility {
         return res;
     }
 
-    // op = add | and | sub | neg | or | not | sign extend
+    // op = add | and | sub | neg | or | not
     // unary operations use data1
     public String operation(String data1, String data2, String op) {
         if (op.equals("not")) {
