@@ -1,6 +1,9 @@
 public class Main {
     public static void main(String[] args) {
-        String res = "110011001100";
-        System.out.println(res.substring(4, 10));
+        String a = "mama";
+        String b = "baba";
+        String c = b;
+        b = "qw";
+        System.out.println(c);
     }
 }
