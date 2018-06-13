@@ -2,16 +2,21 @@ public class Register {
     private String data_out;
     final private String default_value;
 
-    public void signals(String data_in, boolean LD, boolean INC, boolean DEC, boolean reset) {
+    public void signals(String data_in, boolean LD, boolean INC, boolean DEC,
+                        boolean INC4, boolean DEC4, boolean reset) {
         Utility utility = new Utility();
-        if (LD)
+        if (reset)
+            data_out = default_value;
+        else if (LD)
             data_out = data_in;
         else if (INC)
             data_out = utility.operation(data_out, "1", "add");
         else if (DEC)
             data_out = utility.operation(data_out, "1", "sub");
-        else if (reset)
-            data_out = default_value;
+        else if (INC4)
+            data_out = utility.operation(data_out, "4", "add");
+        else if (DEC4)
+            data_out = utility.operation(data_out, "4", "sub");
     }
 
     public Register(String data_in, String default_value) {
