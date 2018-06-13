@@ -13,6 +13,10 @@ public class ControlUnit {
         T = decoder.decode(sequenceCounter.getSc());
     }
 
+    public void count(boolean sc_reset, boolean ready, boolean reset) {
+        sequenceCounter.signals(sc_reset, ready, reset);
+    }
+
     private void instruction_decoding(String IR) {
         if (T[3]) {
             boolean IR4 = IR.charAt(index(4)) == '1';
@@ -128,4 +132,146 @@ public class ControlUnit {
         return res;
     }
 
+    public boolean Z_en() {
+        return (L[3] & F[0] & T[7]) |
+                (L[3] & F[3] & T[10]);
+    }
+
+    public boolean N_en() {
+        return (L[3] & F[1] & T[7]);
+    }
+
+    public boolean SP_ADD4() {
+        return (L[1] & F[4] & T[4]) |
+                (L[1] & F[6] & T[4]) |
+                (L[2] & F[7] & T[4]) |
+                (L[3] & F[0] & T[4]) |
+                (L[3] & F[1] & T[4]) |
+                (L[3] & F[3] & T[4]) |
+                (L[3] & F[3] & T[7]);
+
+    }
+
+    public boolean SP_SUB4() {
+        return (L[2] & F[0] & T[4]) |
+                (L[2] & F[2] & T[4]);
+
+    }
+
+    public boolean DR1_LD(boolean ready) {
+        return (L[1] & F[4] & T[6] & ready) |
+                (L[1] & F[6] & T[6] & ready) |
+                (L[2] & F[2] & T[4]) |
+                (L[2] & F[7] & T[7]) |
+                (L[3] & F[2] & T[4]) |
+                (L[3] & F[2] & T[7] & ready) |
+                (L[3] & F[7] & T[4]) |
+                (L[3] & F[0] & T[7]) |
+                (L[3] & F[1] & T[7]) |
+                (L[3] & F[3] & T[6] & ready) |
+                (L[3] & F[3] & T[10]);
+    }
+
+    public boolean DR2_LD(boolean ready) {
+        return (L[1] & F[4] & T[9] & ready) |
+                (L[1] & F[6] & T[9] & ready) |
+                (L[3] & F[2] & T[8]) |
+                (L[3] & F[0] & T[6] & ready) |
+                (L[3] & F[1] & T[6] & ready) |
+                (L[3] & F[3] & T[9] & ready);
+    }
+
+    public boolean AR_LD() {
+        return (T[0]) |
+                (L[1] & F[4] & T[4]) |
+                (L[1] & F[4] & T[7]) |
+                (L[1] & F[6] & T[4]) |
+                (L[1] & F[6] & T[7]) |
+                (L[2] & F[0] & T[5]) |
+                (L[2] & F[2] & T[5]) |
+                (L[2] & F[2] & T[8]) |
+                (L[2] & F[7] & T[4]) |
+                (L[2] & F[7] & T[8]) |
+                (L[3] & F[2] & T[5]) |
+                (L[3] & F[0] & T[4]) |
+                (L[3] & F[1] & T[4]) |
+                (L[3] & F[3] & T[4]) |
+                (L[3] & F[3] & T[7]);
+    }
+
+    public boolean WD_LD(boolean ready) {
+        return (L[1] & F[4] & T[10]) |
+                (L[1] & F[6] & T[10]) |
+                (L[2] & F[0] & T[4]) |
+                (L[2] & F[2] & T[7] & ready) |
+                (L[2] & F[7] & T[6] & ready) |
+                (L[3] & F[2] & T[9]);
+    }
+
+    public boolean ST_val() {
+        return (T[0]) |
+                (L[1] & F[4] & T[4]) |
+                (L[1] & F[4] & T[7]) |
+                (L[1] & F[4] & T[10]) |
+                (L[1] & F[6] & T[4]) |
+                (L[1] & F[6] & T[10]) |
+                (L[1] & F[6] & T[7]) |
+                (L[2] & F[0] & T[5]) |
+                (L[2] & F[2] & T[5]) |
+                (L[2] & F[2] & T[8]) |
+                (L[2] & F[7] & T[4]) |
+                (L[2] & F[7] & T[8]) |
+                (L[3] & F[2] & T[5]) |
+                (L[3] & F[2] & T[9]) |
+                (L[3] & F[0] & T[4]) |
+                (L[3] & F[1] & T[4]) |
+                (L[3] & F[3] & T[4]) |
+                (L[3] & F[3] & T[7]);
+    }
+
+    public boolean RW_val() {
+        return (T[0]) |
+                (L[1] & F[4] & T[4]) |
+                (L[1] & F[4] & T[7]) |
+                (L[1] & F[6] & T[4]) |
+                (L[1] & F[6] & T[7]) |
+                (L[2] & F[2] & T[5]) |
+                (L[2] & F[7] & T[4]) |
+                (L[3] & F[2] & T[5]) |
+                (L[3] & F[0] & T[4]) |
+                (L[3] & F[1] & T[4]) |
+                (L[3] & F[3] & T[4]) |
+                (L[3] & F[3] & T[7]);
+    }
+
+    public boolean PC_LD(boolean Z, boolean N) {
+        return (L[3] & F[7] & T[6]) |
+                (L[3] & F[0] & T[8] & Z) |
+                (L[3] & F[1] & T[8] & N) |
+                (L[3] & F[3] & T[11] & Z);
+    }
+
+    public boolean PC_INC() {
+        return (T[0]) |
+                (L[2] & T[4]) |
+                (L[3] & T[4]) |
+                (L[3] & T[5]);
+    }
+
+    public boolean IR_LD(boolean ready) {
+        return (T[2] & ready);
+    }
+
+    public String extractor_sel() {
+        boolean ext_const = L[3] & F[2] & T[8];
+        boolean ext_varOffset = (L[2] & F[2] & T[4]) |
+                (L[2] & F[7] & T[7]) |
+                (L[3] & F[2] & T[4]);
+        boolean ext_byte = L[2] & F[0] & T[4];
+        boolean[] ext_sel = {(ext_const | ext_byte), (ext_varOffset | ext_byte)};
+        char[] c = {ext_sel[0] ? '1' : '0', ext_sel[1] ? '1' : '0'};
+        String res = "";
+        res += c[1] + c[0];
+        return res;
+    }
 }
