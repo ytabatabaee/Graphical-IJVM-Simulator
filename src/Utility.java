@@ -50,7 +50,7 @@ public class Utility {
     public String extend(String data, boolean sign) {
         String res = "";
         int length = 32 - data.length();
-        char c = sign ? '1' : '0';
+        char c = sign ? data.charAt(0) : '0';
         for (int i = 0; i < length; i++)
             res += c;
         res += data;
