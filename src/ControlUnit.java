@@ -8,16 +8,20 @@ public class ControlUnit {
         return 31 - x;
     }
 
-    private void time_signals() {
+    public void time_signals() {
         Decoder decoder = new Decoder();
         T = decoder.decode(sequenceCounter.getSc());
+    }
+
+    public String sc_val() {
+        return sequenceCounter.getSc();
     }
 
     public void count(boolean sc_reset, boolean ready, boolean reset) {
         sequenceCounter.signals(sc_reset, ready, reset);
     }
 
-    private void instruction_decoding(String IR) {
+    public void instruction_decoding(String IR) {
         if (T[3]) {
             boolean IR4 = IR.charAt(index(4)) == '1';
             boolean IR7 = IR.charAt(index(7)) == '1';

@@ -20,7 +20,7 @@ public class DataPath {
     private boolean ALU_Z;
     private boolean ALU_N;
 
-    public void update(boolean AR_LD, boolean WD_LD, boolean DR1_LD, boolean DR2_LD, boolean PC_LD, boolean IR_LD,
+    public void signals(boolean AR_LD, boolean WD_LD, boolean DR1_LD, boolean DR2_LD, boolean PC_LD, boolean IR_LD,
                        boolean SP_SUB4, boolean SP_ADD4, boolean reset, boolean ST_val, boolean RW_val, boolean Z_en,
                        boolean N_en, String bus_sel, String ext_sel, String memory_data, String ALU_D2sel,
                        String ALU_control) {
@@ -89,5 +89,5 @@ public class DataPath {
     public boolean N() {
         return N.isValue();
     }
-    
+
 }
