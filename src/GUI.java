@@ -1,7 +1,11 @@
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -9,38 +13,63 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * Created by y.tabatabaee on 7/7/2018.
  */
 public class GUI extends Application {
+
+    Button chooseFile = new Button("Input Code");
+    Button run = new Button("   Run   ");
+    Button stop = new Button("   Stop   ");
+    Button step = new Button("   Step   ");
+    Button reset = new Button("   Reset   ");
+    String buttonStyle = "";
+    String labelStyle = "";
+    TextArea codeArea = new TextArea();
+    TextArea stackArea = new TextArea();
+    TextArea constantArea = new TextArea();
+    TextArea varArea = new TextArea();
     @Override
     public void start(Stage primaryStage) throws Exception {
+        setStyleSheets();
         CPU cpu = new CPU();
-        GridPane root = new GridPane();
+        Group root = new Group();
         GridPane regRoot = new GridPane();
         GridPane buttonRoot = new GridPane();
-        gridpanePlacement(regRoot);
-        gridpanePlacement(buttonRoot);
-        gridpanePlacement(root);
-        root.add(regRoot, 0, 0);
-        root.add(buttonRoot, 0, 4);
-        Scene scene = new Scene(root ,1000, 600, Color.DARKGRAY);
+        gridpanePlacement(regRoot, 5, 10);
+        gridpanePlacement(buttonRoot, 20, 430);
+        root.getChildren().add(regRoot);
+        root.getChildren().add(buttonRoot);
+        Scene scene = new Scene(root ,1000, 650, Color.DARKGRAY);
         registers(regRoot, cpu);
         code(buttonRoot, cpu, primaryStage);
-        //codeArea(root, cpu, primaryStage);
+        codeArea(root, cpu, primaryStage);
         primaryStage.getIcons().add(new Image("images/icon.png"));
         primaryStage.setTitle("JVM Emulator");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    public void gridpanePlacement(GridPane root){
+    public void setStyleSheets(){
+        try {
+            labelStyle = new String(Files.readAllBytes(Paths.get("src/styleSheets/label.txt")));
+            buttonStyle = new String(Files.readAllBytes(Paths.get("src/styleSheets/button.txt")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void gridpanePlacement(GridPane root, int x, int y){
         root.setVgap(10);
         root.setHgap(10);
+        root.relocate(x, y);
 
     }
 
@@ -66,6 +95,17 @@ public class GUI extends Application {
         Label dr1Label = new Label("DR1");
         Label dr2Label = new Label("DR2");
         Label wdLabel = new Label("WD");
+
+        regLabel.setStyle(labelStyle);
+        pcLabel.setStyle(labelStyle);
+        arLabel.setStyle(labelStyle);
+        irLabel.setStyle(labelStyle);
+        spLabel.setStyle(labelStyle);
+        lvLabel.setStyle(labelStyle);
+        cppLabel.setStyle(labelStyle);
+        dr1Label.setStyle(labelStyle);
+        dr2Label.setStyle(labelStyle);
+        wdLabel.setStyle(labelStyle);
 
         pc.setEditable(false);
         ar.setEditable(false);
@@ -110,29 +150,30 @@ public class GUI extends Application {
     }
 
     public void code(GridPane root, CPU cpu, Stage stage) {
-        Button chooseFile = new Button("Input Code");
-        Button run = new Button("   Run   ");
-        Button stop = new Button("   Stop   ");
-        Button step = new Button("   Step   ");
-        Button reset = new Button("   Reset   ");
         chooseFile.setOnAction((ActionEvent event) -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setInitialDirectory(new File("src/tests"));
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
             fileChooser.getExtensionFilters().add(extFilter);
             File file = fileChooser.showOpenDialog(stage);
+            ArrayList<String> codeLines = new ArrayList<>();
+            try {
+                Scanner input = new Scanner(file);
+                while (input.hasNextLine()){
+                    String line = input.nextLine();
+                    codeLines.add(line);
+                    codeArea.appendText((codeLines.size()+127) + ".     " + line + "\n");
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         });
         root.add(chooseFile, 1, 15);
         root.add(run, 2, 15);
         root.add(stop, 3, 15);
         root.add(step, 4, 15);
         root.add(reset, 5, 15);
-        String buttonStyle = "";
-        try {
-            buttonStyle = new String(Files.readAllBytes(Paths.get("src/styleSheets/button.txt")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         chooseFile.setStyle(buttonStyle);
         run.setStyle(buttonStyle);
         stop.setStyle(buttonStyle);
@@ -140,14 +181,29 @@ public class GUI extends Application {
         reset.setStyle(buttonStyle);
     }
 
-    public static void codeArea(GridPane root, CPU cpu, Stage stage){
-        TableView tableView = new TableView();
-        tableView.setEditable(false);
-        TableColumn pc = new TableColumn("PC");
-        TableColumn code = new TableColumn("Instructions");
-        tableView.getColumns().addAll(pc, code);
-        root.add(tableView, 3, 0);
-
+    public void codeArea(Group root, CPU cpu, Stage stage){
+        root.getChildren().addAll(codeArea, stackArea, constantArea, varArea);
+        codeArea.setPrefSize(300, 200);
+        stackArea.setPrefSize(90, 150);
+        constantArea.setPrefSize(90, 150);
+        varArea.setPrefSize(90, 150);
+        codeArea.relocate(250, 35);
+        stackArea.relocate(250, 270);
+        constantArea.relocate(350, 270);
+        varArea.relocate(450, 270);
+        Label codeLabel = new Label("Instructions");
+        Label stackLabel = new Label("Stack");
+        Label constLabel = new Label("Constant Pool");
+        Label varLabel = new Label("Local Variables");
+        root.getChildren().addAll(codeLabel, stackLabel, constLabel, varLabel);
+        codeLabel.relocate(250, 12);
+        stackLabel.relocate(270, 250);
+        constLabel.relocate(350, 250);
+        varLabel.relocate(450, 250);
+        codeLabel.setStyle(labelStyle);
+        stackLabel.setStyle(labelStyle);
+        constLabel.setStyle(labelStyle);
+        varLabel.setStyle(labelStyle);
     }
 
 
