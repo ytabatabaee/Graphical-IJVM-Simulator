@@ -21,9 +21,9 @@ public class DataPath {
     private boolean ALU_N;
 
     public void signals(boolean AR_LD, boolean WD_LD, boolean DR1_LD, boolean DR2_LD, boolean PC_LD, boolean IR_LD,
-                       boolean SP_SUB4, boolean SP_ADD4, boolean reset, boolean ST_val, boolean RW_val, boolean Z_en,
-                       boolean N_en, String bus_sel, String ext_sel, String memory_data, String ALU_D2sel,
-                       String ALU_control) {
+                        boolean SP_SUB4, boolean SP_ADD4, boolean reset, boolean ST_val, boolean RW_val, boolean Z_en,
+                        boolean N_en, boolean PC_INC, String bus_sel, String ext_sel, String memory_data,
+                        String ALU_D2sel, String ALU_control) {
         boolean[] bus_select = decoder.decode(bus_sel);
         String Lbus = bus;
         boolean LALU_Z = ALU_Z;
@@ -51,7 +51,7 @@ public class DataPath {
         WD.signals(Lbus, WD_LD, false, false, false, false, reset);
         DR1.signals(Lbus, DR1_LD, false, false, false, false, reset);
         DR2.signals(Lbus, DR2_LD, false, false, false, false, reset);
-        PC.signals(Lbus, PC_LD, false, false, false, false, reset);
+        PC.signals(Lbus, PC_LD, PC_INC, false, false, false, reset);
         CPP.signals(Lbus, false, false, false, false, false, reset);
         LV.signals(Lbus, false, false, false, false, false, reset);
         SP.signals(Lbus, false, false, false, SP_ADD4, SP_SUB4, reset);
