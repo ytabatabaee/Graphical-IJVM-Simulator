@@ -90,4 +90,43 @@ public class DataPath {
         return N.isValue();
     }
 
+    public Register getAR() {
+        return AR;
+    }
+
+    public Register getWD() {
+        return WD;
+    }
+
+    public Register getDR1() {
+        return DR1;
+    }
+
+    public Register getDR2() {
+        return DR2;
+    }
+
+    public Register getPC() {
+        return PC;
+    }
+
+    public Register getCPP() {
+        return CPP;
+    }
+
+    public Register getLV() {
+        return LV;
+    }
+
+    public Register getSP() {
+        return SP;
+    }
+
+    public Register getIR() {
+        return IR;
+    }
+
+    public String getBus() {
+        return bus;
+    }
 }

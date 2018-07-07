@@ -27,4 +27,12 @@ public class CPU {
                 controlUnit.bus_sel(dataPath.Z(), dataPath.N()), controlUnit.extractor_sel(), data_in,
                 controlUnit.ALU_D2sel(dataPath.Z(), dataPath.N()), controlUnit.ALU_control(dataPath.Z(), dataPath.N()));
     }
+
+    public ControlUnit getControlUnit() {
+        return controlUnit;
+    }
+
+    public DataPath getDataPath() {
+        return dataPath;
+    }
 }
