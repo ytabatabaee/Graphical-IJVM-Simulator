@@ -7,6 +7,7 @@ public class Memory {
     private String counter = "";
     private Utility utility;
     private String data_out = "";
+    private boolean ready;
 
     public Memory() {
         this.cell = new String[512];
@@ -26,6 +27,7 @@ public class Memory {
                 data_t = data_in;
                 counter = "" + address.charAt(1) + address.charAt(0);
                 state = true;
+                ready = false;
             } else if ((counter.charAt(1) == '1' || counter.charAt(0) == '1') && state) {
                 String cnt = utility.operation(counter, "1", "sub");
                 counter = "" + cnt.charAt(1) + cnt.charAt(0);
@@ -44,8 +46,13 @@ public class Memory {
                     }
                 }
                 state = false;
+                ready = true;
             }
         }
         return data_out;
+    }
+
+    public boolean isReady() {
+        return ready;
     }
 }

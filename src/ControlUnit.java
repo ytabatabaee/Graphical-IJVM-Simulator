@@ -2,7 +2,7 @@ public class ControlUnit {
     private boolean[] T = new boolean[16];
     private boolean[] D = new boolean[8];
     private boolean[] IR = new boolean[32];
-    Utility utility = new Utility();
+    private Utility utility = new Utility();
     private SequenceCounter sequenceCounter = new SequenceCounter();
 
     private int index(int x) {
@@ -203,6 +203,5 @@ public class ControlUnit {
     public boolean IR_LD(boolean ready) {
         return (T[2] & ready);
     }
-
 
 }
