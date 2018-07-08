@@ -45,12 +45,12 @@ public class DataPath {
         } else if (bus_select[6]) {
             bus = DR2.getData_out();
         }*/
-        AR.signals(Lbus, AR_LD, false, false, false, false, reset);
-        PC.signals(Lbus, PC_LD, PC_INC, false, false, false, reset);
-        CPP.signals(Lbus, false, false, false, false, false, reset);
-        LV.signals(Lbus, false, false, false, false, false, reset);
-        SP.signals(Lbus, false, false, false, SP_ADD4, SP_SUB4, reset);
-        IR.signals(Lbus, IR_LD, false, false, false, false, reset);
+        AR.signals(Lbus, AR_LD, false, false, false, false, false, reset);
+        PC.signals(Lbus, PC_LD, PC_INC, false, false, false, false, reset);
+        CPP.signals(Lbus, false, false, false, false, false, false, reset);
+        LV.signals(Lbus, false, false, false, false, false, false, reset);
+        SP.signals(Lbus, false, false, false, false, SP_ADD4, SP_SUB4, reset);
+        IR.signals(Lbus, IR_LD, false, false, false, false, false, reset);
         Z.signals(LALU_Z, Z_en, reset);
         N.signals(LALU_N, N_en, reset);
     }
