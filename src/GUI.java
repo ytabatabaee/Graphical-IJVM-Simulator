@@ -79,28 +79,27 @@ public class GUI extends Application {
     }
 
     public void registers(GridPane root, CPU cpu){
-        TextField pc = new TextField();
         TextField ar = new TextField();
-        TextField dr1 = new TextField();
-        TextField dr2 = new TextField();
-        TextField sp = new TextField();
-        TextField cpp  = new TextField();
-        TextField lv = new TextField();
+        TextField dr = new TextField();
         TextField ir = new TextField();
-        TextField wd = new TextField();
-        TextField alu = new TextField();
+        TextField pc = new TextField();
+        TextField sp = new TextField();
+        TextField lv = new TextField();
+        TextField cpp  = new TextField();
+        TextField tos = new TextField();
+        TextField h = new TextField();
 
         Label regLabel = new Label("Registers");
-        Label pcLabel = new Label("PC");
         Label arLabel = new Label("AR");
+        Label drLabel = new Label("DR");
         Label irLabel = new Label("IR");
+        Label pcLabel = new Label("PC");
         Label spLabel = new Label("SP");
         Label lvLabel = new Label("LV");
         Label cppLabel = new Label("CPP");
-        Label dr1Label = new Label("H");
-        Label dr2Label = new Label("OPC");
-        Label wdLabel = new Label("TOS");
-        Label aluLabel = new Label("ALU");
+        Label tosLabel = new Label("TOS");
+        Label hLabel = new Label("H");
+
 
         regLabel.setStyle(labelStyle);
         pcLabel.setStyle(labelStyle);
@@ -109,43 +108,40 @@ public class GUI extends Application {
         spLabel.setStyle(labelStyle);
         lvLabel.setStyle(labelStyle);
         cppLabel.setStyle(labelStyle);
-        dr1Label.setStyle(labelStyle);
-        dr2Label.setStyle(labelStyle);
-        wdLabel.setStyle(labelStyle);
-        aluLabel.setStyle(labelStyle);
+        drLabel.setStyle(labelStyle);
+        tosLabel.setStyle(labelStyle);
+        hLabel.setStyle(labelStyle);
 
         pc.setEditable(false);
         ar.setEditable(false);
-        dr1.setEditable(false);
-        dr2.setEditable(false);
+        dr.setEditable(false);
+        tos.setEditable(false);
         sp.setEditable(false);
         cpp.setEditable(false);
         lv.setEditable(false);
         ir.setEditable(false);
-        wd.setEditable(false);
-        alu.setEditable(false);
+        h.setEditable(false);
 
         pc.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getPC().getData_out())));
         ar.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getAR().getData_out())));
         sp.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getSP().getData_out())));
         lv.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getLV().getData_out())));
-        dr1.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getDR1().getData_out())));
-        dr2.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getDR2().getData_out())));
+        dr.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getDR().getData_out())));
+        h.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getH().getData_out())));
         cpp.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getCPP().getData_out())));
         ir.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getIR().getData_out())));
-        wd.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getWD().getData_out())));
-        alu.setText(cpu.getControlUnit().ALU_control(cpu.getDataPath().Z(), cpu.getDataPath().N()));
+        tos.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getTOS().getData_out())));
 
-        root.add(pc, 2, 1);
-        root.add(ir, 2, 2);
-        root.add(ar, 2, 3);
-        root.add(sp, 2, 4);
-        root.add(lv, 2, 5);
-        root.add(cpp, 2, 6);
-        root.add(wd, 2, 7);
-        root.add(dr1, 2, 8);
-        root.add(dr2, 2, 9);
-        root.add(alu, 2, 10);
+        root.add(ar, 2, 1);
+        root.add(dr, 2, 2);
+        root.add(ir, 2, 3);
+        root.add(pc, 2, 4);
+        root.add(sp, 2, 5);
+        root.add(lv, 2, 6);
+        root.add(cpp, 2, 7);
+        root.add(tos, 2, 8);
+        root.add(h, 2, 9);
+
 
         Arrow[] arrow = new Arrow[9];
         for (int i = 0; i < 9; i++) {
@@ -154,16 +150,15 @@ public class GUI extends Application {
         }
 
         root.add(regLabel, 1, 0);
-        root.add(pcLabel, 1, 1);
-        root.add(irLabel, 1, 2);
-        root.add(arLabel, 1, 3);
-        root.add(spLabel, 1, 4);
-        root.add(lvLabel, 1, 5);
-        root.add(cppLabel, 1, 6);
-        root.add(wdLabel, 1, 7);
-        root.add(dr1Label, 1, 8);
-        root.add(dr2Label, 1, 9);
-        root.add(aluLabel, 1, 10);
+        root.add(arLabel, 1, 1);
+        root.add(drLabel, 1, 2);
+        root.add(irLabel, 1, 3);
+        root.add(pcLabel, 1, 4);
+        root.add(spLabel, 1, 5);
+        root.add(lvLabel, 1, 6);
+        root.add(cppLabel, 1, 7);
+        root.add(tosLabel, 1, 8);
+        root.add(hLabel, 1, 9);
     }
 
     public void code(GridPane root, CPU cpu, Stage stage) {

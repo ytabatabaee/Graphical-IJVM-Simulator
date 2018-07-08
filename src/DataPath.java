@@ -9,7 +9,7 @@ public class DataPath {
     private Register PC = new Register();
     private Register SP = new Register("00000000000000000000000001000000");
     private Register LV = new Register("00000000000000000000000010000000");
-    private Register CPP = new Register("00000000000000000000000010000000");
+    private Register CPP = new Register("00000000000000000000000011000000");
     private Register TOS = new Register();
     private Register H = new Register();
     private String bus;
@@ -97,5 +97,17 @@ public class DataPath {
 
     public String getBus() {
         return bus;
+    }
+
+    public Register getDR() {
+        return DR;
+    }
+
+    public Register getTOS() {
+        return TOS;
+    }
+
+    public Register getH() {
+        return H;
     }
 }

@@ -13,9 +13,9 @@ public class CPU {
 
     public void signals(String data_in, boolean ready, boolean reset) {
         address = dataPath.memory_address();
-        wData = dataPath.memory_wdata();
-        start = dataPath.start();
-        rwn = dataPath.rwn();
+        //wData = dataPath.memory_wdata();
+        //start = dataPath.start();
+        //rwn = dataPath.rwn();
         sc_value = controlUnit.sc_val();
         fetch();
         controlUnit.time_signals();
