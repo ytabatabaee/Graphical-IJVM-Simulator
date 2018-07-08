@@ -1,20 +1,18 @@
 public class DataPath {
     private Decoder decoder = new Decoder();
     private MUX mux = new MUX();
-    private Register AR = new Register();
-    private Register WD = new Register();
-    private Register DR1 = new Register();
     private ALU alu = new ALU();
-    private Register DR2 = new Register();
-    private Register PC = new Register("00000000000000000000000010000000");
-    private Register CPP = new Register();
-    private Register LV = new Register("00000000000000000000000001000000");
-    private Register SP = new Register("00000000000000000000000100000000");
+    private Shifter shifter = new Shifter();
+    private Register AR = new Register();
+    private Register DR = new Register();
     private Register IR = new Register();
-    private Extractor extractor = new Extractor();
+    private Register PC = new Register();
+    private Register SP = new Register("00000000000000000000000001000000");
+    private Register LV = new Register("00000000000000000000000010000000");
+    private Register CPP = new Register("00000000000000000000000010000000");
+    private Register TOS = new Register();
+    private Register H = new Register();
     private String bus;
-    private DFF ST = new DFF();
-    private DFF RW = new DFF();
     private DFF Z = new DFF();
     private DFF N = new DFF();
     private boolean ALU_Z;
@@ -28,7 +26,7 @@ public class DataPath {
         String Lbus = bus;
         boolean LALU_Z = ALU_Z;
         boolean LALU_N = ALU_N;
-        if (bus_select[0]) {
+        /*if (bus_select[0]) {
             bus = memory_data;
         } else if (bus_select[1]) {
             String[] in = {DR2.getData_out(), LV.getData_out(), PC.getData_out(), CPP.getData_out()};
@@ -46,36 +44,19 @@ public class DataPath {
             bus = DR1.getData_out();
         } else if (bus_select[6]) {
             bus = DR2.getData_out();
-        }
+        }*/
         AR.signals(Lbus, AR_LD, false, false, false, false, reset);
-        WD.signals(Lbus, WD_LD, false, false, false, false, reset);
-        DR1.signals(Lbus, DR1_LD, false, false, false, false, reset);
-        DR2.signals(Lbus, DR2_LD, false, false, false, false, reset);
         PC.signals(Lbus, PC_LD, PC_INC, false, false, false, reset);
         CPP.signals(Lbus, false, false, false, false, false, reset);
         LV.signals(Lbus, false, false, false, false, false, reset);
         SP.signals(Lbus, false, false, false, SP_ADD4, SP_SUB4, reset);
         IR.signals(Lbus, IR_LD, false, false, false, false, reset);
-        ST.signals(ST_val, true, reset);
-        RW.signals(RW_val, true, reset);
         Z.signals(LALU_Z, Z_en, reset);
         N.signals(LALU_N, N_en, reset);
     }
 
     public String memory_address() {
         return AR.getData_out();
-    }
-
-    public String memory_wdata() {
-        return WD.getData_out();
-    }
-
-    public boolean start() {
-        return ST.isValue();
-    }
-
-    public boolean rwn() {
-        return RW.isValue();
     }
 
     public String IR() {
@@ -92,18 +73,6 @@ public class DataPath {
 
     public Register getAR() {
         return AR;
-    }
-
-    public Register getWD() {
-        return WD;
-    }
-
-    public Register getDR1() {
-        return DR1;
-    }
-
-    public Register getDR2() {
-        return DR2;
     }
 
     public Register getPC() {
