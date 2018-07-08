@@ -9,17 +9,42 @@ public class CPU {
     private boolean start;
     private boolean rwn;
 
-    public void fetch(boolean reset) {
+    public String read(boolean reset) {
+        String res;
         do {
-            memory.signals(reset, controlUnit.read() | controlUnit.write(),
+            res = memory.signals(reset, controlUnit.read() | controlUnit.write() | controlUnit.fetch(),
                     !controlUnit.write(), dataPath.getAR().getData_out(), dataPath.getDR().getData_out());
             clk++;
             boolean a = !(controlUnit.read() | controlUnit.write() | !memory.isReady());
             controlUnit.count(reset | a, memory.isReady(), reset);
 
         } while (!memory.isReady());
+        return res;
     }
 
+    public void signals(boolean reset) {
+        boolean a = !(controlUnit.read() | controlUnit.write() | !memory.isReady());
+        dataPath.signals(controlUnit.read(), memory.isReady(), reset, memory.getData_out(), controlUnit.DR_LD(),
+                controlUnit.CPP_Reset(), controlUnit.IR_LD(dataPath.isZ(), dataPath.isN()), controlUnit.fetch(),
+                controlUnit.TOS_LD(memory.isReady()), controlUnit.ALU_control(dataPath.isZ(), dataPath.isN()),
+                controlUnit.LV_LD(), controlUnit.LR(), controlUnit.PC_INC(), controlUnit.PC_INC2(), controlUnit.PC_LD,
+                controlUnit.ShSelect(), controlUnit.AR_LD(), controlUnit.CPP_LD(), controlUnit.BSelect(),
+                controlUnit.SP_SUB4(), controlUnit.SP_ADD4(), controlUnit.SP_LD(), controlUnit.H_LD());
+        clk++;
+        controlUnit.count(reset | a, memory.isReady(), reset);
+        controlUnit.time_signals();
+    }
+
+    public void signalsWithFetch(boolean reset) {
+        dataPath.getIR().setData_out(read(reset));
+        controlUnit.time_signals();
+        controlUnit.instruction_decoding(dataPath.IR());
+        boolean a = !(controlUnit.read() | controlUnit.write() | !memory.isReady());
+        clk++;
+        controlUnit.count(reset | a, memory.isReady(), reset);
+        controlUnit.time_signals();
+        signals(reset);
+    }
 //    public void signals(String data_in, boolean ready, boolean reset) {
 //        address = dataPath.memory_address();
 //        //wData = dataPath.memory_wdata();

@@ -102,14 +102,6 @@ public class Utility {
         return res;
     }
 
-    public boolean not(char x){
-        if(x == '1')
-            return false;
-        else if (x == '0')
-            return true;
-        return false;
-    }
-
     public String booleanToString(boolean bool) {
         if (bool)
             return "1";

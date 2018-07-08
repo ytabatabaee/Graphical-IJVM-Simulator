@@ -34,4 +34,8 @@ public class Register {
     public String getData_out() {
         return data_out;
     }
+
+    public void setData_out(String data_out) {
+        this.data_out = data_out;
+    }
 }

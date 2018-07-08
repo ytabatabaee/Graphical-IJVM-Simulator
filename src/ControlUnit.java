@@ -183,6 +183,10 @@ public class ControlUnit {
                         & D[6] & T[7]);
     }
 
+    public boolean fetch() {
+        return T[0];
+    }
+
 
     public boolean IR_LD(boolean Z, boolean N) {
         return T[1];

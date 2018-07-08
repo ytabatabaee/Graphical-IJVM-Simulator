@@ -55,4 +55,8 @@ public class Memory {
     public boolean isReady() {
         return ready;
     }
+
+    public String getData_out() {
+        return data_out;
+    }
 }
