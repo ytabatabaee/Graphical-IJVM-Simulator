@@ -109,4 +109,16 @@ public class Utility {
             return true;
         return false;
     }
+
+    public String booleanToString(boolean bool) {
+        if (bool)
+            return "1";
+        return "0";
+    }
+
+    public boolean stringToBoolean(String string) {
+        if (string.equals("1"))
+            return true;
+        return false;
+    }
 }

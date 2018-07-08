@@ -12,48 +12,49 @@ public class DataPath {
     private Register CPP = new Register("00000000000000000000000011000000");
     private Register TOS = new Register();
     private Register H = new Register();
-    private String bus;
-    private DFF Z = new DFF();
-    private DFF N = new DFF();
-    private boolean ALU_Z;
-    private boolean ALU_N;
+    private String B;
+    private String C;
+    private DFF D1 = new DFF();
+    private DFF D2 = new DFF();
+    private DFF D3 = new DFF();
+    private boolean Z;
+    private boolean N;
 
-    public void signals(boolean AR_LD, boolean WD_LD, boolean DR1_LD, boolean DR2_LD, boolean PC_LD, boolean IR_LD,
-                        boolean SP_SUB4, boolean SP_ADD4, boolean reset, boolean ST_val, boolean RW_val, boolean Z_en,
-                        boolean N_en, boolean PC_INC, String bus_sel, String ext_sel, String memory_data,
-                        String ALU_D2sel, String ALU_control) {
-        boolean[] bus_select = decoder.decode(bus_sel);
-        String Lbus = bus;
-        boolean LALU_Z = ALU_Z;
-        boolean LALU_N = ALU_N;
-        /*if (bus_select[0]) {
-            bus = memory_data;
-        } else if (bus_select[1]) {
-            String[] in = {DR2.getData_out(), LV.getData_out(), PC.getData_out(), CPP.getData_out()};
-            String res = mux.data_out(in, ALU_D2sel);
-            bus = alu.data_out(DR1.getData_out(), res, ALU_control);
-            ALU_Z = alu.Z(bus);
-            ALU_N = alu.N(bus);
-        } else if (bus_select[2]) {
-            bus = SP.getData_out();
-        } else if (bus_select[3]) {
-            bus = PC.getData_out();
-        } else if (bus_select[4]) {
-            bus = extractor.data_out(IR.getData_out(), ext_sel);
-        } else if (bus_select[5]) {
-            bus = DR1.getData_out();
-        } else if (bus_select[6]) {
-            bus = DR2.getData_out();
-        }*/
-        AR.signals(Lbus, AR_LD, false, false, false, false, false, reset);
-        PC.signals(Lbus, PC_LD, PC_INC, false, false, false, false, reset);
-        CPP.signals(Lbus, false, false, false, false, false, false, reset);
-        LV.signals(Lbus, false, false, false, false, false, false, reset);
-        SP.signals(Lbus, false, false, false, false, SP_ADD4, SP_SUB4, reset);
-        IR.signals(Lbus, IR_LD, false, false, false, false, false, reset);
-        Z.signals(LALU_Z, Z_en, reset);
-        N.signals(LALU_N, N_en, reset);
+    public void signals(boolean read, boolean ready, boolean reset, String mem, boolean LD_DR, boolean Reset_CPP,
+                        boolean LD_IR, boolean fetch, boolean LD_TOS, String ALUControll, boolean LD_LV, boolean LR,
+                        boolean INC_PC, boolean INC2_PC, boolean LD_PC, String ShSelect, boolean LD_AR, boolean LD_CPP,
+                        boolean resetCPP, String BSelect, boolean DEC4_SP, boolean INC4_SP, boolean LD_SP, boolean LD_H) {
+        String x = alu.data_out(H.getData_out(), B, ALUControll);
+        Z = alu.Z(x);
+        N = alu.N(x);
+        Utility utility = new Utility();
+        B = mux.data_out(new String[]{H.getData_out(), TOS.getData_out(), LV.getData_out(), CPP.getData_out(),
+                SP.getData_out(), PC.getData_out(), DR.getData_out(), IR.getData_out()}, BSelect);
+        C = shifter.shift(utility.binaryToInt(mux.data_out(new String[]{"00000", "00010", "01000", "10000", "11000",
+                "00100", "11001"}, ShSelect)), LR, x);
+
+        String DR_WData = mux.data_out(new String[]{C, mem}, utility.booleanToString(D2.isValue()));
+        boolean DR_WEnable = D2.isValue() | LD_DR;
+        DR.signals(DR_WData, DR_WEnable, false, false, false, false, false, reset);
+        String IR_WData = mux.data_out(new String[]{C, mem}, utility.booleanToString(D3.isValue()));
+        boolean IR_WEnable = D3.isValue() | LD_IR;
+        IR.signals(IR_WData, IR_WEnable, false, false, false, false, false, reset);
+        D2.setValue(utility.stringToBoolean(mux.data_out(new String[]
+                        {utility.booleanToString(!(!D1.isValue() & ready)), utility.booleanToString(read)},
+                utility.booleanToString(D2.isValue()))));
+        D3.setValue(utility.stringToBoolean(mux.data_out(new String[]
+                        {utility.booleanToString(!(!D1.isValue() & ready)), utility.booleanToString(fetch)},
+                utility.booleanToString(D3.isValue()))));
+        D1.setValue(ready);
+        TOS.signals(C, LD_TOS, false, false, false, false, false, reset);
+        LV.signals(C, LD_LV, false, false, false, false, false, reset);
+        PC.signals(C, LD_PC, INC_PC, false, INC2_PC, false, false, reset);
+        AR.signals(C, LD_AR, false, false, false, false, false, reset);
+        CPP.signals(C, LD_CPP, false, false, false, false, false, reset | resetCPP);
+        SP.signals(C, LD_SP, false, false, false, INC4_SP, DEC4_SP, reset);
+        H.signals(C, LD_H, false, false, false, false, false, reset);
     }
+
 
     public String memory_address() {
         return AR.getData_out();
@@ -61,14 +62,6 @@ public class DataPath {
 
     public String IR() {
         return IR.getData_out();
-    }
-
-    public boolean Z() {
-        return Z.isValue();
-    }
-
-    public boolean N() {
-        return N.isValue();
     }
 
     public Register getAR() {
@@ -95,8 +88,8 @@ public class DataPath {
         return IR;
     }
 
-    public String getBus() {
-        return bus;
+    public String getB() {
+        return B;
     }
 
     public Register getDR() {
