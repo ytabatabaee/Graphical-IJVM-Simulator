@@ -123,8 +123,7 @@ public class ControlUnit {
                 !ALU_s[2] ? '1' : '0',
                 '1',
                 !ALU_s[2] ? '1' : '0'};
-        String res = "";
-        res += c[5] + c[4] + c[3] + c[2] + c[1] + c[0];
+        String res = "" + c[5] + c[4] + c[3] + c[2] + c[1] + c[0];
         return res;
     }
 

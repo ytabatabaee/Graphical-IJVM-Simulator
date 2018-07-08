@@ -9,6 +9,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -36,19 +38,21 @@ public class GUI extends Application {
     TextArea stackArea = new TextArea();
     TextArea constantArea = new TextArea();
     TextArea varArea = new TextArea();
+    CPU cpu = new CPU();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         setStyleSheets();
-        CPU cpu = new CPU();
         Group root = new Group();
         GridPane regRoot = new GridPane();
         GridPane buttonRoot = new GridPane();
-        gridpanePlacement(regRoot, 5, 10);
+        gridpanePlacement(regRoot, 310, 10);
         gridpanePlacement(buttonRoot, 20, 430);
+        Rectangle bBus = new Rectangle(580, 30, 30, 400);
+        bBus.setFill(new ImagePattern(new Image("images/arrow1.png")));
         root.getChildren().add(regRoot);
-        root.getChildren().add(buttonRoot);
-        Scene scene = new Scene(root ,1000, 650, Color.DARKGRAY);
+        root.getChildren().addAll(buttonRoot, bBus);
+        Scene scene = new Scene(root ,1100, 700, Color.DARKGRAY);
         registers(regRoot, cpu);
         code(buttonRoot, cpu, primaryStage);
         codeArea(root, cpu, primaryStage);
@@ -84,6 +88,7 @@ public class GUI extends Application {
         TextField lv = new TextField();
         TextField ir = new TextField();
         TextField wd = new TextField();
+        TextField alu = new TextField();
 
         Label regLabel = new Label("Registers");
         Label pcLabel = new Label("PC");
@@ -92,9 +97,10 @@ public class GUI extends Application {
         Label spLabel = new Label("SP");
         Label lvLabel = new Label("LV");
         Label cppLabel = new Label("CPP");
-        Label dr1Label = new Label("DR1");
-        Label dr2Label = new Label("DR2");
-        Label wdLabel = new Label("WD");
+        Label dr1Label = new Label("H");
+        Label dr2Label = new Label("OPC");
+        Label wdLabel = new Label("TOS");
+        Label aluLabel = new Label("ALU");
 
         regLabel.setStyle(labelStyle);
         pcLabel.setStyle(labelStyle);
@@ -106,6 +112,7 @@ public class GUI extends Application {
         dr1Label.setStyle(labelStyle);
         dr2Label.setStyle(labelStyle);
         wdLabel.setStyle(labelStyle);
+        aluLabel.setStyle(labelStyle);
 
         pc.setEditable(false);
         ar.setEditable(false);
@@ -116,6 +123,7 @@ public class GUI extends Application {
         lv.setEditable(false);
         ir.setEditable(false);
         wd.setEditable(false);
+        alu.setEditable(false);
 
         pc.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getPC().getData_out())));
         ar.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getAR().getData_out())));
@@ -126,6 +134,7 @@ public class GUI extends Application {
         cpp.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getCPP().getData_out())));
         ir.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getIR().getData_out())));
         wd.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getWD().getData_out())));
+        alu.setText(cpu.getControlUnit().ALU_control(cpu.getDataPath().Z(), cpu.getDataPath().N()));
 
         root.add(pc, 2, 1);
         root.add(ir, 2, 2);
@@ -136,6 +145,13 @@ public class GUI extends Application {
         root.add(wd, 2, 7);
         root.add(dr1, 2, 8);
         root.add(dr2, 2, 9);
+        root.add(alu, 2, 10);
+
+        Arrow[] arrow = new Arrow[9];
+        for (int i = 0; i < 9; i++) {
+            arrow[i] = new Arrow(10, 10, 50, 10);
+            root.add(arrow[i], 3, i+1);
+        }
 
         root.add(regLabel, 1, 0);
         root.add(pcLabel, 1, 1);
@@ -147,6 +163,7 @@ public class GUI extends Application {
         root.add(wdLabel, 1, 7);
         root.add(dr1Label, 1, 8);
         root.add(dr2Label, 1, 9);
+        root.add(aluLabel, 1, 10);
     }
 
     public void code(GridPane root, CPU cpu, Stage stage) {
@@ -188,10 +205,10 @@ public class GUI extends Application {
         stackArea.setPrefSize(90, 150);
         constantArea.setPrefSize(90, 150);
         varArea.setPrefSize(90, 150);
-        codeArea.relocate(250, 35);
-        stackArea.relocate(250, 270);
-        constantArea.relocate(350, 270);
-        varArea.relocate(450, 270);
+        codeArea.relocate(10, 35);
+        stackArea.relocate(10, 270);
+        constantArea.relocate(110, 270);
+        varArea.relocate(210, 270);
         codeArea.setEditable(false);
         stackArea.setEditable(false);
         constantArea.setEditable(false);
@@ -201,10 +218,10 @@ public class GUI extends Application {
         Label constLabel = new Label("Constant Pool");
         Label varLabel = new Label("Local Variables");
         root.getChildren().addAll(codeLabel, stackLabel, constLabel, varLabel);
-        codeLabel.relocate(250, 12);
-        stackLabel.relocate(270, 250);
-        constLabel.relocate(350, 250);
-        varLabel.relocate(450, 250);
+        codeLabel.relocate(10, 12);
+        stackLabel.relocate(30, 250);
+        constLabel.relocate(110, 250);
+        varLabel.relocate(210, 250);
         codeLabel.setStyle(labelStyle);
         stackLabel.setStyle(labelStyle);
         constLabel.setStyle(labelStyle);
