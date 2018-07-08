@@ -1,7 +1,8 @@
 public class ControlUnit {
     private boolean[] T = new boolean[16];
-    private boolean[] L = new boolean[4];
-    private boolean[] F = new boolean[8];
+    private boolean[] D = new boolean[8];
+    private String IR;
+    Utility utility = new Utility();
     private SequenceCounter sequenceCounter = new SequenceCounter();
 
     private int index(int x) {
@@ -22,7 +23,7 @@ public class ControlUnit {
     }
 
     public void instruction_decoding(String IR) {
-        if (T[3]) {
+        /*if (T[3]) {
             boolean IR4 = IR.charAt(index(4)) == '1';
             boolean IR7 = IR.charAt(index(7)) == '1';
             L[1] = !(IR4 | IR7);
@@ -33,26 +34,22 @@ public class ControlUnit {
             in += IR.charAt(index(5)) + IR.charAt(index(2)) + IR.charAt(index(1));
             Decoder decoder = new Decoder();
             F = decoder.decode(in);
-        }
+        }*/
 
     }
 
     public boolean sc_reset(boolean ready) {
-        return (L[1] & F[4] & T[12] & ready) |
-                (L[1] & F[6] & T[12] & ready) |
-                (L[1] & F[0] & T[4]) |
-                (L[2] & F[0] & T[7] & ready) |
-                (L[2] & F[2] & T[10] & ready) |
-                (L[2] & F[7] & T[10] & ready) |
-                (L[3] & F[2] & T[11] & ready) |
-                (L[3] & F[7] & T[7]) |
-                (L[3] & F[0] & T[9]) |
-                (L[3] & F[1] & T[9]) |
-                (L[3] & F[3] & T[12]);
+        return (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                & D[0] & T[3]) |
+                (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                        & D[4] & T[7]) |
+                (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                        & D[6] & T[7])
+                ;
     }
 
     public String bus_sel(boolean Z, boolean N) {
-        boolean bus_ALU = (L[1] & F[4] & T[10]) |
+        /*boolean bus_ALU = (L[1] & F[4] & T[10]) |
                 (L[1] & F[6] & T[10]) |
                 (L[2] & F[2] & T[5]) |
                 (L[2] & F[7] & T[8]) |
@@ -88,11 +85,11 @@ public class ControlUnit {
         char bs2 = bus_extractor ? '1' : '0';
         String bus_sel = "";
         bus_sel += bs2 + bs1 + bs0;
-        return bus_sel;
+        return bus_sel;*/
     }
 
     private boolean[] ALU(boolean Z, boolean N) {
-        boolean ALU_add = (L[1] & F[4] & T[10]) |
+        /*boolean ALU_add = (L[1] & F[4] & T[10]) |
                 (L[2] & F[2] & T[5]) |
                 (L[2] & F[7] & T[8]) |
                 (L[3] & F[2] & T[5]) |
@@ -112,7 +109,7 @@ public class ControlUnit {
                 (L[3] & F[0] & T[8] & Z) |
                 (L[3] & F[1] & T[8] & N) |
                 (L[3] & F[3] & T[11] & Z);
-        return new boolean[]{ALU_add, ALU_sub, ALU_b, ALU_LV, ALU_PC};
+        return new boolean[]{ALU_add, ALU_sub, ALU_b, ALU_LV, ALU_PC};*/
     }
 
     public String ALU_control(boolean Z, boolean N) {
@@ -136,145 +133,83 @@ public class ControlUnit {
     }
 
     public boolean Z_en() {
-        return (L[3] & F[0] & T[7]) |
-                (L[3] & F[3] & T[10]);
+
     }
 
     public boolean N_en() {
-        return (L[3] & F[1] & T[7]);
+
     }
 
     public boolean SP_ADD4() {
-        return (L[1] & F[4] & T[4]) |
-                (L[1] & F[6] & T[4]) |
-                (L[2] & F[7] & T[4]) |
-                (L[3] & F[0] & T[4]) |
-                (L[3] & F[1] & T[4]) |
-                (L[3] & F[3] & T[4]) |
-                (L[3] & F[3] & T[7]);
+
 
     }
 
     public boolean SP_SUB4() {
-        return (L[2] & F[0] & T[4]) |
-                (L[2] & F[2] & T[4]);
-
+        return (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                & D[4] & T[3]) |
+                (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                        & D[6] & T[3]);
     }
 
-    public boolean DR1_LD(boolean ready) {
-        return (L[1] & F[4] & T[6] & ready) |
-                (L[1] & F[6] & T[6] & ready) |
-                (L[2] & F[2] & T[4]) |
-                (L[2] & F[7] & T[7]) |
-                (L[3] & F[2] & T[4]) |
-                (L[3] & F[2] & T[7] & ready) |
-                (L[3] & F[7] & T[4]) |
-                (L[3] & F[0] & T[7]) |
-                (L[3] & F[1] & T[7]) |
-                (L[3] & F[3] & T[6] & ready) |
-                (L[3] & F[3] & T[10]);
+    public boolean H_LD() {
+        return (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                & D[4] & T[5]) |
+                (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                        & D[6] & T[5]);
     }
 
-    public boolean DR2_LD(boolean ready) {
-        return (L[1] & F[4] & T[9] & ready) |
-                (L[1] & F[6] & T[9] & ready) |
-                (L[3] & F[2] & T[8]) |
-                (L[3] & F[0] & T[6] & ready) |
-                (L[3] & F[1] & T[6] & ready) |
-                (L[3] & F[3] & T[9] & ready);
+    public boolean DR_LD() {
+        return (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                & D[4] & T[5]) |
+                (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                & D[4] & T[6]) |
+                (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                        & D[6] & T[5]) |
+                (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                        & D[6] & T[6]);
     }
 
     public boolean AR_LD() {
-        return (T[0]) |
-                (L[1] & F[4] & T[4]) |
-                (L[1] & F[4] & T[7]) |
-                (L[1] & F[6] & T[4]) |
-                (L[1] & F[6] & T[7]) |
-                (L[2] & F[0] & T[5]) |
-                (L[2] & F[2] & T[5]) |
-                (L[2] & F[2] & T[8]) |
-                (L[2] & F[7] & T[4]) |
-                (L[2] & F[7] & T[8]) |
-                (L[3] & F[2] & T[5]) |
-                (L[3] & F[0] & T[4]) |
-                (L[3] & F[1] & T[4]) |
-                (L[3] & F[3] & T[4]) |
-                (L[3] & F[3] & T[7]);
+        return (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                & D[4] & T[4]) |
+                (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                        & D[6] & T[4]);
     }
 
-    public boolean WD_LD(boolean ready) {
-        return (L[1] & F[4] & T[10]) |
-                (L[1] & F[6] & T[10]) |
-                (L[2] & F[0] & T[4]) |
-                (L[2] & F[2] & T[7] & ready) |
-                (L[2] & F[7] & T[6] & ready) |
-                (L[3] & F[2] & T[9]);
+    public boolean TOS_LD(boolean ready) {
+        return (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                & D[4] & T[6]) |
+                (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                        & D[6] & T[6]);
     }
 
-    public boolean ST_val() {
-        return (T[0]) |
-                (L[1] & F[4] & T[4]) |
-                (L[1] & F[4] & T[7]) |
-                (L[1] & F[4] & T[10]) |
-                (L[1] & F[6] & T[4]) |
-                (L[1] & F[6] & T[10]) |
-                (L[1] & F[6] & T[7]) |
-                (L[2] & F[0] & T[5]) |
-                (L[2] & F[2] & T[5]) |
-                (L[2] & F[2] & T[8]) |
-                (L[2] & F[7] & T[4]) |
-                (L[2] & F[7] & T[8]) |
-                (L[3] & F[2] & T[5]) |
-                (L[3] & F[2] & T[9]) |
-                (L[3] & F[0] & T[4]) |
-                (L[3] & F[1] & T[4]) |
-                (L[3] & F[3] & T[4]) |
-                (L[3] & F[3] & T[7]);
+    public boolean read(){
+        return (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                & D[4] & T[5]) |
+                (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                        & D[6] & T[5]);
     }
 
-    public boolean RW_val() {
-        return (T[0]) |
-                (L[1] & F[4] & T[4]) |
-                (L[1] & F[4] & T[7]) |
-                (L[1] & F[6] & T[4]) |
-                (L[1] & F[6] & T[7]) |
-                (L[2] & F[2] & T[5]) |
-                (L[2] & F[7] & T[4]) |
-                (L[3] & F[2] & T[5]) |
-                (L[3] & F[0] & T[4]) |
-                (L[3] & F[1] & T[4]) |
-                (L[3] & F[3] & T[4]) |
-                (L[3] & F[3] & T[7]);
+    public boolean write(){
+        return (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                & D[4] & T[7]) |
+                (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                        & D[6] & T[7]);
     }
+
 
     public boolean PC_LD(boolean Z, boolean N) {
-        return (L[3] & F[7] & T[6]) |
-                (L[3] & F[0] & T[8] & Z) |
-                (L[3] & F[1] & T[8] & N) |
-                (L[3] & F[3] & T[11] & Z);
+
     }
 
     public boolean PC_INC() {
-        return (T[0]) |
-                (L[2] & T[4]) |
-                (L[3] & T[4]) |
-                (L[3] & T[5]);
+
     }
 
     public boolean IR_LD(boolean ready) {
         return (T[2] & ready);
     }
 
-    public String extractor_sel() {
-        boolean ext_const = L[3] & F[2] & T[8];
-        boolean ext_varOffset = (L[2] & F[2] & T[4]) |
-                (L[2] & F[7] & T[7]) |
-                (L[3] & F[2] & T[4]);
-        boolean ext_byte = L[2] & F[0] & T[4];
-        boolean[] ext_sel = {(ext_const | ext_byte), (ext_varOffset | ext_byte)};
-        char[] c = {ext_sel[0] ? '1' : '0', ext_sel[1] ? '1' : '0'};
-        String res = "";
-        res += c[1] + c[0];
-        return res;
-    }
+
 }

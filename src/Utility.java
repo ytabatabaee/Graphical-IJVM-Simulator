@@ -101,4 +101,12 @@ public class Utility {
         res += data;
         return res;
     }
+
+    public boolean not(char x){
+        if(x == '1')
+            return false;
+        else if (x == '0')
+            return true;
+        return false;
+    }
 }
