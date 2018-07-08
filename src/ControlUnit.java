@@ -58,28 +58,31 @@ public class ControlUnit {
         boolean bus_sp = (!(IR[4]) & !(IR[7])
                 & D[4] & T[4]) |
                 (!(IR[4]) & !(IR[7])
-                        & D[4] & T[4]);
+                        & D[4] & T[4]) |
+                (!(IR[4]) & (IR[7])
+                        & D[0] & T[4]);
         boolean bus_pc = false;
         boolean bus_dr = (!(IR[4]) & !(IR[7])
                 & D[4] & T[6]) |
                 (!(IR[4]) & !(IR[7])
                         & D[6] & T[6]);
-        boolean bus_ir = false;
+        boolean bus_ir = (!(IR[4]) & (IR[7])
+                & D[0] & T[5]);
         if (bus_h)
             return "000";
         if (bus_tos)
             return "001";
-        if(bus_lv)
+        if (bus_lv)
             return "010";
-        if(bus_cpp)
+        if (bus_cpp)
             return "011";
-        if(bus_sp)
+        if (bus_sp)
             return "100";
-        if(bus_pc)
+        if (bus_pc)
             return "101";
-        if(bus_dr)
+        if (bus_dr)
             return "110";
-        if(bus_ir)
+        if (bus_ir)
             return "111";
         return "000";
     }
@@ -120,47 +123,60 @@ public class ControlUnit {
                         & D[6] & T[3]);
     }
 
+    public boolean SP_ADD4() {
+        return (!(IR[4]) & (IR[7])
+                & D[0] & T[3]);
+    }
+
     public boolean H_LD() {
         return (!(IR[4]) & !(IR[7])
                 & D[4] & T[5]) |
                 (!(IR[4]) & !(IR[7])
-                        & D[6] & T[5]);
+                        & D[6] & T[5]) |
+                (!(IR[4]) & (IR[7])
+                        & D[0] & T[5]);
     }
 
     public boolean DR_LD() {
         return (!(IR[4]) & !(IR[7])
                 & D[4] & T[5]) |
                 (!(IR[4]) & !(IR[7])
-                & D[4] & T[6]) |
+                        & D[4] & T[6]) |
                 (!(IR[4]) & !(IR[7])
                         & D[6] & T[5]) |
                 (!(IR[4]) & !(IR[7])
-                        & D[6] & T[6]);
+                        & D[6] & T[6]) |
+                (!(IR[4]) & (IR[7])
+                        & D[0] & T[6]);
     }
 
     public boolean AR_LD() {
         return T[0] |
                 (!(IR[4]) & !(IR[7])
-                & D[4] & T[4]) |
+                        & D[4] & T[4]) |
                 (!(IR[4]) & !(IR[7])
-                        & D[6] & T[4]);
+                        & D[6] & T[4]) |
+                (!(IR[4]) & (IR[7])
+                        & D[0] & T[4]);
     }
 
     public boolean TOS_LD(boolean ready) {
         return (!(IR[4]) & !(IR[7])
                 & D[4] & T[6]) |
                 (!(IR[4]) & !(IR[7])
-                        & D[6] & T[6]);
+                        & D[6] & T[6]) |
+                (!(IR[4]) & (IR[7])
+                        & D[0] & T[6]);
     }
 
-    public boolean read(){
+    public boolean read() {
         return (!(IR[4]) & !(IR[7])
                 & D[4] & T[5]) |
                 (!(IR[4]) & !(IR[7])
                         & D[6] & T[5]);
     }
 
-    public boolean write(){
+    public boolean write() {
         return (!(IR[4]) & !(IR[7])
                 & D[4] & T[7]) |
                 (!(IR[4]) & !(IR[7])
@@ -173,7 +189,9 @@ public class ControlUnit {
     }
 
     public boolean PC_INC() {
-        return T[1];
+        return T[1] |
+                (!(IR[4]) & (IR[7])
+                        & D[0] & T[3]);
     }
 
 
