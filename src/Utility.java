@@ -1,4 +1,5 @@
 public class Utility {
+
     public int binaryToInt(String binary) {
         String binaryDigits = "01";
         int length = binary.length();
@@ -9,6 +10,11 @@ public class Utility {
             dec = 2 * dec + d;
         }
         return dec;
+    }
+
+    public String binaryToHex(String binary) {
+        StringBuilder hex = new StringBuilder("0x");
+        return hex.append(Integer.toHexString(binaryToInt(binary))).toString();
     }
 
     public String intToBinary(int dec) {
@@ -46,6 +52,45 @@ public class Utility {
             return intToBinary(res);
         }
     }
+
+    public String codeToBinary(String codeLine) {
+        String[] components = codeLine.split("\\s+");
+        switch (components.length) {
+            case 1:
+                switch (components[0].toLowerCase()) {
+                    case "iadd":
+                        return "01100000";
+                    case "isub":
+                        return "01100100";
+                    case "nop":
+                        return "00000000";
+                }
+            case 2:
+                switch (components[0].toLowerCase()) {
+                    case "bipush":
+                        return "00010000";
+                    case "iload":
+                        return "00010101";
+                    case "istore":
+                        return "00110110";
+                }
+            case 3:
+                switch (components[0].toLowerCase()){
+                    case "iinc":
+                        return "10000100";
+                    case "goto":
+                        return "10100111";
+                    case "ifeq":
+                        return "10011001";
+                    case "iflt":
+                        return "10011011";
+                    case "if_icmpeq":
+                        return "10011111";
+                }
+        }
+        return "";
+    }
+
 
     public String extend(String data, boolean sign) {
         String res = "";

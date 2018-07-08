@@ -19,21 +19,9 @@ public class Register {
             data_out = utility.operation(data_out, "4", "sub");
     }
 
-    public Register(String data_in, String default_value) {
+    public Register(String data_in) {
         this.data_out = data_in;
-        this.default_value = default_value;
-    }
-
-    public Register(boolean is_data_in, String data_in) {
-        if (is_data_in) {
-            this.data_out = data_in;
-            this.default_value = "00000000000000000000000000000000";
-        }
-        else  {
-            this.data_out = "00000000000000000000000000000000";
-            this.default_value = data_in;
-        }
-
+        this.default_value = data_in;
     }
 
     public Register() {

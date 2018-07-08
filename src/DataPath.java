@@ -6,10 +6,10 @@ public class DataPath {
     private Register DR1 = new Register();
     private ALU alu = new ALU();
     private Register DR2 = new Register();
-    private Register PC = new Register(false, "00000000000000000000000010000000");
+    private Register PC = new Register("00000000000000000000000010000000");
     private Register CPP = new Register();
-    private Register LV = new Register(false, "00000000000000000000000001000000");
-    private Register SP = new Register(false, "00000000000000000000000100000000");
+    private Register LV = new Register("00000000000000000000000001000000");
+    private Register SP = new Register("00000000000000000000000100000000");
     private Register IR = new Register();
     private Extractor extractor = new Extractor();
     private String bus;

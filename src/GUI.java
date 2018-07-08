@@ -24,7 +24,7 @@ import java.util.Scanner;
  * Created by y.tabatabaee on 7/7/2018.
  */
 public class GUI extends Application {
-
+    Utility utility = new Utility();
     Button chooseFile = new Button("Input Code");
     Button run = new Button("   Run   ");
     Button stop = new Button("   Stop   ");
@@ -36,6 +36,7 @@ public class GUI extends Application {
     TextArea stackArea = new TextArea();
     TextArea constantArea = new TextArea();
     TextArea varArea = new TextArea();
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         setStyleSheets();
@@ -74,7 +75,6 @@ public class GUI extends Application {
     }
 
     public void registers(GridPane root, CPU cpu){
-        Utility utility = new Utility();
         TextField pc = new TextField();
         TextField ar = new TextField();
         TextField dr1 = new TextField();
@@ -162,7 +162,8 @@ public class GUI extends Application {
                 while (input.hasNextLine()){
                     String line = input.nextLine();
                     codeLines.add(line);
-                    codeArea.appendText((codeLines.size()+127) + ".     " + line + "\n");
+                    //String hex = utility.binaryToHex(utility.codeToBinary(line));
+                    codeArea.appendText((codeLines.size()+127) + ".     " + line + "   " + "\n");
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -191,6 +192,10 @@ public class GUI extends Application {
         stackArea.relocate(250, 270);
         constantArea.relocate(350, 270);
         varArea.relocate(450, 270);
+        codeArea.setEditable(false);
+        stackArea.setEditable(false);
+        constantArea.setEditable(false);
+        varArea.setEditable(false);
         Label codeLabel = new Label("Instructions");
         Label stackLabel = new Label("Stack");
         Label constLabel = new Label("Constant Pool");
