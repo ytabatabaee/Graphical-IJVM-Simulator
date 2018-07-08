@@ -1,7 +1,7 @@
 public class ControlUnit {
     private boolean[] T = new boolean[16];
     private boolean[] D = new boolean[8];
-    private String IR;
+    private boolean[] IR = new boolean[32];
     Utility utility = new Utility();
     private SequenceCounter sequenceCounter = new SequenceCounter();
 
@@ -39,17 +39,17 @@ public class ControlUnit {
     }
 
     public boolean sc_reset(boolean ready) {
-        return (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+        return (!(IR[4]) & !(IR[7])
                 & D[0] & T[3]) |
-                (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                (!(IR[4]) & !(IR[7])
                         & D[4] & T[7]) |
-                (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                (!(IR[4]) & !(IR[7])
                         & D[6] & T[7])
                 ;
     }
 
     public String bus_sel(boolean Z, boolean N) {
-        /*boolean bus_ALU = (L[1] & F[4] & T[10]) |
+        boolean bus_ALU = (L[1] & F[4] & T[10]) |
                 (L[1] & F[6] & T[10]) |
                 (L[2] & F[2] & T[5]) |
                 (L[2] & F[7] & T[8]) |
@@ -71,21 +71,13 @@ public class ControlUnit {
                 (L[3] & F[3] & T[4]) |
                 (L[3] & F[3] & T[7]);
         boolean bus_PC = T[0];
-        boolean bus_extractor = (L[2] & F[0] & T[4]) |
-                (L[2] & F[2] & T[4]) |
-                (L[2] & F[7] & T[7]) |
-                (L[3] & F[2] & T[4]) |
-                (L[3] & F[2] & T[8]) |
-                (L[3] & F[7] & T[4]) |
-                (L[3] & F[0] & T[7]) |
-                (L[3] & F[1] & T[7]) |
-                (L[3] & F[3] & T[10]);
+
         char bs0 = (bus_ALU | bus_PC) ? '1' : '0';
         char bs1 = (bus_SP | bus_PC) ? '1' : '0';
         char bs2 = bus_extractor ? '1' : '0';
         String bus_sel = "";
         bus_sel += bs2 + bs1 + bs0;
-        return bus_sel;*/
+        return bus_sel;
     }
 
     private boolean[] ALU(boolean Z, boolean N) {
@@ -146,55 +138,56 @@ public class ControlUnit {
     }
 
     public boolean SP_SUB4() {
-        return (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+        return (!(IR[4]) & !(IR[7])
                 & D[4] & T[3]) |
-                (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                (!(IR[4]) & !(IR[7])
                         & D[6] & T[3]);
     }
 
     public boolean H_LD() {
-        return (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+        return (!(IR[4]) & !(IR[7])
                 & D[4] & T[5]) |
-                (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                (!(IR[4]) & !(IR[7])
                         & D[6] & T[5]);
     }
 
     public boolean DR_LD() {
-        return (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+        return (!(IR[4]) & !(IR[7])
                 & D[4] & T[5]) |
-                (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                (!(IR[4]) & !(IR[7])
                 & D[4] & T[6]) |
-                (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                (!(IR[4]) & !(IR[7])
                         & D[6] & T[5]) |
-                (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                (!(IR[4]) & !(IR[7])
                         & D[6] & T[6]);
     }
 
     public boolean AR_LD() {
-        return (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+        return T[0] |
+                (!(IR[4]) & !(IR[7])
                 & D[4] & T[4]) |
-                (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                (!(IR[4]) & !(IR[7])
                         & D[6] & T[4]);
     }
 
     public boolean TOS_LD(boolean ready) {
-        return (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+        return (!(IR[4]) & !(IR[7])
                 & D[4] & T[6]) |
-                (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                (!(IR[4]) & !(IR[7])
                         & D[6] & T[6]);
     }
 
     public boolean read(){
-        return (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+        return (!(IR[4]) & !(IR[7])
                 & D[4] & T[5]) |
-                (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                (!(IR[4]) & !(IR[7])
                         & D[6] & T[5]);
     }
 
     public boolean write(){
-        return (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+        return (!(IR[4]) & !(IR[7])
                 & D[4] & T[7]) |
-                (utility.not(IR.charAt(4)) & utility.not(IR.charAt(7))
+                (!(IR[4]) & !(IR[7])
                         & D[6] & T[7]);
     }
 
