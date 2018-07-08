@@ -48,11 +48,23 @@ public class GUI extends Application {
         GridPane buttonRoot = new GridPane();
         gridpanePlacement(regRoot, 310, 10);
         gridpanePlacement(buttonRoot, 20, 430);
-        Rectangle bBus = new Rectangle(580, 30, 30, 400);
+        Rectangle bBus = new Rectangle(640, 30, 30, 400);
+        Rectangle cBus = new Rectangle(360, 30, 28, 500);
+        Rectangle aBus = new Rectangle(500, 345, 28, 90);
+        Rectangle alu = new Rectangle(480, 430, 200, 70);
         bBus.setFill(new ImagePattern(new Image("images/arrow1.png")));
-        root.getChildren().add(regRoot);
-        root.getChildren().addAll(buttonRoot, bBus);
-        Scene scene = new Scene(root ,1100, 700, Color.DARKGRAY);
+        cBus.setFill(new ImagePattern(new Image("images/cbus.png")));
+        aBus.setFill(new ImagePattern(new Image("images/abus.png")));
+        alu.setFill(new ImagePattern(new Image("images/alu.png")));
+        Arrow arrow = new Arrow(580, 500, 580, 520);
+        Label aluLabel = new Label("ALU");
+        aluLabel.relocate(450, 450);
+        aluLabel.setStyle(labelStyle);
+        TextField shifter = new TextField();
+        shifter.setEditable(false);
+        shifter.relocate(500, 520);
+        root.getChildren().addAll(buttonRoot, regRoot, bBus, alu, shifter, cBus, aBus, aluLabel, arrow);
+        Scene scene = new Scene(root ,1100, 650, Color.DARKGRAY);
         registers(regRoot, cpu);
         code(buttonRoot, cpu, primaryStage);
         codeArea(root, cpu, primaryStage);
@@ -132,21 +144,27 @@ public class GUI extends Application {
         ir.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getIR().getData_out())));
         tos.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getTOS().getData_out())));
 
-        root.add(ar, 2, 1);
-        root.add(dr, 2, 2);
-        root.add(ir, 2, 3);
-        root.add(pc, 2, 4);
-        root.add(sp, 2, 5);
-        root.add(lv, 2, 6);
-        root.add(cpp, 2, 7);
-        root.add(tos, 2, 8);
-        root.add(h, 2, 9);
+        root.add(ar, 3, 1);
+        root.add(dr, 3, 2);
+        root.add(ir, 3, 3);
+        root.add(pc, 3, 4);
+        root.add(sp, 3, 5);
+        root.add(lv, 3, 6);
+        root.add(cpp, 3, 7);
+        root.add(tos, 3, 8);
+        root.add(h, 3, 9);
 
 
         Arrow[] arrow = new Arrow[9];
         for (int i = 0; i < 9; i++) {
             arrow[i] = new Arrow(10, 10, 50, 10);
-            root.add(arrow[i], 3, i+1);
+            root.add(arrow[i], 4, i+1);
+        }
+
+        Arrow[] load = new Arrow[9];
+        for (int i = 0; i < 9; i++) {
+            load[i] = new Arrow(10, 10, 50, 10);
+            root.add(load[i], 2, i+1);
         }
 
         root.add(regLabel, 1, 0);

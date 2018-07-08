@@ -2,7 +2,7 @@ public class ControlUnit {
     private boolean[] T = new boolean[16];
     private boolean[] D = new boolean[8];
     private boolean[] IR = new boolean[32];
-    private Utility utility = new Utility();
+    Utility utility = new Utility();
     private SequenceCounter sequenceCounter = new SequenceCounter();
 
     private int index(int x) {
@@ -35,7 +35,6 @@ public class ControlUnit {
             Decoder decoder = new Decoder();
             F = decoder.decode(in);
         }*/
-
     }
 
     public boolean sc_reset(boolean ready) {
@@ -49,59 +48,49 @@ public class ControlUnit {
     }
 
     public String bus_sel(boolean Z, boolean N) {
-        boolean bus_ALU = (L[1] & F[4] & T[10]) |
-                (L[1] & F[6] & T[10]) |
-                (L[2] & F[2] & T[5]) |
-                (L[2] & F[7] & T[8]) |
-                (L[3] & F[2] & T[5]) |
-                (L[3] & F[2] & T[9]) |
-                (L[3] & F[7] & T[6]) |
-                (L[3] & F[0] & T[8] & Z) |
-                (L[3] & F[1] & T[8] & N) |
-                (L[3] & F[3] & T[11] & Z);
-        boolean bus_SP = (L[1] & F[4] & T[4]) |
-                (L[1] & F[4] & T[7]) |
-                (L[1] & F[6] & T[4]) |
-                (L[1] & F[6] & T[7]) |
-                (L[2] & F[0] & T[5]) |
-                (L[2] & F[2] & T[8]) |
-                (L[2] & F[7] & T[4]) |
-                (L[3] & F[0] & T[4]) |
-                (L[3] & F[1] & T[4]) |
-                (L[3] & F[3] & T[4]) |
-                (L[3] & F[3] & T[7]);
-        boolean bus_PC = T[0];
-
-        char bs0 = (bus_ALU | bus_PC) ? '1' : '0';
-        char bs1 = (bus_SP | bus_PC) ? '1' : '0';
-        char bs2 = bus_extractor ? '1' : '0';
-        String bus_sel = "";
-        bus_sel += bs2 + bs1 + bs0;
-        return bus_sel;
+        boolean bus_h = false;
+        boolean bus_tos = (!(IR[4]) & !(IR[7])
+                & D[4] & T[5]) |
+                (!(IR[4]) & !(IR[7])
+                        & D[6] & T[5]);
+        boolean bus_lv = false;
+        boolean bus_cpp = false;
+        boolean bus_sp = (!(IR[4]) & !(IR[7])
+                & D[4] & T[4]) |
+                (!(IR[4]) & !(IR[7])
+                        & D[4] & T[4]);
+        boolean bus_pc = false;
+        boolean bus_dr = (!(IR[4]) & !(IR[7])
+                & D[4] & T[6]) |
+                (!(IR[4]) & !(IR[7])
+                        & D[6] & T[6]);
+        boolean bus_ir = false;
+        if (bus_h)
+            return "000";
+        if (bus_tos)
+            return "001";
+        if(bus_lv)
+            return "010";
+        if(bus_cpp)
+            return "011";
+        if(bus_sp)
+            return "100";
+        if(bus_pc)
+            return "101";
+        if(bus_dr)
+            return "110";
+        if(bus_ir)
+            return "111";
+        return "000";
     }
 
     private boolean[] ALU(boolean Z, boolean N) {
-        /*boolean ALU_add = (L[1] & F[4] & T[10]) |
-                (L[2] & F[2] & T[5]) |
-                (L[2] & F[7] & T[8]) |
-                (L[3] & F[2] & T[5]) |
-                (L[3] & F[2] & T[9]) |
-                (L[3] & F[7] & T[6]) |
-                (L[3] & F[0] & T[8] & Z) |
-                (L[3] & F[1] & T[8] & N) |
-                (L[3] & F[3] & T[11] & Z);
-        boolean ALU_sub = (L[1] & F[6] & T[10]) |
-                (L[3] & F[3] & T[10]);
-        boolean ALU_b = (L[3] & F[0] & T[7]) |
-                (L[3] & F[1] & T[7]);
-        boolean ALU_LV = (L[2] & F[2] & T[5]) |
-                (L[2] & F[7] & T[8]) |
-                (L[3] & F[2] & T[5]);
-        boolean ALU_PC = (L[3] & F[7] & T[6]) |
-                (L[3] & F[0] & T[8] & Z) |
-                (L[3] & F[1] & T[8] & N) |
-                (L[3] & F[3] & T[11] & Z);
-        return new boolean[]{ALU_add, ALU_sub, ALU_b, ALU_LV, ALU_PC};*/
+        boolean ALU_add = (!(IR[4]) & !(IR[7])
+                & D[4] & T[6]);
+        boolean ALU_sub = (!(IR[4]) & !(IR[7])
+                & D[6] & T[6]);
+        boolean ALU_data2 = !(ALU_add | ALU_sub);
+        return new boolean[]{ALU_add, ALU_sub, ALU_data2, false, false};
     }
 
     public String ALU_control(boolean Z, boolean N) {
@@ -122,19 +111,6 @@ public class ControlUnit {
         String res = "";
         res += c[1] + c[0];
         return res;
-    }
-
-    public boolean Z_en() {
-
-    }
-
-    public boolean N_en() {
-
-    }
-
-    public boolean SP_ADD4() {
-
-
     }
 
     public boolean SP_SUB4() {
@@ -192,16 +168,13 @@ public class ControlUnit {
     }
 
 
-    public boolean PC_LD(boolean Z, boolean N) {
-
+    public boolean IR_LD(boolean Z, boolean N) {
+        return T[1];
     }
 
     public boolean PC_INC() {
-
+        return T[1];
     }
 
-    public boolean IR_LD(boolean ready) {
-        return (T[2] & ready);
-    }
 
 }

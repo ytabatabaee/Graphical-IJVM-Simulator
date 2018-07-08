@@ -11,7 +11,7 @@ public class CPU {
 
     public void fetch(boolean reset) {
         do {
-            memory.signals(reset, controlUnit.read() | controlUnit.write() | controlUnit.fetch(),
+            memory.signals(reset, controlUnit.read() | controlUnit.write(),
                     !controlUnit.write(), dataPath.getAR().getData_out(), dataPath.getDR().getData_out());
             clk++;
             boolean a = !(controlUnit.read() | controlUnit.write() | !memory.isReady());
