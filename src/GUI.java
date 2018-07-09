@@ -193,8 +193,9 @@ public class GUI extends Application {
                     String line = input.nextLine();
                     codeLines.add(line);
                     binaryCode.append(utility.codeToBinary(line));
-                    codeArea.appendText((codeLines.size()+127) + ".     " + line + "   " + "\n");
+                    codeArea.appendText((codeLines.size()) + ".     " + line + "   " + "\n");
                 }
+                System.out.println(binaryCode);
                 cpu.getMemory().setCell(binaryCode.toString());
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -202,20 +203,11 @@ public class GUI extends Application {
         });
 
         step.setOnAction((ActionEvent event) -> {
+            int lastSP = utility.binaryToInt(cpu.getDataPath().getSP().getData_out());
             cpu.runStep(false);
             System.out.println(cpu.getSC());
-            /*for (int i = 0; i < cpu.getControlUnit().getT().length; i++) {
-                System.out.print(i + " ");
-                System.out.println(cpu.getControlUnit().getT()[i]);
-            }*/
-
-            /*for (int i = 0; i < cpu.getControlUnit().getD().length; i++) {
-                System.out.print(i + " ");
-                System.out.println(cpu.getControlUnit().getD()[i]);
-            }*/
-            for (int i = 68; i <= utility.binaryToInt(cpu.getDataPath().getSP().getData_out()); i+=4) {
-                stackArea.appendText((i - 4) + ". " + utility.binaryToInt(cpu.getMemory().getCell(i)) + "\n");
-            }
+            if(utility.binaryToInt(cpu.getDataPath().getSP().getData_out()) > lastSP)
+                stackArea.appendText((lastSP) + ". " + utility.binaryToInt(cpu.getMemory().getCell(lastSP)) + "\n");
             pc.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getPC().getData_out())));
             ar.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getAR().getData_out())));
             sp.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getSP().getData_out())));
