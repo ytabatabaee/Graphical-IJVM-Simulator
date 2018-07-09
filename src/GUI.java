@@ -213,8 +213,8 @@ public class GUI extends Application {
                 System.out.print(i + " ");
                 System.out.println(cpu.getControlUnit().getD()[i]);
             }*/
-            for (int i = 64; i < utility.binaryToInt(cpu.getDataPath().getSP().getData_out()); i+=4) {
-                stackArea.appendText((i - 4) + ". " + cpu.getMemory().getCell(i) + "\n");
+            for (int i = 68; i <= utility.binaryToInt(cpu.getDataPath().getSP().getData_out()); i+=4) {
+                stackArea.appendText((i - 4) + ". " + utility.binaryToInt(cpu.getMemory().getCell(i)) + "\n");
             }
             pc.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getPC().getData_out())));
             ar.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getAR().getData_out())));
