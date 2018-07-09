@@ -203,13 +203,16 @@ public class GUI extends Application {
         });
 
         step.setOnAction((ActionEvent event) -> {
-            int lastSPval = utility.binaryToInt(cpu.getMemory().getCell(utility.binaryToInt(cpu.getDataPath().getSP().getData_out())));
+            System.out.println(cpu.getSC());
             int lastSP = utility.binaryToInt(cpu.getDataPath().getSP().getData_out());
             cpu.runStep(false);
             System.out.println(cpu.getSC());
-            int newSp = utility.binaryToInt(cpu.getMemory().getCell(utility.binaryToInt(cpu.getDataPath().getSP().getData_out())));
-            if(newSp > lastSPval)
-                stackArea.appendText((lastSP) + ". " + utility.binaryToInt(cpu.getMemory().getCell(lastSP)) + "\n");
+            int newSp = utility.binaryToInt(cpu.getDataPath().getSP().getData_out());
+            if(newSp != lastSP){
+                stackArea.setText("");
+                for (int i = 68; i <= utility.binaryToInt(cpu.getDataPath().getSP().getData_out()); i+=4)
+                    stackArea.appendText((i) + ". " + utility.binaryToInt(cpu.getMemory().getCell(i)) + "\n");
+            }
             pc.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getPC().getData_out())));
             ar.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getAR().getData_out())));
             sp.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getSP().getData_out())));
