@@ -14,9 +14,9 @@ public class DataPath {
     private Register H = new Register();
     private String B;
     private String C;
-    private DFF D1 = new DFF();
-    private DFF D2 = new DFF();
-    private DFF D3 = new DFF();
+//    private DFF D1 = new DFF();
+//    private DFF D2 = new DFF();
+//    private DFF D3 = new DFF();
     private boolean Z;
     private boolean N;
 
@@ -32,19 +32,20 @@ public class DataPath {
         Utility utility = new Utility();
         C = shifter.shift(shift_amt, LR, x);
 
-        String DR_WData = mux.data_out(new String[]{C, mem}, utility.booleanToString(D2.isValue()));
-        boolean DR_WEnable = D2.isValue() | LD_DR;
+        String DR_WData = mux.data_out(new String[]{C, mem}, utility.booleanToString(read));
+        boolean DR_WEnable = /*D2.isValue() | */LD_DR;
+//        System.out.println("D2: " + D2.isValue());
         DR.signals(DR_WData, DR_WEnable, false, false, false, false, false, reset);
-        String IR_WData = mux.data_out(new String[]{C, mem}, utility.booleanToString(D3.isValue()));
-        boolean IR_WEnable = D3.isValue() | LD_IR;
+        String IR_WData = mux.data_out(new String[]{C, mem}, utility.booleanToString(fetch));
+        boolean IR_WEnable = /*D3.isValue() | */LD_IR;
         IR.signals(IR_WData, IR_WEnable, false, false, false, false, false, reset);
-        D2.setValue(utility.stringToBoolean(mux.data_out(new String[]
-                        {utility.booleanToString(!(!D1.isValue() & ready)), utility.booleanToString(read)},
-                utility.booleanToString(D2.isValue()))));
-        D3.setValue(utility.stringToBoolean(mux.data_out(new String[]
-                        {utility.booleanToString(!(!D1.isValue() & ready)), utility.booleanToString(fetch)},
-                utility.booleanToString(D3.isValue()))));
-        D1.setValue(ready);
+//        D2.setValue(utility.stringToBoolean(mux.data_out(new String[]
+//                        {utility.booleanToString(!(!D1.isValue() & ready)), utility.booleanToString(read)},
+//                utility.booleanToString(D2.isValue()))));
+//        D3.setValue(utility.stringToBoolean(mux.data_out(new String[]
+//                        {utility.booleanToString(!(!D1.isValue() & ready)), utility.booleanToString(fetch)},
+//                utility.booleanToString(D3.isValue()))));
+//        D1.setValue(ready);
         TOS.signals(C, LD_TOS, false, false, false, false, false, reset);
         LV.signals(C, LD_LV, false, false, false, false, false, reset);
         PC.signals(C, LD_PC, INC_PC, false, INC2_PC, false, false, reset);
