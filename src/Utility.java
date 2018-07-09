@@ -17,7 +17,7 @@ public class Utility {
     }
 
     public String decToHalf(int decimal) {
-        return extend(intToBinary(decimal).substring(16), true);
+        return intToBinary(decimal).substring(16);
     }
 
     public String binaryToHex(String binary) {
