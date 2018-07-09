@@ -127,7 +127,7 @@ public class ControlUnit {
                         & D[2] & T[4]);
     }
 
-    public String shift_amt() {
+    public int shift_amt() {
         boolean shift24 = ((IR[4]) & !(IR[7])
                 & D[0] & T[6]) |
                 ((IR[4]) & !(IR[7])
@@ -138,7 +138,13 @@ public class ControlUnit {
                         & D[2] & T[3]);
         boolean shift2 = ((IR[4]) & !(IR[7])
                 & D[2] & T[5]);
-        return "00000";
+        if(shift24)
+            return 24;
+        if (shift16)
+            return 16;
+        if (shift2)
+            return 2;
+        return 0;
     }
 
     public boolean SP_SUB4() {
