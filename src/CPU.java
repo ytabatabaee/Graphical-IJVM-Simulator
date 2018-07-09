@@ -48,7 +48,7 @@ public class CPU {
         clk++;
         controlUnit.count(controlUnit.sc_reset(memory.isReady()), a, reset);
         controlUnit.time_signals();
-        signals(reset);
+//        signals(reset);
     }
 
     public void runStep(boolean reset) {
