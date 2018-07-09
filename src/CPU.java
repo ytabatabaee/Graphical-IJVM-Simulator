@@ -5,7 +5,7 @@ public class CPU {
     private long clk = 0;
 
 
-    public String read(boolean reset) {
+    public String readWriteFetch(boolean reset) {
         String res;
         do {
             res = memory.signals(reset, controlUnit.read() | controlUnit.write() | controlUnit.fetch(),
@@ -29,6 +29,11 @@ public class CPU {
                 controlUnit.shift_amt(), controlUnit.AR_LD(), controlUnit.CPP_LD(),
                 controlUnit.bus_sel(dataPath.isZ(), dataPath.isN()),
                 controlUnit.SP_SUB4(), controlUnit.SP_ADD4(), controlUnit.SP_LD(), controlUnit.H_LD());
+        if (controlUnit.read())
+            dataPath.getDR().signals(readWriteFetch(reset), controlUnit.DR_LD(), false, false, false,
+                    false, false, reset);
+        if (controlUnit.write())
+            readWriteFetch(reset);
         clk++;
         controlUnit.count(controlUnit.sc_reset(memory.isReady()), a, reset);
         controlUnit.time_signals();
@@ -37,7 +42,7 @@ public class CPU {
     public void signalsWithFetch(boolean reset) {
         dataPath.getAR().signals(dataPath.getPC().getData_out(), controlUnit.AR_LD(), false, false, false,
                 false, false, reset);
-        String d = read(reset);
+        String d = readWriteFetch(reset);
         dataPath.getPC().signals("", controlUnit.PC_LD(), controlUnit.PC_INC(), false, controlUnit.PC_INC2(),
                 false, false, reset);
         boolean a = !(controlUnit.read() | controlUnit.write() | !memory.isReady());
