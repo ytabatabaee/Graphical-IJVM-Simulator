@@ -51,6 +51,10 @@ public class Memory {
         return data_out;
     }
 
+    public String getCell(int index) {
+        return cell[index];
+    }
+
     public void setCell(String cell, int index) {
         this.cell[index] = cell;
     }
