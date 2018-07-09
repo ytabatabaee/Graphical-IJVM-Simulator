@@ -44,7 +44,7 @@ public class GUI extends Application {
     TextField pc = new TextField();
     TextField sp = new TextField();
     TextField lv = new TextField();
-    TextField cpp  = new TextField();
+    TextField cpp = new TextField();
     TextField tos = new TextField();
     TextField h = new TextField();
     CPU cpu = new CPU();
@@ -73,7 +73,7 @@ public class GUI extends Application {
         shifter.setEditable(false);
         shifter.relocate(500, 520);
         root.getChildren().addAll(buttonRoot, regRoot, bBus, alu, shifter, cBus, aBus, aluLabel, arrow);
-        Scene scene = new Scene(root ,1100, 650, Color.DARKGRAY);
+        Scene scene = new Scene(root, 1100, 650, Color.DARKGRAY);
         registers(regRoot, cpu);
         code(buttonRoot, cpu, primaryStage);
         codeArea(root, cpu, primaryStage);
@@ -83,7 +83,7 @@ public class GUI extends Application {
         primaryStage.show();
     }
 
-    public void setStyleSheets(){
+    public void setStyleSheets() {
         try {
             labelStyle = new String(Files.readAllBytes(Paths.get("src/styleSheets/label.txt")));
             buttonStyle = new String(Files.readAllBytes(Paths.get("src/styleSheets/button.txt")));
@@ -92,14 +92,14 @@ public class GUI extends Application {
         }
     }
 
-    public void gridpanePlacement(GridPane root, int x, int y){
+    public void gridpanePlacement(GridPane root, int x, int y) {
         root.setVgap(10);
         root.setHgap(10);
         root.relocate(x, y);
 
     }
 
-    public void registers(GridPane root, CPU cpu){
+    public void registers(GridPane root, CPU cpu) {
         Label regLabel = new Label("Registers");
         Label arLabel = new Label("AR");
         Label drLabel = new Label("DR");
@@ -157,13 +157,13 @@ public class GUI extends Application {
         Arrow[] arrow = new Arrow[9];
         for (int i = 0; i < 9; i++) {
             arrow[i] = new Arrow(10, 10, 50, 10);
-            root.add(arrow[i], 4, i+1);
+            root.add(arrow[i], 4, i + 1);
         }
 
         Arrow[] load = new Arrow[9];
         for (int i = 0; i < 9; i++) {
             load[i] = new Arrow(10, 10, 50, 10);
-            root.add(load[i], 2, i+1);
+            root.add(load[i], 2, i + 1);
         }
 
         root.add(regLabel, 1, 0);
@@ -189,7 +189,7 @@ public class GUI extends Application {
             try {
                 Scanner input = new Scanner(file);
                 StringBuilder binaryCode = new StringBuilder();
-                while (input.hasNextLine()){
+                while (input.hasNextLine()) {
                     String line = input.nextLine();
                     codeLines.add(line);
                     binaryCode.append(utility.codeToBinary(line));
@@ -204,15 +204,11 @@ public class GUI extends Application {
 
         step.setOnAction((ActionEvent event) -> {
             System.out.println(cpu.getSC());
-            int lastSP = utility.binaryToInt(cpu.getDataPath().getSP().getData_out());
             cpu.runStep(false);
             System.out.println(cpu.getSC());
-            int newSp = utility.binaryToInt(cpu.getDataPath().getSP().getData_out());
-            if(newSp != lastSP){
-                stackArea.setText("");
-                for (int i = 68; i <= utility.binaryToInt(cpu.getDataPath().getSP().getData_out()); i+=4)
-                    stackArea.appendText((i) + ". " + utility.binaryToInt(cpu.getMemory().getCell(i)) + "\n");
-            }
+            stackArea.setText("");
+            for (int i = 68; i <= utility.binaryToInt(cpu.getDataPath().getSP().getData_out()); i += 4)
+                stackArea.appendText((i) + ". " + utility.binaryToInt(cpu.getMemory().getCell(i)) + "\n");
             pc.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getPC().getData_out())));
             ar.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getAR().getData_out())));
             sp.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getSP().getData_out())));
@@ -223,7 +219,7 @@ public class GUI extends Application {
             ir.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getIR().getData_out())));
             tos.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getTOS().getData_out())));
             //System.out.println(cpu.getClk());
-                });
+        });
         root.add(chooseFile, 1, 15);
         root.add(run, 2, 15);
         root.add(stop, 3, 15);
@@ -237,7 +233,7 @@ public class GUI extends Application {
         reset.setStyle(buttonStyle);
     }
 
-    public void codeArea(Group root, CPU cpu, Stage stage){
+    public void codeArea(Group root, CPU cpu, Stage stage) {
         root.getChildren().addAll(codeArea, stackArea, constantArea, varArea);
         codeArea.setPrefSize(300, 200);
         stackArea.setPrefSize(90, 150);
@@ -267,7 +263,7 @@ public class GUI extends Application {
     }
 
 
-    public static void main(String args[]){
+    public static void main(String args[]) {
         launch(args);
     }
 }
