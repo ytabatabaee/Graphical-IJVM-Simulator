@@ -12,6 +12,14 @@ public class Utility {
         return dec;
     }
 
+    public String decToByte(int decimal) {
+        return intToBinary(decimal).substring(24);
+    }
+
+    public String decToHalf(int decimal) {
+        return intToBinary(decimal).substring(16);
+    }
+
     public String binaryToHex(String binary) {
         StringBuilder hex = new StringBuilder("0x");
         return hex.append(Integer.toHexString(binaryToInt(binary))).toString();
@@ -53,42 +61,65 @@ public class Utility {
         }
     }
 
-    public String codeToBinary(String codeLine) {
+    public StringBuilder codeToBinary(String codeLine) {
         String[] components = codeLine.split("\\s+");
+        StringBuilder binaryCode = new StringBuilder();
         switch (components.length) {
             case 1:
                 switch (components[0].toLowerCase()) {
                     case "iadd":
-                        return "01100000";
+                        binaryCode.append("01100000");
+                        break;
                     case "isub":
-                        return "01100100";
+                        binaryCode.append("01100100");
+                        break;
                     case "nop":
-                        return "00000000";
+                        binaryCode.append("00000000");
+                        break;
                 }
+                break;
             case 2:
                 switch (components[0].toLowerCase()) {
                     case "bipush":
-                        return "00010000";
+                        binaryCode.append("00010000");
+                        binaryCode.append(decToByte(Integer.valueOf(components[1])));
+                        break;
                     case "iload":
-                        return "00010101";
+                        binaryCode.append("00010101");
+                        binaryCode.append(decToByte(Integer.valueOf(components[1])));
+                        break;
                     case "istore":
-                        return "00110110";
+                        binaryCode.append("00110110");
+                        binaryCode.append(decToByte(Integer.valueOf(components[1])));
+                        break;
+                    case "goto":
+                        binaryCode.append("10100111");
+                        binaryCode.append(decToHalf(Integer.valueOf(components[1])));
+                        break;
+                    case "ifeq":
+                        binaryCode.append("10011001");
+                        binaryCode.append(decToHalf(Integer.valueOf(components[1])));
+                        break;
+                    case "iflt":
+                        binaryCode.append("10011011");
+                        binaryCode.append(decToHalf(Integer.valueOf(components[1])));
+                        break;
+                    case "if_icmpeq":
+                        binaryCode.append("10011111");
+                        binaryCode.append(decToHalf(Integer.valueOf(components[1])));
+                        break;
                 }
+                break;
             case 3:
                 switch (components[0].toLowerCase()){
                     case "iinc":
-                        return "10000100";
-                    case "goto":
-                        return "10100111";
-                    case "ifeq":
-                        return "10011001";
-                    case "iflt":
-                        return "10011011";
-                    case "if_icmpeq":
-                        return "10011111";
+                        binaryCode.append("10000100");
+                        binaryCode.append(decToByte(Integer.valueOf(components[1])));
+                        binaryCode.append(decToByte(Integer.valueOf(components[2])));
+                        break;
                 }
         }
-        return "";
+        return binaryCode;
     }
 
 
@@ -112,9 +143,5 @@ public class Utility {
         if (string.equals("1"))
             return true;
         return false;
-    }
-
-    public String decimalToByte(int decimal) {
-        return intToBinary(decimal).substring(24);
     }
 }
