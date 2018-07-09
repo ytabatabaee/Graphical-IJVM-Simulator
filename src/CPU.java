@@ -59,4 +59,8 @@ public class CPU {
     public DataPath getDataPath() {
         return dataPath;
     }
+
+    public Memory getMemory() {
+        return memory;
+    }
 }
