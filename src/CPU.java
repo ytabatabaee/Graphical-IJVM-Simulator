@@ -46,6 +46,12 @@ public class CPU {
         signals(reset);
     }
 
+    public void runStep(boolean reset) {
+        if (controlUnit.fetch())
+            signalsWithFetch(reset);
+        else signals(reset);
+    }
+
     public ControlUnit getControlUnit() {
         return controlUnit;
     }
