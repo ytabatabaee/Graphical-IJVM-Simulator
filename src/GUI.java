@@ -196,10 +196,17 @@ public class GUI extends Application {
                     binaryCode.append(utility.codeToBinary(line));
                     codeArea.appendText((codeLines.size()+127) + ".     " + line + "   " + "\n");
                 }
+                cpu.getMemory().setCell(binaryCode.toString());
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         });
+
+        step.setOnAction((ActionEvent event) -> {
+            cpu.runStep(false);
+            System.out.println(cpu.getSC());
+            System.out.println(cpu.getClk());
+                });
         root.add(chooseFile, 1, 15);
         root.add(run, 2, 15);
         root.add(stop, 3, 15);
