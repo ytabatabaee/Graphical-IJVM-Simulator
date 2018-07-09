@@ -50,8 +50,8 @@ public class ControlUnit {
                 ((IR[4]) & !(IR[7])
                         & D[0] & T[7]) |
                 ((IR[4]) & !(IR[7])
-                        & D[7] & T[10])
-                ;
+                        & D[7] & T[10]) |
+                (IR[7] & D[2] & T[10]);
     }
 
     public String bus_sel(boolean Z, boolean N) {
@@ -79,11 +79,13 @@ public class ControlUnit {
                 (!(IR[4]) & !(IR[7])
                         & D[6] & T[6]) |
                 ((IR[4]) & !(IR[7])
-                        & D[7] & T[10]);
+                        & D[7] & T[10]) |
+                (IR[7] & D[2] & T[9]);
         boolean bus_ir = ((IR[4]) & !(IR[7])
                 & D[0] & T[5]) | ((IR[4]) & !(IR[7])
                 & D[7] & T[3]) |
-                (IR[7] & D[2] & T[3]);
+                (IR[7] & D[2] & T[3]) |
+                (IR[7] & D[2] & T[7]);
         if (bus_tos)
             return "001";
         if (bus_lv)
@@ -106,7 +108,8 @@ public class ControlUnit {
                 & D[4] & T[6]) |
                 ((IR[4]) & !(IR[7])
                         & D[7] & T[7]) |
-                (IR[7] & D[2] & T[6]);
+                (IR[7] & D[2] & T[6]) |
+                (IR[7] & D[2] & T[9]);
         boolean ALU_sub = (!(IR[4]) & !(IR[7])
                 & D[6] & T[6]);
         boolean ALU_data2 = !(ALU_add | ALU_sub);
@@ -138,7 +141,8 @@ public class ControlUnit {
                 & D[0] & T[6]) |
                 ((IR[4]) & !(IR[7])
                         & D[2] & T[4]) |
-                (IR[7] & D[2] & T[4]);
+                (IR[7] & D[2] & T[4]) |
+                (IR[7] & D[2] & T[7]);
     }
 
     public int shift_amt() {
@@ -148,7 +152,8 @@ public class ControlUnit {
                         & D[2] & T[4]) |
                 ((IR[4]) & !(IR[7])
                         & D[7] & T[4]) |
-                (IR[7] & D[2] & T[4]);
+                (IR[7] & D[2] & T[4]) |
+                (IR[7] & D[2] & T[7]);
         boolean shift16 = ((IR[4]) & !(IR[7])
                 & D[0] & T[5]) |
                 ((IR[4]) & !(IR[7])
@@ -161,12 +166,15 @@ public class ControlUnit {
                 ((IR[4]) & !(IR[7])
                         & D[7] & T[5]) |
                 (IR[7] & D[2] & T[5]);
+        boolean shift8 = (IR[7] & D[2] & T[7]);
         if (shift24)
             return 24;
         if (shift16)
             return 16;
         if (shift2)
             return 2;
+        if (shift8)
+            return 8;
         return 0;
     }
 
@@ -207,7 +215,9 @@ public class ControlUnit {
                         & D[7] & T[5]) |
                 (IR[7] & D[2] & T[3]) |
                 (IR[7] & D[2] & T[4]) |
-                (IR[7] & D[2] & T[5]);
+                (IR[7] & D[2] & T[5]) |
+                (IR[7] & D[2] & T[7]) |
+                (IR[7] & D[2] & T[8]);
     }
 
     public boolean DR_LD() {
@@ -220,7 +230,8 @@ public class ControlUnit {
                 (!(IR[4]) & !(IR[7])
                         & D[6] & T[6]) |
                 ((IR[4]) & !(IR[7])
-                        & D[0] & T[6]);
+                        & D[0] & T[6]) |
+                (IR[7] & D[2] & T[9]);
     }
 
     public boolean AR_LD() {
@@ -267,7 +278,8 @@ public class ControlUnit {
                 ((IR[4]) & !(IR[7])
                         & D[7] & T[7]) |
                 ((IR[4]) & !(IR[7])
-                        & D[7] & T[9]);
+                        & D[7] & T[9]) |
+                (IR[7] & D[2] & T[7]);
     }
 
     public boolean write() {
@@ -280,7 +292,8 @@ public class ControlUnit {
                 ((IR[4]) & !(IR[7])
                         & D[2] & T[8]) |
                 ((IR[4]) & !(IR[7])
-                        & D[7] & T[8]);
+                        & D[7] & T[8]) |
+                (IR[7] & D[2] & T[10]);
     }
 
     public boolean fetch() {
