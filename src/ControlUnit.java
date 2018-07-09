@@ -136,6 +136,7 @@ public class ControlUnit {
                         & D[2] & T[3]);
         boolean shift2 = ((IR[4]) & !(IR[7])
                 & D[2] & T[5]);
+        return "00000";
     }
 
     public boolean SP_SUB4() {
@@ -194,7 +195,7 @@ public class ControlUnit {
                         & D[2] & T[7]);
     }
 
-    public boolean TOS_LD(boolean ready) {
+    public boolean TOS_LD() {
         return (!(IR[4]) & !(IR[7])
                 & D[4] & T[6]) |
                 (!(IR[4]) & !(IR[7])
@@ -230,7 +231,7 @@ public class ControlUnit {
     }
 
 
-    public boolean IR_LD(boolean Z, boolean N) {
+    public boolean IR_LD() {
         return T[1];
     }
 
@@ -241,4 +242,27 @@ public class ControlUnit {
     }
 
 
+    public boolean LV_LD() {
+        return false;
+    }
+
+    public boolean CPP_LD() {
+        return false;
+    }
+
+    public boolean SP_LD() {
+        return false;
+    }
+
+    public boolean PC_LD() {
+        return false;
+    }
+
+    public boolean PC_INC2() {
+        return false;
+    }
+
+    public String BSelect() {
+        return "000";
+    }
 }

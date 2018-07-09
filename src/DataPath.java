@@ -20,7 +20,7 @@ public class DataPath {
     private boolean Z;
     private boolean N;
 
-    public void signals(boolean read, boolean ready, boolean reset, String mem, boolean LD_DR, boolean Reset_CPP,
+    public void signals(boolean read, boolean ready, boolean reset, String mem, boolean LD_DR,
                         boolean LD_IR, boolean fetch, boolean LD_TOS, String ALUControll, boolean LD_LV, boolean LR,
                         boolean INC_PC, boolean INC2_PC, boolean LD_PC, String ShSelect, boolean LD_AR, boolean LD_CPP,
                         String BSelect, boolean DEC4_SP, boolean INC4_SP, boolean LD_SP, boolean LD_H) {
@@ -50,7 +50,7 @@ public class DataPath {
         LV.signals(C, LD_LV, false, false, false, false, false, reset);
         PC.signals(C, LD_PC, INC_PC, false, INC2_PC, false, false, reset);
         AR.signals(C, LD_AR, false, false, false, false, false, reset);
-        CPP.signals(C, LD_CPP, false, false, false, false, false, reset | Reset_CPP);
+        CPP.signals(C, LD_CPP, false, false, false, false, false, reset);
         SP.signals(C, LD_SP, false, false, false, INC4_SP, DEC4_SP, reset);
         H.signals(C, LD_H, false, false, false, false, false, reset);
     }
