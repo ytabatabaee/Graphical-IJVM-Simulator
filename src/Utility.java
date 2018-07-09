@@ -13,7 +13,7 @@ public class Utility {
     }
 
     public String decToByte(int decimal) {
-        return extend(intToBinary(decimal).substring(24), true);
+        return intToBinary(decimal).substring(24);
     }
 
     public String decToHalf(int decimal) {

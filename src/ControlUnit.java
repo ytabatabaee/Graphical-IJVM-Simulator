@@ -66,7 +66,7 @@ public class ControlUnit {
         boolean bus_sp = (!(IR[4]) & !(IR[7])
                 & D[4] & T[4]) |
                 (!(IR[4]) & !(IR[7])
-                        & D[4] & T[4]) |
+                        & D[6] & T[4]) |
                 ((IR[4]) & !(IR[7])
                         & D[0] & T[4]) |
                 ((IR[4]) & !(IR[7])
