@@ -2,6 +2,7 @@ public class CPU {
     private ControlUnit controlUnit = new ControlUnit();
     private DataPath dataPath = new DataPath();
     private Memory memory = new Memory();
+    private Cache cache = new Cache();
     private long clk = 0;
 
 
