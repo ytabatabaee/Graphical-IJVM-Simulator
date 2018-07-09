@@ -15,6 +15,11 @@ public class CPU {
     }
 
     public void signals(boolean reset) {
+        if (controlUnit.read())
+            dataPath.getDR().signals(readWriteFetch(reset), controlUnit.DR_LD(), false, false, false,
+                    false, false, reset);
+        if (controlUnit.write())
+            readWriteFetch(reset);
         dataPath.signals(controlUnit.read(), memory.isReady(), reset, memory.getData_out(), controlUnit.DR_LD(),
                 controlUnit.IR_LD(), controlUnit.fetch(),
                 controlUnit.TOS_LD(), controlUnit.ALU_control(dataPath.isZ(), dataPath.isN()),
@@ -23,11 +28,6 @@ public class CPU {
                 controlUnit.shift_amt(), controlUnit.AR_LD(), controlUnit.CPP_LD(),
                 controlUnit.bus_sel(dataPath.isZ(), dataPath.isN()),
                 controlUnit.SP_SUB4(), controlUnit.SP_ADD4(), controlUnit.SP_LD(), controlUnit.H_LD());
-        if (controlUnit.read())
-            dataPath.getDR().signals(readWriteFetch(reset), controlUnit.DR_LD(), false, false, false,
-                    false, false, reset);
-        if (controlUnit.write())
-            readWriteFetch(reset);
         clk++;
         controlUnit.count(controlUnit.sc_reset(memory.isReady()), true, reset);
         controlUnit.time_signals();
