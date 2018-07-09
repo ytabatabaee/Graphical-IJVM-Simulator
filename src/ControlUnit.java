@@ -102,7 +102,9 @@ public class ControlUnit {
                 (IR[7] & D[0] & T[6]) |
                 (IR[7] & D[1] & T[6]) |
                 (IR[7] & D[0] & T[8]) |
-                (IR[7] & D[1] & T[8]);
+                (IR[7] & D[1] & T[8]) |
+                (IR[7] & D[1] & T[12]) |
+                (IR[7] & D[0] & T[12]);
         boolean bus_ir = ((IR[4]) & !(IR[7])
                 & D[0] & T[5]) | ((IR[4]) & !(IR[7])
                 & D[7] & T[3]) |
@@ -111,7 +113,9 @@ public class ControlUnit {
                 (IR[7] & D[2] & T[3]) |
                 (IR[7] & D[2] & T[7]) |
                 (IR[7] & D[7] & T[3]) |
-                (IR[7] & D[7] & T[5]);
+                (IR[7] & D[7] & T[5]) |
+                (IR[7] & D[0] & T[9]) |
+                (IR[7] & D[1] & T[8]);
         if (bus_tos)
             return "001";
         if (bus_lv)
@@ -139,7 +143,9 @@ public class ControlUnit {
                 (IR[7] & D[2] & T[6]) |
                 (IR[7] & D[2] & T[9]) |
                 (IR[7] & D[7] & T[8]) |
-                (IR[7] & D[7] & T[9]);
+                (IR[7] & D[7] & T[9]) |
+                (IR[7] & D[0] & T[12]) |
+                (IR[7] & D[1] & T[12]);
         boolean ALU_sub = (!(IR[4]) & !(IR[7])
                 & D[6] & T[6]);
         boolean ALU_data2 = !(ALU_add | ALU_sub);
@@ -198,7 +204,9 @@ public class ControlUnit {
                 (IR[7] & D[7] & T[4]) |
                 (IR[7] & D[7] & T[6]) |
                 (IR[7] & D[1] & T[8]) |
-                (IR[7] & D[1] & T[10]);
+                (IR[7] & D[1] & T[10]) |
+                (IR[7] & D[0] & T[8]) |
+                (IR[7] & D[0] & T[10]);
         boolean shift16 = ((IR[4]) & !(IR[7])
                 & D[0] & T[5]) |
                 ((IR[4]) & !(IR[7])
@@ -207,7 +215,8 @@ public class ControlUnit {
                         & D[7] & T[3]) |
                 (IR[7] & D[2] & T[3]) |
                 (IR[7] & D[7] & T[7]) |
-                (IR[7] & D[1] & T[11]);
+                (IR[7] & D[1] & T[11]) |
+                (IR[7] & D[0] & T[11]);
         boolean shift2 = ((IR[4]) & !(IR[7])
                 & D[2] & T[5]) |
                 ((IR[4]) & !(IR[7])
@@ -218,7 +227,8 @@ public class ControlUnit {
         boolean shift8 = (IR[7] & D[2] & T[7]) |
                 (IR[7] & D[7] & T[3]) |
                 (IR[7] & D[7] & T[5]) |
-                (IR[7] & D[1] & T[9]);
+                (IR[7] & D[1] & T[9]) |
+                (IR[7] & D[0] & T[9]);
         if (shift24)
             return 24;
         if (shift16)
