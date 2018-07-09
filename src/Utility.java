@@ -13,11 +13,11 @@ public class Utility {
     }
 
     public String decToByte(int decimal) {
-        return intToBinary(decimal).substring(24);
+        return extend(intToBinary(decimal).substring(24), true);
     }
 
     public String decToHalf(int decimal) {
-        return intToBinary(decimal).substring(16);
+        return extend(intToBinary(decimal).substring(16), true);
     }
 
     public String binaryToHex(String binary) {
