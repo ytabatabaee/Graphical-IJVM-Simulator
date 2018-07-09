@@ -36,6 +36,8 @@ public class CPU {
 
     public void signalsWithFetch(boolean reset) {
         String d = read(reset);
+        dataPath.getPC().signals("", controlUnit.PC_LD(), controlUnit.PC_INC(), false, controlUnit.PC_INC2(),
+                false, false, reset);
         boolean a = !(controlUnit.read() | controlUnit.write() | !memory.isReady());
         dataPath.getIR().signals(d, controlUnit.IR_LD(), false, false, false, false, false, reset);
         System.out.println("aaa  " + controlUnit.sc_val());
