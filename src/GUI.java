@@ -203,10 +203,12 @@ public class GUI extends Application {
         });
 
         step.setOnAction((ActionEvent event) -> {
+            int lastSPval = utility.binaryToInt(cpu.getMemory().getCell(utility.binaryToInt(cpu.getDataPath().getSP().getData_out())));
             int lastSP = utility.binaryToInt(cpu.getDataPath().getSP().getData_out());
             cpu.runStep(false);
             System.out.println(cpu.getSC());
-            if(utility.binaryToInt(cpu.getDataPath().getSP().getData_out()) > lastSP)
+            int newSp = utility.binaryToInt(cpu.getMemory().getCell(utility.binaryToInt(cpu.getDataPath().getSP().getData_out())));
+            if(newSp > lastSPval)
                 stackArea.appendText((lastSP) + ". " + utility.binaryToInt(cpu.getMemory().getCell(lastSP)) + "\n");
             pc.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getPC().getData_out())));
             ar.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getAR().getData_out())));
