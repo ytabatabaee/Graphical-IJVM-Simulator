@@ -31,9 +31,9 @@ public class ControlUnit {
 
     public void instruction_decoding(String IR) {
         System.out.println(IR);
-            for (int i = 0; i < 32; i++) {
-                this.IR[i] = (IR.charAt(index(i)) == '1');
-            }
+        for (int i = 0; i < 32; i++) {
+            this.IR[i] = (IR.charAt(index(i)) == '1');
+        }
         Decoder decoder = new Decoder();
 //        this.IR = decoder.decode(IR);
         String in = "" + IR.charAt(index(5)) + IR.charAt(index(2)) + IR.charAt(index(1));
@@ -51,6 +51,8 @@ public class ControlUnit {
                         & D[0] & T[7]) |
                 ((IR[4]) & !(IR[7])
                         & D[7] & T[10]) |
+                ((IR[4]) & !(IR[7])
+                        & D[2] & T[8]) |
                 (IR[7] & D[2] & T[10]) |
                 (IR[7] & D[7] & T[9]);
     }
@@ -62,6 +64,8 @@ public class ControlUnit {
                         & D[6] & T[5]);
         boolean bus_lv = ((IR[4]) & !(IR[7])
                 & D[7] & T[7]) |
+                ((IR[4]) & !(IR[7])
+                        & D[2] & T[6]) |
                 (IR[7] & D[2] & T[6]);
         boolean bus_cpp = false;
         boolean bus_sp = (!(IR[4]) & !(IR[7])
@@ -73,7 +77,9 @@ public class ControlUnit {
                 ((IR[4]) & !(IR[7])
                         & D[7] & T[6]) |
                 ((IR[4]) & !(IR[7])
-                        & D[7] & T[8]);
+                        & D[7] & T[8]) |
+                ((IR[4]) & !(IR[7])
+                        & D[2] & T[7]);
         boolean bus_pc = (IR[7] & D[7] & T[9]);
         boolean bus_dr = (!(IR[4]) & !(IR[7])
                 & D[4] & T[6]) |
@@ -87,6 +93,8 @@ public class ControlUnit {
         boolean bus_ir = ((IR[4]) & !(IR[7])
                 & D[0] & T[5]) | ((IR[4]) & !(IR[7])
                 & D[7] & T[3]) |
+                ((IR[4]) & !(IR[7])
+                        & D[2] & T[3])|
                 (IR[7] & D[2] & T[3]) |
                 (IR[7] & D[2] & T[7]) |
                 (IR[7] & D[7] & T[3]) |
@@ -113,6 +121,8 @@ public class ControlUnit {
                 & D[4] & T[6]) |
                 ((IR[4]) & !(IR[7])
                         & D[7] & T[7]) |
+                ((IR[4]) & !(IR[7])
+                        & D[2] & T[6]) |
                 (IR[7] & D[2] & T[6]) |
                 (IR[7] & D[2] & T[9]) |
                 (IR[7] & D[7] & T[8]) |
@@ -178,6 +188,8 @@ public class ControlUnit {
                 & D[2] & T[5]) |
                 ((IR[4]) & !(IR[7])
                         & D[7] & T[5]) |
+                ((IR[4]) & !(IR[7])
+                        & D[2] & T[5]) |
                 (IR[7] & D[2] & T[5]);
         boolean shift8 = (IR[7] & D[2] & T[7]) |
                 (IR[7] & D[7] & T[3]) |
@@ -221,7 +233,7 @@ public class ControlUnit {
                 ((IR[4]) & !(IR[7])
                         & D[2] & T[4]) |
                 ((IR[4]) & !(IR[7])
-                        & D[2] & T[4]) |
+                        & D[2] & T[5]) |
                 ((IR[4]) & !(IR[7])
                         & D[7] & T[3]) |
                 ((IR[4]) & !(IR[7])
@@ -246,6 +258,8 @@ public class ControlUnit {
                         & D[4] & T[6]) |
                 (!(IR[4]) & !(IR[7])
                         & D[6] & T[5]) |
+                ((IR[4]) & !(IR[7])
+                        & D[2] & T[7]) |
                 (!(IR[4]) & !(IR[7])
                         & D[6] & T[6]) |
                 ((IR[4]) & !(IR[7])
@@ -330,6 +344,8 @@ public class ControlUnit {
         return T[1] |
                 ((IR[4]) & !(IR[7])
                         & D[0] & T[3]) |
+                ((IR[4]) & !(IR[7])
+                        & D[2] & T[3]) |
                 ((IR[4]) & !(IR[7])
                         & D[7] & T[3]) |
                 (IR[7] & D[2] & T[3]) |
