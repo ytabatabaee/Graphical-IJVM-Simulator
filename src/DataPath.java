@@ -22,7 +22,7 @@ public class DataPath {
 
     public void signals(boolean read, boolean ready, boolean reset, String mem, boolean LD_DR,
                         boolean LD_IR, boolean fetch, boolean LD_TOS, String ALUControll, boolean LD_LV, boolean LR,
-                        boolean INC_PC, boolean INC2_PC, boolean LD_PC, String ShSelect, boolean LD_AR, boolean LD_CPP,
+                        boolean INC_PC, boolean INC2_PC, boolean LD_PC, int shift_amt, boolean LD_AR, boolean LD_CPP,
                         String BSelect, boolean DEC4_SP, boolean INC4_SP, boolean LD_SP, boolean LD_H) {
         B = mux.data_out(new String[]{H.getData_out(), TOS.getData_out(), LV.getData_out(), CPP.getData_out(),
                 SP.getData_out(), PC.getData_out(), DR.getData_out(), IR.getData_out()}, BSelect);
@@ -30,8 +30,7 @@ public class DataPath {
         Z = alu.Z(x);
         N = alu.N(x);
         Utility utility = new Utility();
-        C = shifter.shift(utility.binaryToInt(mux.data_out(new String[]{"00000", "00010", "01000", "10000", "11000",
-                "00100", "11001"}, ShSelect)), LR, x);
+        C = shifter.shift(shift_amt, LR, x);
 
         String DR_WData = mux.data_out(new String[]{C, mem}, utility.booleanToString(D2.isValue()));
         boolean DR_WEnable = D2.isValue() | LD_DR;
