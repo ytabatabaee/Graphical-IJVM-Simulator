@@ -204,15 +204,15 @@ public class GUI extends Application {
         step.setOnAction((ActionEvent event) -> {
             cpu.runStep(false);
             System.out.println(cpu.getSC());
-            for (int i = 0; i < cpu.getControlUnit().getT().length; i++) {
+            /*for (int i = 0; i < cpu.getControlUnit().getT().length; i++) {
                 System.out.print(i + " ");
                 System.out.println(cpu.getControlUnit().getT()[i]);
-            }
+            }*/
 
-            for (int i = 0; i < cpu.getControlUnit().getD().length; i++) {
+            /*for (int i = 0; i < cpu.getControlUnit().getD().length; i++) {
                 System.out.print(i + " ");
                 System.out.println(cpu.getControlUnit().getD()[i]);
-            }
+            }*/
             pc.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getPC().getData_out())));
             ar.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getAR().getData_out())));
             sp.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getSP().getData_out())));

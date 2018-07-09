@@ -34,7 +34,6 @@ public class CPU {
     }
 
     public void signalsWithFetch(boolean reset) {
-        dataPath.getIR().setData_out(read(reset));
         controlUnit.time_signals();
         controlUnit.instruction_decoding(dataPath.IR());
         boolean a = !(controlUnit.read() | controlUnit.write() | !memory.isReady());

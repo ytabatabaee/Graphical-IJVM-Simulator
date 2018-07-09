@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class ControlUnit {
     private boolean[] T = new boolean[16];
     private boolean[] D = new boolean[8];
@@ -13,6 +15,10 @@ public class ControlUnit {
     public void time_signals() {
         Decoder decoder = new Decoder();
         T = decoder.decode(sequenceCounter.getSc());
+        System.out.println(Arrays.toString(D));
+        System.out.println(Arrays.toString(IR));
+        System.out.println(Arrays.toString(T));
+        System.out.println("LD_AR " + AR_LD());
     }
 
     public String sc_val() {
@@ -24,13 +30,14 @@ public class ControlUnit {
     }
 
     public void instruction_decoding(String IR) {
-        this.IR[4] = IR.charAt(index(4)) == '1';
-        this.IR[7] = IR.charAt(index(7)) == '1';
-        Decoder decoder = new Decoder();
-        String in = "";
-        in += IR.charAt(index(5)) + IR.charAt(index(2)) + IR.charAt(index(1));
-        decoder.decode(in);
-        D = decoder.decode(in);
+            System.out.println(IR);
+            for (int i = 0; i < 32; i++) {
+                this.IR[i] = (IR.charAt(index(i)) == '1');
+            }
+            Decoder decoder = new Decoder();
+            String in = "";
+            in += IR.charAt(index(5)) + IR.charAt(index(2)) + IR.charAt(index(1));
+            D = decoder.decode(in);
     }
 
     public boolean sc_reset(boolean ready) {
