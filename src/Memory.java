@@ -58,4 +58,9 @@ public class Memory {
     public void setCell(String[] cell) {
         this.cell = cell;
     }
+
+    public void setCell(String cell) {
+        for (int i = 0; i < cell.length() / 8; i++)
+            this.cell[i] = cell.substring(i * 8, (i + 1) * 8);
+    }
 }
