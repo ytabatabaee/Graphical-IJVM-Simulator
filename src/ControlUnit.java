@@ -35,8 +35,7 @@ public class ControlUnit {
                 this.IR[i] = (IR.charAt(index(i)) == '1');
             }
             Decoder decoder = new Decoder();
-            String in = "";
-            in += IR.charAt(index(5)) + IR.charAt(index(2)) + IR.charAt(index(1));
+            String in = "" + IR.charAt(index(5)) + IR.charAt(index(2)) + IR.charAt(index(1));
             D = decoder.decode(in);
     }
 

@@ -6,6 +6,15 @@ public class Main {
         b = "qw";
         Decoder decoder = new Decoder();
         boolean[] ii = decoder.decode("011");
+        Register x = new Register();
+        x.signals("", false, true, false, false, false, false, false);
+        x.signals("", false, true, false, false, false, false, false);
+        x.signals("", false, true, false, false, false, false, false);
+        x.signals("", false, true, false, false, false, false, false);
+        x.signals("", false, true, false, false, false, false, false);
+        x.signals("", false, true, false, false, false, false, false);
+
+        System.out.println(x.getData_out());
         System.out.println(c);
         System.out.println(ii[3]);
     }

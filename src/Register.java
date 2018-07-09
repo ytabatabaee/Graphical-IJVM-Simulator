@@ -14,11 +14,11 @@ public class Register {
         else if (DEC)
             data_out = utility.operation(data_out, "1", "sub");
         else if (INC2)
-            data_out = utility.operation(data_out, "2", "add");
+            data_out = utility.operation(data_out, "10", "add");
         else if (INC4)
-            data_out = utility.operation(data_out, "4", "add");
+            data_out = utility.operation(data_out, "100", "add");
         else if (DEC4)
-            data_out = utility.operation(data_out, "4", "sub");
+            data_out = utility.operation(data_out, "100", "sub");
     }
 
     public Register(String data_in) {
