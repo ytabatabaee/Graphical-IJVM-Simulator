@@ -15,7 +15,6 @@ public class CPU {
     }
 
     public void signals(boolean reset) {
-        boolean a = !(controlUnit.read() | controlUnit.write() | !memory.isReady());
         dataPath.signals(controlUnit.read(), memory.isReady(), reset, memory.getData_out(), controlUnit.DR_LD(),
                 controlUnit.IR_LD(), controlUnit.fetch(),
                 controlUnit.TOS_LD(), controlUnit.ALU_control(dataPath.isZ(), dataPath.isN()),
@@ -30,29 +29,28 @@ public class CPU {
         if (controlUnit.write())
             readWriteFetch(reset);
         clk++;
-        controlUnit.count(controlUnit.sc_reset(memory.isReady()), a, reset);
+        controlUnit.count(controlUnit.sc_reset(memory.isReady()), true, reset);
         controlUnit.time_signals();
     }
 
     public void signalsWithFetch(boolean reset) {
         dataPath.getAR().signals(dataPath.getPC().getData_out(), controlUnit.AR_LD(), false, false, false,
                 false, false, reset);
-        boolean a = !(controlUnit.read() | controlUnit.write() | !memory.isReady());
         controlUnit.time_signals();
         String d = readWriteFetch(reset);
         clk++;
-        controlUnit.count(controlUnit.sc_reset(memory.isReady()), a, reset);
+        controlUnit.count(controlUnit.sc_reset(memory.isReady()), true, reset);
         controlUnit.time_signals();
         dataPath.getPC().signals("", controlUnit.PC_LD(), controlUnit.PC_INC(), false, controlUnit.PC_INC2(),
                 false, false, reset);
         dataPath.getIR().signals(d, controlUnit.IR_LD(), false, false, false, false, false, reset);
         System.out.println("aaa  " + controlUnit.sc_val());
         clk++;
-        controlUnit.count(controlUnit.sc_reset(memory.isReady()), a, reset);
+        controlUnit.count(controlUnit.sc_reset(memory.isReady()), true, reset);
         controlUnit.time_signals();
         controlUnit.instruction_decoding(dataPath.IR());
         clk++;
-        controlUnit.count(controlUnit.sc_reset(memory.isReady()), a, reset);
+        controlUnit.count(controlUnit.sc_reset(memory.isReady()), true, reset);
         controlUnit.time_signals();
     }
 
