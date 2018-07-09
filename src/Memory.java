@@ -9,6 +9,11 @@ public class Memory {
     private String data_out = "";
     private boolean ready = true;
 
+    public Memory() {
+        for (int i = 0; i < cell.length; i++) {
+            this.cell[i] = "00000000";
+        }
+    }
 
     public String signals(boolean reset, boolean start, boolean rwn, String address, String data_in) {
         if (reset) {
@@ -31,10 +36,10 @@ public class Memory {
                 if (rwn_t)
                     data_out = cell[ad + 3] + cell[ad + 2] + cell[ad + 1] + cell[ad];
                 else {
-                        cell[ad] = data_t.substring(24);
-                        cell[ad + 1] = data_t.substring(16, 24);
-                        cell[ad + 2] = data_t.substring(8, 16);
-                        cell[ad + 3] = data_t.substring(0, 8);
+                    cell[ad] = data_t.substring(24);
+                    cell[ad + 1] = data_t.substring(16, 24);
+                    cell[ad + 2] = data_t.substring(8, 16);
+                    cell[ad + 3] = data_t.substring(0, 8);
                 }
                 state = false;
                 ready = true;
