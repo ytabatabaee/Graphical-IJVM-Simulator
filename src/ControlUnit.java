@@ -24,15 +24,13 @@ public class ControlUnit {
     }
 
     public void instruction_decoding(String IR) {
-        if (T[3]) {
-            this.IR[4] = IR.charAt(index(4)) == '1';
-            this.IR[7] = IR.charAt(index(7)) == '1';
-            Decoder decoder = new Decoder();
-            String in = "";
-            in += IR.charAt(index(5)) + IR.charAt(index(2)) + IR.charAt(index(1));
-            decoder.decode(in);
-            D = decoder.decode(in);
-        }
+        this.IR[4] = IR.charAt(index(4)) == '1';
+        this.IR[7] = IR.charAt(index(7)) == '1';
+        Decoder decoder = new Decoder();
+        String in = "";
+        in += IR.charAt(index(5)) + IR.charAt(index(2)) + IR.charAt(index(1));
+        decoder.decode(in);
+        D = decoder.decode(in);
     }
 
     public boolean sc_reset(boolean ready) {
@@ -123,7 +121,7 @@ public class ControlUnit {
                         & D[2] & T[4]);
     }
 
-    public String shift_amt(){
+    public String shift_amt() {
         boolean shift24 = ((IR[4]) & !(IR[7])
                 & D[0] & T[6]) |
                 ((IR[4]) & !(IR[7])
