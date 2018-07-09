@@ -189,10 +189,11 @@ public class GUI extends Application {
             ArrayList<String> codeLines = new ArrayList<>();
             try {
                 Scanner input = new Scanner(file);
+                StringBuilder binaryCode = new StringBuilder();
                 while (input.hasNextLine()){
                     String line = input.nextLine();
                     codeLines.add(line);
-                    //String hex = utility.binaryToHex(utility.codeToBinary(line));
+                    binaryCode.append(utility.codeToBinary(line));
                     codeArea.appendText((codeLines.size()+127) + ".     " + line + "   " + "\n");
                 }
             } catch (FileNotFoundException e) {
