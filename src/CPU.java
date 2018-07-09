@@ -12,7 +12,7 @@ public class CPU {
                     !controlUnit.write(), dataPath.getAR().getData_out(), dataPath.getDR().getData_out());
             clk++;
             boolean a = !(controlUnit.read() | controlUnit.write() | !memory.isReady());
-            controlUnit.count(reset | a | controlUnit.sc_reset(memory.isReady()), memory.isReady(), reset);
+            controlUnit.count(controlUnit.sc_reset(memory.isReady()), a, reset);
 
         } while (!memory.isReady());
         return res;
@@ -27,7 +27,7 @@ public class CPU {
                 controlUnit.shift_amt(), controlUnit.AR_LD(), controlUnit.CPP_LD(), controlUnit.BSelect(),
                 controlUnit.SP_SUB4(), controlUnit.SP_ADD4(), controlUnit.SP_LD(), controlUnit.H_LD());
         clk++;
-        controlUnit.count(reset | a | controlUnit.sc_reset(memory.isReady()), memory.isReady(), reset);
+        controlUnit.count(controlUnit.sc_reset(memory.isReady()), a, reset);
         controlUnit.time_signals();
     }
 
@@ -37,7 +37,7 @@ public class CPU {
         controlUnit.instruction_decoding(dataPath.IR());
         boolean a = !(controlUnit.read() | controlUnit.write() | !memory.isReady());
         clk++;
-        controlUnit.count(reset | a | controlUnit.sc_reset(memory.isReady()), memory.isReady(), reset);
+        controlUnit.count(controlUnit.sc_reset(memory.isReady()), a, reset);
         controlUnit.time_signals();
         signals(reset);
     }
