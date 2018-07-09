@@ -23,8 +23,10 @@ public class CPU {
         dataPath.signals(controlUnit.read(), memory.isReady(), reset, memory.getData_out(), controlUnit.DR_LD(),
                 controlUnit.IR_LD(), controlUnit.fetch(),
                 controlUnit.TOS_LD(), controlUnit.ALU_control(dataPath.isZ(), dataPath.isN()),
-                controlUnit.LV_LD(), controlUnit.shifter_right(), controlUnit.PC_INC(), controlUnit.PC_INC2(), controlUnit.PC_LD(),
-                controlUnit.shift_amt(), controlUnit.AR_LD(), controlUnit.CPP_LD(), controlUnit.BSelect(),
+                controlUnit.LV_LD(), controlUnit.shifter_right(), controlUnit.PC_INC(),
+                controlUnit.PC_INC2(), controlUnit.PC_LD(),
+                controlUnit.shift_amt(), controlUnit.AR_LD(), controlUnit.CPP_LD(),
+                controlUnit.bus_sel(dataPath.isZ(), dataPath.isN()),
                 controlUnit.SP_SUB4(), controlUnit.SP_ADD4(), controlUnit.SP_LD(), controlUnit.H_LD());
         clk++;
         controlUnit.count(controlUnit.sc_reset(memory.isReady()), a, reset);
