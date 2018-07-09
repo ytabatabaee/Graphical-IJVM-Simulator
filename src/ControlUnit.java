@@ -23,18 +23,15 @@ public class ControlUnit {
     }
 
     public void instruction_decoding(String IR) {
-        /*if (T[3]) {
-            boolean IR4 = IR.charAt(index(4)) == '1';
-            boolean IR7 = IR.charAt(index(7)) == '1';
-            L[1] = !(IR4 | IR7);
-            L[2] = IR4 & !IR7;
-            L[3] = IR7;
-
+        if (T[3]) {
+            this.IR[4] = IR.charAt(index(4)) == '1';
+            this.IR[7] = IR.charAt(index(7)) == '1';
+            Decoder decoder = new Decoder();
             String in = "";
             in += IR.charAt(index(5)) + IR.charAt(index(2)) + IR.charAt(index(1));
-            Decoder decoder = new Decoder();
-            F = decoder.decode(in);
-        }*/
+            decoder.decode(in);
+            D = decoder.decode(in);
+        }
     }
 
     public boolean sc_reset(boolean ready) {
