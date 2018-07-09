@@ -113,4 +113,8 @@ public class Utility {
             return true;
         return false;
     }
+
+    public String decimalToByte(int decimal) {
+        return intToBinary(decimal).substring(24);
+    }
 }
