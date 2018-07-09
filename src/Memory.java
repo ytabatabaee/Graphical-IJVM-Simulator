@@ -1,18 +1,14 @@
 public class Memory {
-    private String[] cell;
+    private String[] cell = new String[256];
     private boolean state = false;
     private String ad_t = "";
     private boolean rwn_t = false;
     private String data_t;
     private String counter = "";
-    private Utility utility;
+    private Utility utility = new Utility();
     private String data_out = "";
-    private boolean ready;
+    private boolean ready = true;
 
-    public Memory() {
-        this.cell = new String[512];
-        this.utility = new Utility();
-    }
 
     public String signals(boolean reset, boolean start, boolean rwn, String address, String data_in) {
         if (reset) {
@@ -58,5 +54,13 @@ public class Memory {
 
     public String getData_out() {
         return data_out;
+    }
+
+    public void setCell(String cell, int index) {
+        this.cell[index] = cell;
+    }
+
+    public void setCell(String[] cell) {
+        this.cell = cell;
     }
 }
