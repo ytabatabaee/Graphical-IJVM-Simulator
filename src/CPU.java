@@ -10,9 +10,10 @@ public class CPU {
         do {
             res = memory.signals(reset, controlUnit.read() | controlUnit.write() | controlUnit.fetch(),
                     !controlUnit.write(), dataPath.getAR().getData_out(), dataPath.getDR().getData_out());
-            clk++;
             boolean a = !(controlUnit.read() | controlUnit.write() | !memory.isReady());
+            clk++;
             controlUnit.count(controlUnit.sc_reset(memory.isReady()), a, reset);
+            controlUnit.time_signals();
 
         } while (!memory.isReady());
         return res;
@@ -34,9 +35,14 @@ public class CPU {
     }
 
     public void signalsWithFetch(boolean reset) {
+        String d = read(reset);
+        boolean a = !(controlUnit.read() | controlUnit.write() | !memory.isReady());
+        dataPath.getIR().signals(d, controlUnit.IR_LD(), false, false, false, false, false, reset);
+        System.out.println("aaa  " + controlUnit.sc_val());
+        clk++;
+        controlUnit.count(controlUnit.sc_reset(memory.isReady()), a, reset);
         controlUnit.time_signals();
         controlUnit.instruction_decoding(dataPath.IR());
-        boolean a = !(controlUnit.read() | controlUnit.write() | !memory.isReady());
         clk++;
         controlUnit.count(controlUnit.sc_reset(memory.isReady()), a, reset);
         controlUnit.time_signals();
