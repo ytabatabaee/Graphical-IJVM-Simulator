@@ -24,12 +24,12 @@ public class DataPath {
                         boolean LD_IR, boolean fetch, boolean LD_TOS, String ALUControll, boolean LD_LV, boolean LR,
                         boolean INC_PC, boolean INC2_PC, boolean LD_PC, String ShSelect, boolean LD_AR, boolean LD_CPP,
                         String BSelect, boolean DEC4_SP, boolean INC4_SP, boolean LD_SP, boolean LD_H) {
+        B = mux.data_out(new String[]{H.getData_out(), TOS.getData_out(), LV.getData_out(), CPP.getData_out(),
+                SP.getData_out(), PC.getData_out(), DR.getData_out(), IR.getData_out()}, BSelect);
         String x = alu.data_out(H.getData_out(), B, ALUControll);
         Z = alu.Z(x);
         N = alu.N(x);
         Utility utility = new Utility();
-        B = mux.data_out(new String[]{H.getData_out(), TOS.getData_out(), LV.getData_out(), CPP.getData_out(),
-                SP.getData_out(), PC.getData_out(), DR.getData_out(), IR.getData_out()}, BSelect);
         C = shifter.shift(utility.binaryToInt(mux.data_out(new String[]{"00000", "00010", "01000", "10000", "11000",
                 "00100", "11001"}, ShSelect)), LR, x);
 

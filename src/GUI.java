@@ -38,6 +38,15 @@ public class GUI extends Application {
     TextArea stackArea = new TextArea();
     TextArea constantArea = new TextArea();
     TextArea varArea = new TextArea();
+    TextField ar = new TextField();
+    TextField dr = new TextField();
+    TextField ir = new TextField();
+    TextField pc = new TextField();
+    TextField sp = new TextField();
+    TextField lv = new TextField();
+    TextField cpp  = new TextField();
+    TextField tos = new TextField();
+    TextField h = new TextField();
     CPU cpu = new CPU();
 
     @Override
@@ -91,16 +100,6 @@ public class GUI extends Application {
     }
 
     public void registers(GridPane root, CPU cpu){
-        TextField ar = new TextField();
-        TextField dr = new TextField();
-        TextField ir = new TextField();
-        TextField pc = new TextField();
-        TextField sp = new TextField();
-        TextField lv = new TextField();
-        TextField cpp  = new TextField();
-        TextField tos = new TextField();
-        TextField h = new TextField();
-
         Label regLabel = new Label("Registers");
         Label arLabel = new Label("AR");
         Label drLabel = new Label("DR");
@@ -205,7 +204,16 @@ public class GUI extends Application {
         step.setOnAction((ActionEvent event) -> {
             cpu.runStep(false);
             System.out.println(cpu.getSC());
-            System.out.println(cpu.getClk());
+            pc.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getPC().getData_out())));
+            ar.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getAR().getData_out())));
+            sp.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getSP().getData_out())));
+            lv.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getLV().getData_out())));
+            dr.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getDR().getData_out())));
+            h.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getH().getData_out())));
+            cpp.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getCPP().getData_out())));
+            ir.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getIR().getData_out())));
+            tos.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getTOS().getData_out())));
+            //System.out.println(cpu.getClk());
                 });
         root.add(chooseFile, 1, 15);
         root.add(run, 2, 15);

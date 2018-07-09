@@ -2,6 +2,7 @@ public class ControlUnit {
     private boolean[] T = new boolean[16];
     private boolean[] D = new boolean[8];
     private boolean[] IR = new boolean[32];
+
     Utility utility = new Utility();
     private SequenceCounter sequenceCounter = new SequenceCounter();
 
@@ -261,5 +262,17 @@ public class ControlUnit {
 
     public String BSelect() {
         return "000";
+    }
+
+    public boolean[] getT() {
+        return T;
+    }
+
+    public boolean[] getD() {
+        return D;
+    }
+
+    public boolean[] getIR() {
+        return IR;
     }
 }
