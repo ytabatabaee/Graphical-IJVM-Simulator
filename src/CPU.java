@@ -43,6 +43,7 @@ public class CPU {
     }
 
     public void runStep(boolean reset) {
+        controlUnit.time_signals();
         if (controlUnit.fetch())
             signalsWithFetch(reset);
         else signals(reset);

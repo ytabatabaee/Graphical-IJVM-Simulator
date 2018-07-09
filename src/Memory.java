@@ -23,7 +23,7 @@ public class Memory {
                 counter = "" + address.charAt(30) + address.charAt(31);
                 state = true;
                 ready = false;
-            } else if ((counter.charAt(30) == '1' || counter.charAt(31) == '1') && state) {
+            } else if ((counter.charAt(1) == '1' || counter.charAt(0) == '1') && state) {
                 String cnt = utility.operation(counter, "1", "sub");
                 counter = "" + cnt.charAt(30) + cnt.charAt(31);
             } else if (state) {
