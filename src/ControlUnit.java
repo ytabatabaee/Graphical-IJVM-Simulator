@@ -30,13 +30,15 @@ public class ControlUnit {
     }
 
     public void instruction_decoding(String IR) {
-            System.out.println(IR);
+        System.out.println(IR);
             for (int i = 0; i < 32; i++) {
                 this.IR[i] = (IR.charAt(index(i)) == '1');
             }
-            Decoder decoder = new Decoder();
-            String in = "" + IR.charAt(index(5)) + IR.charAt(index(2)) + IR.charAt(index(1));
-            D = decoder.decode(in);
+
+        Decoder decoder = new Decoder();
+//        this.IR = decoder.decode(IR);
+        String in = "" + IR.charAt(index(5)) + IR.charAt(index(2)) + IR.charAt(index(1));
+        D = decoder.decode(in);
     }
 
     public boolean sc_reset(boolean ready) {
@@ -138,7 +140,7 @@ public class ControlUnit {
                         & D[2] & T[3]);
         boolean shift2 = ((IR[4]) & !(IR[7])
                 & D[2] & T[5]);
-        if(shift24)
+        if (shift24)
             return 24;
         if (shift16)
             return 16;
