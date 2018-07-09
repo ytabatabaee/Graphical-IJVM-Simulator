@@ -9,7 +9,7 @@ public class Shifter {
         this.right = right;
         Utility utility = new Utility();
         if (right)
-            return utility.intToBinary(utility.binaryToInt(data_in )>> shift_amt);
+            return utility.intToBinary(utility.binaryToInt(data_in )>>> shift_amt);
         else
             return utility.intToBinary(utility.binaryToInt(data_in )<< shift_amt);
     }
