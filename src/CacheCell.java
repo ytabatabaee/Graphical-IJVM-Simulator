@@ -1,11 +1,11 @@
 class CacheCell {
-    private int data;
+    private String data;
     private int tag;
     private int valid;
     private int dirty;
     private int index;
 
-    public CacheCell(int data, int address, int cacheArch) {
+    public CacheCell(String data, int address, int cacheArch) {
         this.data = data;
         this.valid = 1;
         if (cacheArch == 0) {
@@ -24,7 +24,7 @@ class CacheCell {
 
     }
 
-    public int getData() {
+    public String getData() {
         return data;
     }
 
@@ -44,7 +44,7 @@ class CacheCell {
         return index;
     }
 
-    public void setData(int data) {
+    public void setData(String data) {
         this.data = data;
     }
 

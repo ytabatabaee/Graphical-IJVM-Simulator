@@ -14,10 +14,10 @@ class Cache {
     private int writeMode = -1;
     private int length = 1;
     private CacheCell[] cache = new CacheCell[cacheSize];
-    private int[] mainMemory = new int[memorySize];
+    private String[] mainMemory = new String[memorySize];
     private int[] delayList = new int[cacheSize];
 
-    public Cache(int memorySize, int cacheArch, int evictionMode, int writeMode) {
+    public Cache(int memorySize, int cacheArch, int evictionMode, int writeMode, String[] mainMemory) {
         this.memorySize = memorySize;
         this.cacheSize = 32;
         this.cacheArch = cacheArch;
@@ -26,6 +26,7 @@ class Cache {
         this.evictionMode = evictionMode;
         this.writeMode = writeMode;
         this.cache = new CacheCell[this.cacheSize];
+        this.mainMemory = mainMemory;
         this.delayList = new int[this.cacheSize];
         if (cacheArch == 0)
             this.length = 1;
@@ -58,7 +59,7 @@ class Cache {
         return -1;
     }
 
-    int read(int address) {
+    String read(int address) {
         if (isInCache(address) != -1) {
             numOfHits++;
             updateDelayList(isInCache(address), 1);
@@ -78,7 +79,7 @@ class Cache {
         return mainMemory[address];
     }
 
-    void write(int address, int data) {
+    void write(int address, String data) {
         if (writeMode == 0) {
             read(address);
             cache[isInCache(address)].setData(data);
