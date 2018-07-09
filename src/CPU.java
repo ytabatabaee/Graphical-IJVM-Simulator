@@ -3,11 +3,7 @@ public class CPU {
     private DataPath dataPath = new DataPath();
     private Memory memory = new Memory();
     private long clk = 0;
-    private String address;
-    private String wData;
-    private String sc_value;
-    private boolean start;
-    private boolean rwn;
+
 
     public String read(boolean reset) {
         String res;
@@ -62,5 +58,14 @@ public class CPU {
 
     public Memory getMemory() {
         return memory;
+    }
+
+    public long getClk() {
+        return clk;
+    }
+
+    public int getSC() {
+        Utility utility = new Utility();
+        return utility.binaryToInt(controlUnit.sc_val());
     }
 }
