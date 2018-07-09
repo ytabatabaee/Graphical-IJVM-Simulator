@@ -17,29 +17,24 @@ public class Memory {
             }
         } else {
             if (start && !state) {
-                for (int i = 15; i >= 0; i--)
-                    ad_t += address.charAt(i);
+                ad_t = address.substring(16);
                 rwn_t = rwn;
                 data_t = data_in;
-                counter = "" + address.charAt(1) + address.charAt(0);
+                counter = "" + address.charAt(30) + address.charAt(31);
                 state = true;
                 ready = false;
-            } else if ((counter.charAt(1) == '1' || counter.charAt(0) == '1') && state) {
+            } else if ((counter.charAt(30) == '1' || counter.charAt(31) == '1') && state) {
                 String cnt = utility.operation(counter, "1", "sub");
-                counter = "" + cnt.charAt(1) + cnt.charAt(0);
+                counter = "" + cnt.charAt(30) + cnt.charAt(31);
             } else if (state) {
                 int ad = utility.binaryToInt(ad_t);
                 if (rwn_t)
                     data_out = cell[ad + 3] + cell[ad + 2] + cell[ad + 1] + cell[ad];
                 else {
-                    for (int i = 0; i < 4; i++)
-                        cell[ad + i] = "";
-                    for (int i = 7; i >= 0; i--) {
-                        cell[ad] += data_t.charAt(i);
-                        cell[ad + 1] += data_t.charAt(i + 8);
-                        cell[ad + 2] += data_t.charAt(i + 16);
-                        cell[ad + 3] += data_t.charAt(i + 24);
-                    }
+                        cell[ad] = data_t.substring(24);
+                        cell[ad + 1] = data_t.substring(16, 24);
+                        cell[ad + 2] = data_t.substring(8, 16);
+                        cell[ad + 3] = data_t.substring(0, 8);
                 }
                 state = false;
                 ready = true;
