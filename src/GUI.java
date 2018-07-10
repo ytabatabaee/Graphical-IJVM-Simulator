@@ -1,11 +1,9 @@
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -50,6 +48,8 @@ public class GUI extends Application {
     TextField h = new TextField();
     TextField t = new TextField();
     TextField ins = new TextField();
+    TextField util = new TextField();
+    TextField throught = new TextField();
     Label z = new Label("Z");
     Label n = new Label("N");
     Label sp_sub4 = new Label("SP- 4");
@@ -70,6 +70,9 @@ public class GUI extends Application {
     Label write = new Label("Write");
     Label fetch = new Label("Fetch");
     TextField shifter = new TextField();
+    TextField[] V = new TextField[8];
+    TextField[] tag = new TextField[8];
+    TextField[] data = new TextField[8];
     CPU cpu = new CPU();
 
     @Override
@@ -85,15 +88,23 @@ public class GUI extends Application {
         Rectangle aBus = new Rectangle(500, 345, 28, 90);
         Rectangle alu = new Rectangle(480, 430, 200, 70);
         Rectangle cu = new Rectangle(750, 40, 220, 170);
-        Rectangle mem = new Rectangle(750, 240, 220, 100);
+        Rectangle mem = new Rectangle(750, 220, 220, 100);
+        Rectangle cache = new Rectangle(700, 380, 350, 260);
+        ChoiceBox cb = new ChoiceBox(FXCollections.observableArrayList(
+                "FIFO", "LRU", "MRU", "Random", "LIP"));
+        cb.setTooltip(new Tooltip("Evicition Mode"));
+        cb.setValue("Eviction Mode");
+        cb.setAccessibleText("Eviction Mode");
         bBus.setFill(new ImagePattern(new Image("images/arrow1.png")));
         cBus.setFill(new ImagePattern(new Image("images/cbus.png")));
         aBus.setFill(new ImagePattern(new Image("images/abus.png")));
         alu.setFill(new ImagePattern(new Image("images/alu.png")));
         cu.setFill(new ImagePattern(new Image("images/rect.png")));
         mem.setFill(new ImagePattern(new Image("images/mem.png")));
+        cache.setFill(new ImagePattern(new Image("images/cache.png")));
         z.relocate(540, 470);
         n.relocate(620, 470);
+        cb.relocate(710, 350);
         sp_sub4.relocate(760, 60);
         sp_add4.relocate(760, 80);
         pc_inc.relocate(760, 100);
@@ -116,23 +127,33 @@ public class GUI extends Application {
         Label micro = new Label("Instruction");
         Label shiftLabel  = new Label("Shifter");
         Label tLabel  = new Label("Counter(T)");
+        Label utilization  = new Label("Utilization");
+        Label tput  = new Label("Throughput");
         aluLabel.relocate(450, 450);
         shiftLabel.relocate(550, 550);
         tLabel.relocate(30, 450);
         micro.relocate(30, 480);
+        utilization.relocate(30, 510);
+        tput.relocate(30, 540);
         aluLabel.setStyle(labelStyle);
         micro.setStyle(labelStyle);
         shiftLabel.setStyle(labelStyle);
         tLabel.setStyle(labelStyle);
-        t.relocate(100, 450);
-        ins.relocate(100, 480);
+        utilization.setStyle(labelStyle);
+        tput.setStyle(labelStyle);
+        t.relocate(110, 450);
+        ins.relocate(110, 480);
+        util.relocate(110, 510);
+        throught.relocate(110, 540);
         shifter.setEditable(false);
         shifter.relocate(500, 520);
         root.getChildren().addAll(buttonRoot, regRoot, bBus, alu,
                 shifter, cBus, aBus, aluLabel, arrow, cu, z, n, mem,
                 sp_add4, sp_sub4, write, read, fetch, ready, pc_inc,
                 pc_inc2, ar_LD, dr_LD, ir_LD, pc_LD, sp_LD, lv_LD,
-                cpp_LD, tos_LD, h_LD, micro, tLabel, shiftLabel, t, ins);
+                cpp_LD, tos_LD, h_LD, micro, tLabel, shiftLabel, t, ins,
+                throught, util, utilization, tput, cache, cb);
+        cacheArea(root, cpu);
         Scene scene = new Scene(root, 1100, 650, Color.DARKGRAY);
         registers(regRoot, cpu);
         code(buttonRoot, cpu, primaryStage);
@@ -241,7 +262,31 @@ public class GUI extends Application {
         root.add(hLabel, 1, 9);
     }
 
+    public void cacheArea(Group root, CPU cpu){
+        for (int i = 0; i < 8; i++) {
+            TextField textField = new TextField("" + ((i / 4) % 2) + ((i / 2) % 2) + (i % 2));
+            textField.setEditable(false);
+            textField.setPrefWidth(35);
+            V[i] = new TextField();
+            V[i].setEditable(false);
+            tag[i] = new TextField();
+            tag[i].setEditable(false);
+            data[i] = new TextField();
+            data[i].setEditable(false);
+            V[i].setPrefWidth(25);
+            tag[i].setPrefWidth(80);
+            data[i].setPrefWidth(100);
+            textField.relocate(730, 430 + 25 * i);
+            V[i].relocate(770, 430 + 25 * i);
+            tag[i].relocate(800, 430 + 25 * i);
+            data[i].relocate(885, 430 + 25 * i);
+            root.getChildren().addAll(textField, V[i], tag[i], data[i]);
+        }
+    }
+
     public void code(GridPane root, CPU cpu, Stage stage) {
+        int[] numOfBytes = new int[64];
+        String[] lines = new String[64];
         chooseFile.setOnAction((ActionEvent event) -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setInitialDirectory(new File("src/tests"));
@@ -252,11 +297,15 @@ public class GUI extends Application {
             try {
                 Scanner input = new Scanner(file);
                 StringBuilder binaryCode = new StringBuilder();
+                int count = 0;
                 while (input.hasNextLine()) {
                     String line = input.nextLine();
                     codeLines.add(line);
+                    lines[count] = line;
                     binaryCode.append(utility.codeToBinary(line));
+                    numOfBytes[count] += utility.codeBytes(line);
                     codeArea.appendText((codeLines.size()) + ".     " + line + "   " + "\n");
+                    count ++;
                 }
                 System.out.println(binaryCode);
                 cpu.getMemory().setCell(binaryCode.toString());
@@ -276,8 +325,12 @@ public class GUI extends Application {
             for (int i = 68; i <= utility.binaryToInt(cpu.getDataPath().getSP().getData_out()); i += 4)
                 stackArea.appendText((i) + ". " + utility.binaryToInt(cpu.getMemory().getCell(i)) + "\n");
             varArea.setText("");
-            for (int i = 128; i <= 192 /*utility.binaryToInt(cpu.getDataPath().getLV().getData_out())*/ ; i += 4) {
+            for (int i = 128; i < 192 /*utility.binaryToInt(cpu.getDataPath().getLV().getData_out())*/ ; i += 4) {
                 varArea.appendText((i) + ". " + utility.binaryToInt(cpu.getMemory().getCell(i)) + "\n");
+            }
+            constantArea.setText("");
+            for (int i = 192; i < 256 /*utility.binaryToInt(cpu.getDataPath().getLV().getData_out())*/ ; i += 4) {
+                constantArea.appendText((i) + ". " + utility.binaryToInt(cpu.getMemory().getCell(i)) + "\n");
             }
             t.setText(Integer.toString(cpu.getSC()));
             pc.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getPC().getData_out())));
@@ -289,6 +342,13 @@ public class GUI extends Application {
             cpp.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getCPP().getData_out())));
             ir.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getIR().getData_out())));
             tos.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getTOS().getData_out())));
+            int counter = 0;
+            int  lineNum = -1;
+            while (counter <= utility.binaryToInt(cpu.getDataPath().getPC().getData_out())){
+                lineNum +=1;
+                counter += numOfBytes[lineNum];
+            }
+            ins.setText(lines[lineNum]);
             if(cpu.getDataPath().isZ())
                 z.setStyle(redStyle);
             else

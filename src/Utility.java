@@ -133,6 +133,45 @@ public class Utility {
         return res;
     }
 
+    public int codeBytes(String codeLine) {
+        String[] components = codeLine.split("\\s+");
+        switch (components.length) {
+            case 1:
+                switch (components[0].toLowerCase()) {
+                    case "iadd":
+                        return 1;
+                    case "isub":
+                        return 1;
+                    case "nop":
+                        return 1;
+                }
+            case 2:
+                switch (components[0].toLowerCase()) {
+                    case "bipush":
+                        return 2;
+                    case "iload":
+                        return 2;
+                    case "istore":
+                        return 2;
+                    case "goto":
+                        return 3;
+                    case "ifeq":
+                        return 3;
+                    case "iflt":
+                        return 3;
+                    case "if_icmpeq":
+                        return 3;
+                }
+                break;
+            case 3:
+                switch (components[0].toLowerCase()){
+                    case "iinc":
+                        return 3;
+                }
+        }
+        return 0;
+    }
+
     public String booleanToString(boolean bool) {
         if (bool)
             return "1";
