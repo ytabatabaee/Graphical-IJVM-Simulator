@@ -2,7 +2,6 @@ public class CPU {
     private ControlUnit controlUnit = new ControlUnit();
     private DataPath dataPath = new DataPath();
     private Memory memory = new Memory();
-    private Cache cache = new Cache();
     private long clk = 0;
 
 
@@ -24,13 +23,13 @@ public class CPU {
         dataPath.signals(controlUnit.read(), memory.isReady(), reset, memory.getData_out(), controlUnit.DR_LD(),
                 controlUnit.IR_LD(), controlUnit.fetch(),
                 controlUnit.TOS_LD(), controlUnit.ALU_control(dataPath.isZ(), dataPath.isN()),
-                controlUnit.LV_LD(), controlUnit.shifter_right(), controlUnit.PC_INC(),
-                controlUnit.PC_INC2(), controlUnit.PC_LD(),
+                controlUnit.LV_LD(), controlUnit.shifter_right(), controlUnit.PC_INC(dataPath.isZ(), dataPath.isN()),
+                controlUnit.PC_INC2(dataPath.isZ(), dataPath.isN()), controlUnit.PC_LD(),
                 controlUnit.shift_amt(), controlUnit.AR_LD(), controlUnit.CPP_LD(),
                 controlUnit.bus_sel(dataPath.isZ(), dataPath.isN()),
                 controlUnit.SP_SUB4(), controlUnit.SP_ADD4(), controlUnit.SP_LD(), controlUnit.H_LD());
         clk++;
-        controlUnit.count(controlUnit.sc_reset(memory.isReady()), true, reset);
+        controlUnit.count(controlUnit.sc_reset(dataPath.isZ(), dataPath.isN()), true, reset);
         controlUnit.time_signals();
     }
 
@@ -40,18 +39,18 @@ public class CPU {
         controlUnit.time_signals();
         String d = readWriteFetch(reset);
         clk++;
-        controlUnit.count(controlUnit.sc_reset(memory.isReady()), true, reset);
+        controlUnit.count(controlUnit.sc_reset(dataPath.isZ(), dataPath.isN()), true, reset);
         controlUnit.time_signals();
-        dataPath.getPC().signals("", controlUnit.PC_LD(), controlUnit.PC_INC(), false, controlUnit.PC_INC2(),
+        dataPath.getPC().signals("", controlUnit.PC_LD(), controlUnit.PC_INC(dataPath.isZ(), dataPath.isN()), false, controlUnit.PC_INC2(dataPath.isZ(), dataPath.isN()),
                 false, false, reset);
         dataPath.getIR().signals(d, controlUnit.IR_LD(), false, false, false, false, false, reset);
         System.out.println("aaa  " + controlUnit.sc_val());
         clk++;
-        controlUnit.count(controlUnit.sc_reset(memory.isReady()), true, reset);
+        controlUnit.count(controlUnit.sc_reset(dataPath.isZ(), dataPath.isN()), true, reset);
         controlUnit.time_signals();
         controlUnit.instruction_decoding(dataPath.IR());
         clk++;
-        controlUnit.count(controlUnit.sc_reset(memory.isReady()), true, reset);
+        controlUnit.count(controlUnit.sc_reset(dataPath.isZ(), dataPath.isN()), true, reset);
         controlUnit.time_signals();
     }
 

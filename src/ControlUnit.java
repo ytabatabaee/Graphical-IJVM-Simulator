@@ -40,7 +40,7 @@ public class ControlUnit {
         D = decoder.decode(in);
     }
 
-    public boolean sc_reset(boolean ready) {
+    public boolean sc_reset(boolean Z, boolean N) {
         return (!(IR[4]) & !(IR[7])
                 & D[0] & T[3]) |
                 (!(IR[4]) & !(IR[7])
@@ -57,7 +57,9 @@ public class ControlUnit {
                 (IR[7] & D[7] & T[9]) |
                 (IR[7] & D[0] & T[13]) |
                 (IR[7] & D[1] & T[13]) |
-                (IR[7] & D[3] & T[15]);
+                (IR[7] & D[3] & T[15]) |
+                (IR[7] & D[0] & T[7] & (!Z)) |
+                (IR[7] & D[1] & T[7] & (!N));
     }
 
     public String bus_sel(boolean Z, boolean N) {
@@ -89,7 +91,9 @@ public class ControlUnit {
                 (IR[7] & D[0] & T[4]) |
                 (IR[7] & D[1] & T[4]) |
                 (IR[7] & D[3] & T[4]);
-        boolean bus_pc = (IR[7] & D[7] & T[9]);
+        boolean bus_pc = (IR[7] & D[7] & T[9]) |
+                (IR[7] & D[0] & T[13]) |
+                (IR[7] & D[1] & T[13]);
         boolean bus_dr = (!(IR[4]) & !(IR[7])
                 & D[4] & T[6]) |
                 (!(IR[4]) & !(IR[7])
@@ -115,7 +119,9 @@ public class ControlUnit {
                 (IR[7] & D[7] & T[3]) |
                 (IR[7] & D[7] & T[5]) |
                 (IR[7] & D[0] & T[9]) |
-                (IR[7] & D[1] & T[8]);
+                (IR[7] & D[1] & T[8]) |
+                (IR[7] & D[0] & T[7] & Z) |
+                (IR[7] & D[1] & T[7] & N);
         if (bus_tos)
             return "001";
         if (bus_lv)
@@ -145,7 +151,9 @@ public class ControlUnit {
                 (IR[7] & D[7] & T[8]) |
                 (IR[7] & D[7] & T[9]) |
                 (IR[7] & D[0] & T[12]) |
-                (IR[7] & D[1] & T[12]);
+                (IR[7] & D[1] & T[12]) |
+                (IR[7] & D[0] & T[13]) |
+                (IR[7] & D[1] & T[13]);
         boolean ALU_sub = (!(IR[4]) & !(IR[7])
                 & D[6] & T[6]);
         boolean ALU_data2 = !(ALU_add | ALU_sub);
@@ -192,7 +200,7 @@ public class ControlUnit {
                 (IR[7] & D[0] & T[8]);
     }
 
-    public int shift_amt() {
+    public int shift_amt(boolean Z, boolean N) {
         boolean shift24 = ((IR[4]) & !(IR[7])
                 & D[0] & T[6]) |
                 ((IR[4]) & !(IR[7])
@@ -228,7 +236,9 @@ public class ControlUnit {
                 (IR[7] & D[7] & T[3]) |
                 (IR[7] & D[7] & T[5]) |
                 (IR[7] & D[1] & T[9]) |
-                (IR[7] & D[0] & T[9]);
+                (IR[7] & D[0] & T[9]) |
+                (IR[7] & D[0] & T[7] & Z) |
+                (IR[7] & D[1] & T[7] & N);
         if (shift24)
             return 24;
         if (shift16)
@@ -306,7 +316,7 @@ public class ControlUnit {
                 (IR[7] & D[0] & T[12]);
     }
 
-    public boolean DR_LD() {
+    public boolean DR_LD(boolean Z, boolean N) {
         return (!(IR[4]) & !(IR[7])
                 & D[4] & T[5]) |
                 (!(IR[4]) & !(IR[7])
@@ -326,7 +336,9 @@ public class ControlUnit {
                 (IR[7] & D[1] & T[5]) |
                 (IR[7] & D[1] & T[5]) |
                 (IR[7] & D[0] & T[8]) |
-                (IR[7] & D[1] & T[8]);
+                (IR[7] & D[1] & T[8]) |
+                (IR[7] & D[0] & T[7] & Z) |
+                (IR[7] & D[1] & T[7] & N);
     }
 
     public boolean AR_LD() {
@@ -409,7 +421,7 @@ public class ControlUnit {
         return T[1];
     }
 
-    public boolean PC_INC() {
+    public boolean PC_INC(boolean Z, boolean N) {
         return T[1] |
                 ((IR[4]) & !(IR[7])
                         & D[0] & T[3]) |
@@ -419,7 +431,9 @@ public class ControlUnit {
                         & D[7] & T[3]) |
                 (IR[7] & D[2] & T[3]) |
                 (IR[7] & D[2] & T[4]) |
-                (IR[7] & D[7] & T[3]);
+                (IR[7] & D[7] & T[3]) |
+                (IR[7] & D[0] & T[7] & Z) |
+                (IR[7] & D[1] & T[7] & N);
     }
 
 
@@ -436,11 +450,14 @@ public class ControlUnit {
     }
 
     public boolean PC_LD() {
-        return (IR[7] & D[7] & T[9]);
+        return (IR[7] & D[7] & T[9]) |
+                (IR[7] & D[0] & T[13]) |
+                (IR[7] & D[1] & T[13]);
     }
 
-    public boolean PC_INC2() {
-        return false;
+    public boolean PC_INC2(boolean Z, boolean N) {
+        return (IR[7] & D[0] & T[7] & (!Z)) |
+                (IR[7] & D[1] & T[7] & (!N));
     }
 
     public String BSelect() {
