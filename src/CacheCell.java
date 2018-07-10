@@ -8,15 +8,16 @@ class CacheCell {
     public CacheCell(String data, int address, int cacheArch) {
         this.data = data;
         this.valid = 1;
+        address = address / 4;
         if (cacheArch == 0) {
-            this.tag = address / 100;
-            this.index = address % 100;
+            this.tag = address / 8;
+            this.index = address % 8;
         } else if (cacheArch == 1) {
-            this.tag = address / 50;
-            this.index = address % 50;
+            this.tag = address / 4;
+            this.index = address % 4;
         } else if (cacheArch == 2) {
-            this.tag = address / 25;
-            this.index = address % 25;
+            this.tag = address / 2;
+            this.index = address % 2;
         }
     }
 

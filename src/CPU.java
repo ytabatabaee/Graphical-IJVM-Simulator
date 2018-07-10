@@ -18,8 +18,11 @@ public class CPU {
     public void signals(boolean reset) {
         Utility utility = new Utility();
         if (controlUnit.read()) {
-            cache.read(utility.binaryToInt(dataPath.getAR().getData_out()));
-            dataPath.getDR().signals(readWriteFetch(reset),
+            String a = cache.read(utility.binaryToInt(dataPath.getAR().getData_out()));
+            System.out.println("p: " + a);
+            String b = readWriteFetch(reset);
+            System.out.println(b);
+            dataPath.getDR().signals(b,
                     controlUnit.DR_LD(utility.isZ(dataPath.getH()), utility.isN(dataPath.getH())),
                     false, false, false, false, false, reset);
         }
@@ -45,7 +48,6 @@ public class CPU {
 
     public void signalsWithFetch(boolean reset) {
         Utility utility = new Utility();
-        cache.read(utility.binaryToInt(dataPath.getPC().getData_out()));
         dataPath.getAR().signals(dataPath.getPC().getData_out(), controlUnit.AR_LD(), false, false, false,
                 false, false, reset);
         controlUnit.time_signals();

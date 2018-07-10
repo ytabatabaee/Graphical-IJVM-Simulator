@@ -48,12 +48,12 @@ class Cache {
 //    }
 
     public int cacheAddressMap(int address) {
-        return (address % (cacheSize / length)) * length;
+        return ((address / 4) % (cacheSize / length)) * length;
     }
 
     public int isInCache(int address) {
         int index = cacheAddressMap(address);
-        int tag = address / (cacheSize / length);
+        int tag = (address / 4) / (cacheSize / length);
 
         for (int i = index; i < index + length; i++)
             if (tag == cache[i].getTag() && cache[i].getValid() == 1)
@@ -65,20 +65,20 @@ class Cache {
         if (isInCache(address) != -1) {
             numOfHits++;
             updateDelayList(isInCache(address), 1);
-            return mainMemory[address];
+            return mainMemory[address / 4];
         }
         numOfMisses++;
         int index = cacheAddressMap(address);
         for (int i = index; i < index + length; i++)
             if (cache[i].getValid() == 0) {
-                cache[i] = new CacheCell(mainMemory[address], address, cacheArch);
+                cache[i] = new CacheCell(mainMemory[address / 4], address, cacheArch);
                 updateDelayList(i, 0);
-                return mainMemory[address];
+                return mainMemory[address / 4];
             }
         int insertAddress = eviction(index);
-        cache[insertAddress] = new CacheCell(mainMemory[address], address, cacheArch);
+        cache[insertAddress] = new CacheCell(mainMemory[address / 4], address, cacheArch);
         updateDelayList(insertAddress, 0);
-        return mainMemory[address];
+        return mainMemory[address / 4];
     }
 
     public void write(int address, String data) {
@@ -121,7 +121,7 @@ class Cache {
         int s = rand.nextInt(length);
         int i = index + s;
         if (cache[i].getDirty() == 1) {
-            mainMemory[(cache[i].getTag() * (cacheSize / length)) + cache[i].getIndex()] = cache[i].getData();
+            mainMemory[((cache[i].getTag() * (cacheSize / length)) + cache[i].getIndex()) * 4] = cache[i].getData();
             cache[i].setDirty(0);
         }
         return i;
@@ -146,7 +146,7 @@ class Cache {
     }
 
     public void updateDelayList(int address, int mode) {
-        int index = (address / length) * length;
+        int index = ((address) / length) * length;
 
         if ((evictionMode == 0 && mode == 0) || evictionMode == 1 ||
                 (evictionMode == 4 && mode == 1)) {
