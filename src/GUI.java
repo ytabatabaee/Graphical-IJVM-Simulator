@@ -52,10 +52,13 @@ public class GUI extends Application {
     Label n = new Label("N");
     Label sp_sub4 = new Label("SP- 4");
     Label sp_add4 = new Label("SP+4");
+    Label pc_inc = new Label("PC+1");
+    Label pc_inc2 = new Label("PC+2");
     Label ready = new Label("Ready");
     Label read = new Label("Read");
     Label write = new Label("Write");
     Label fetch = new Label("Fetch");
+    TextField shifter = new TextField();
     CPU cpu = new CPU();
 
     @Override
@@ -82,6 +85,8 @@ public class GUI extends Application {
         n.relocate(620, 470);
         sp_sub4.relocate(760, 80);
         sp_add4.relocate(760, 100);
+        pc_inc.relocate(760, 120);
+        pc_inc2.relocate(760, 140);
         read.relocate(760, 285);
         fetch.relocate(760, 305);
         write.relocate(760, 325);
@@ -90,12 +95,11 @@ public class GUI extends Application {
         Label aluLabel = new Label("ALU");
         aluLabel.relocate(450, 450);
         aluLabel.setStyle(labelStyle);
-        TextField shifter = new TextField();
         shifter.setEditable(false);
         shifter.relocate(500, 520);
         root.getChildren().addAll(buttonRoot, regRoot, bBus, alu,
                 shifter, cBus, aBus, aluLabel, arrow, cu, z, n, mem,
-                sp_add4, sp_sub4, write, read, fetch, ready);
+                sp_add4, sp_sub4, write, read, fetch, ready, pc_inc, pc_inc2);
         Scene scene = new Scene(root, 1100, 650, Color.DARKGRAY);
         registers(regRoot, cpu);
         code(buttonRoot, cpu, primaryStage);
@@ -279,7 +283,19 @@ public class GUI extends Application {
                 sp_sub4.setTextFill(Color.RED);
             else
                 sp_sub4.setTextFill(Color.BLACK);
-            //System.out.println(cpu.getClk());
+            if(cpu.getControlUnit().PC_INC(cpu.getDataPath().isZ(), cpu.getDataPath().isN()))
+                pc_inc.setTextFill(Color.RED);
+            else
+                pc_inc.setTextFill(Color.BLACK);
+            if(cpu.getControlUnit().PC_INC2(cpu.getDataPath().isZ(), cpu.getDataPath().isN()))
+                pc_inc2.setTextFill(Color.RED);
+            else
+                pc_inc2.setTextFill(Color.BLACK);
+            shifter.setText(Integer.toString(cpu.getDataPath().getShifter().shift_amt));
+            if(cpu.getDataPath().getShifter().right)
+                shifter.appendText("  (right)");
+            else
+                shifter.appendText("  (left)");
         });
         root.add(chooseFile, 1, 15);
         root.add(run, 2, 15);
