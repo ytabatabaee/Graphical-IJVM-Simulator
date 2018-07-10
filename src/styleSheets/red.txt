@@ -1,0 +1,4 @@
+-fx-font-size: 13px;
+-fx-font-weight: bold;
+-fx-text-fill: red;
+-fx-effect: dropshadow( gaussian , rgba(0,255,0,0.5) , 0,0,0,1 );

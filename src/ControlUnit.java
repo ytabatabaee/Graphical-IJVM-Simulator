@@ -156,28 +156,23 @@ public class ControlUnit {
                 (IR[7] & D[1] & T[13]);
         boolean ALU_sub = (!(IR[4]) & !(IR[7])
                 & D[6] & T[6]);
-        boolean ALU_data2 = !(ALU_add | ALU_sub);
+        boolean ALU_data1 = (IR[7] & D[0] & T[6]) |
+                (IR[7] & D[1] & T[6]);
+        boolean ALU_data2 = !(ALU_add | ALU_sub | ALU_data1);
         return new boolean[]{ALU_add, ALU_sub, ALU_data2, false, false};
     }
 
     public String ALU_control(boolean Z, boolean N) {
         boolean[] ALU_s = ALU(Z, N);
-        char[] c = {ALU_s[1] ? '1' : '0',
-                ALU_s[1] ? '1' : '0',
-                '1',
-                !ALU_s[2] ? '1' : '0',
-                '1',
-                !ALU_s[2] ? '1' : '0'};
-        String res = "" + c[5] + c[4] + c[3] + c[2] + c[1] + c[0];
-        return res;
-    }
-
-    public String ALU_D2sel(boolean Z, boolean N) {
-        boolean[] ALU_s = ALU(Z, N);
-        char[] c = {ALU_s[3] ? '1' : '0', ALU_s[4] ? '1' : '0'};
-        String res = "";
-        res += c[1] + c[0];
-        return res;
+        if(ALU_s[0])
+            return "111100";
+        if(ALU_s[1])
+            return "111111";
+        if(ALU_s[2])
+            return "010100";
+        if (ALU_s[2])
+            return "011000";
+        return "010100";
     }
 
     public boolean shifter_right() {

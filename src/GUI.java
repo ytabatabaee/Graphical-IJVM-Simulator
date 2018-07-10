@@ -34,6 +34,7 @@ public class GUI extends Application {
     Button reset = new Button("   Reset   ");
     String buttonStyle = "";
     String labelStyle = "";
+    String redStyle = "";
     TextArea codeArea = new TextArea();
     TextArea stackArea = new TextArea();
     TextArea constantArea = new TextArea();
@@ -47,6 +48,14 @@ public class GUI extends Application {
     TextField cpp = new TextField();
     TextField tos = new TextField();
     TextField h = new TextField();
+    Label z = new Label("Z");
+    Label n = new Label("N");
+    Label sp_sub4 = new Label("SP- 4");
+    Label sp_add4 = new Label("SP+4");
+    Label ready = new Label("Ready");
+    Label read = new Label("Read");
+    Label write = new Label("Write");
+    Label fetch = new Label("Fetch");
     CPU cpu = new CPU();
 
     @Override
@@ -61,10 +70,22 @@ public class GUI extends Application {
         Rectangle cBus = new Rectangle(360, 30, 28, 500);
         Rectangle aBus = new Rectangle(500, 345, 28, 90);
         Rectangle alu = new Rectangle(480, 430, 200, 70);
+        Rectangle cu = new Rectangle(750, 70, 220, 170);
+        Rectangle mem = new Rectangle(750, 270, 220, 100);
         bBus.setFill(new ImagePattern(new Image("images/arrow1.png")));
         cBus.setFill(new ImagePattern(new Image("images/cbus.png")));
         aBus.setFill(new ImagePattern(new Image("images/abus.png")));
         alu.setFill(new ImagePattern(new Image("images/alu.png")));
+        cu.setFill(new ImagePattern(new Image("images/rect.png")));
+        mem.setFill(new ImagePattern(new Image("images/mem.png")));
+        z.relocate(540, 470);
+        n.relocate(620, 470);
+        sp_sub4.relocate(760, 80);
+        sp_add4.relocate(760, 100);
+        read.relocate(760, 285);
+        fetch.relocate(760, 305);
+        write.relocate(760, 325);
+        ready.relocate(930, 305);
         Arrow arrow = new Arrow(580, 500, 580, 520);
         Label aluLabel = new Label("ALU");
         aluLabel.relocate(450, 450);
@@ -72,7 +93,9 @@ public class GUI extends Application {
         TextField shifter = new TextField();
         shifter.setEditable(false);
         shifter.relocate(500, 520);
-        root.getChildren().addAll(buttonRoot, regRoot, bBus, alu, shifter, cBus, aBus, aluLabel, arrow);
+        root.getChildren().addAll(buttonRoot, regRoot, bBus, alu,
+                shifter, cBus, aBus, aluLabel, arrow, cu, z, n, mem,
+                sp_add4, sp_sub4, write, read, fetch, ready);
         Scene scene = new Scene(root, 1100, 650, Color.DARKGRAY);
         registers(regRoot, cpu);
         code(buttonRoot, cpu, primaryStage);
@@ -87,6 +110,7 @@ public class GUI extends Application {
         try {
             labelStyle = new String(Files.readAllBytes(Paths.get("src/styleSheets/label.txt")));
             buttonStyle = new String(Files.readAllBytes(Paths.get("src/styleSheets/button.txt")));
+            redStyle = new String(Files.readAllBytes(Paths.get("src/styleSheets/red.txt")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -122,6 +146,8 @@ public class GUI extends Application {
         drLabel.setStyle(labelStyle);
         tosLabel.setStyle(labelStyle);
         hLabel.setStyle(labelStyle);
+        z.setStyle(labelStyle);
+        n.setStyle(labelStyle);
 
         pc.setEditable(false);
         ar.setEditable(false);
@@ -225,6 +251,34 @@ public class GUI extends Application {
             cpp.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getCPP().getData_out())));
             ir.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getIR().getData_out())));
             tos.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getTOS().getData_out())));
+            if(cpu.getDataPath().isZ())
+                z.setStyle(redStyle);
+            else
+                z.setStyle(labelStyle);
+            if(cpu.getControlUnit().read())
+                read.setTextFill(Color.RED);
+            else
+                read.setTextFill(Color.BLACK);
+            if(cpu.getControlUnit().write())
+                write.setTextFill(Color.RED);
+            else
+                write.setTextFill(Color.BLACK);
+            if(cpu.getControlUnit().fetch())
+                fetch.setTextFill(Color.RED);
+            else
+                fetch.setTextFill(Color.BLACK);
+            if(cpu.getMemory().isReady())
+                ready.setTextFill(Color.RED);
+            else
+                ready.setTextFill(Color.BLACK);
+            if(cpu.getControlUnit().SP_ADD4())
+                sp_add4.setTextFill(Color.RED);
+            else
+                sp_add4.setTextFill(Color.BLACK);
+            if(cpu.getControlUnit().SP_SUB4())
+                sp_sub4.setTextFill(Color.RED);
+            else
+                sp_sub4.setTextFill(Color.BLACK);
             //System.out.println(cpu.getClk());
         });
         root.add(chooseFile, 1, 15);
