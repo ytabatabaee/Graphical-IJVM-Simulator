@@ -111,4 +111,8 @@ public class DataPath {
     public boolean isZ() {
         return Z;
     }
+
+    public Shifter getShifter() {
+        return shifter;
+    }
 }

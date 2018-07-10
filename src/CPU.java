@@ -90,4 +90,8 @@ public class CPU {
         Utility utility = new Utility();
         return utility.binaryToInt(controlUnit.sc_val());
     }
+
+    public Shifter getShifter() {
+        return dataPath.getShifter();
+    }
 }
