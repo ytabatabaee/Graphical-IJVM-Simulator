@@ -202,6 +202,9 @@ public class GUI extends Application {
             }
         });
 
+        reset.setOnAction((ActionEvent event) -> {;
+            cpu.runStep(true);
+        });
         step.setOnAction((ActionEvent event) -> {
             System.out.println(cpu.getSC());
             cpu.runStep(false);
