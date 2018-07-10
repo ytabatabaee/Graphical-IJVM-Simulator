@@ -361,6 +361,11 @@ public class GUI extends Application {
                 }
                 ins.setText(lines[lineNum]);
             }
+
+            
+            double throughput = (1.0 * lineNum) / cpu.getClk();
+
+
             cpu.runStep(false);
             stackArea.setText("");
             for (int i = 68; i <= utility.binaryToInt(cpu.getDataPath().getSP().getData_out()); i += 4)
