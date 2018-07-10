@@ -71,6 +71,7 @@ public class GUI extends Application {
     Label fetch = new Label("Fetch");
     TextField shifter = new TextField();
     TextField[] V = new TextField[8];
+    TextField[] D = new TextField[8];
     TextField[] tag = new TextField[8];
     TextField[] data = new TextField[8];
     CPU cpu = new CPU();
@@ -263,24 +264,39 @@ public class GUI extends Application {
     }
 
     public void cacheArea(Group root, CPU cpu){
+        Label tagLabel = new Label("Tag");
+        Label indexLabel = new Label("Index");
+        Label VLabel = new Label("V");
+        Label DLabel = new Label("D");
+        Label DataLabel = new Label("Data");
+        indexLabel.relocate(730, 415);
+        VLabel.relocate(780, 415);
+        DLabel.relocate(810, 415);
+        tagLabel.relocate(860, 415);
+        DataLabel.relocate(950, 415);
+        root.getChildren().addAll(indexLabel, VLabel, tagLabel, DLabel, DataLabel);
         for (int i = 0; i < 8; i++) {
             TextField textField = new TextField("" + ((i / 4) % 2) + ((i / 2) % 2) + (i % 2));
             textField.setEditable(false);
             textField.setPrefWidth(35);
             V[i] = new TextField();
             V[i].setEditable(false);
+            D[i] = new TextField();
+            D[i].setEditable(false);
             tag[i] = new TextField();
             tag[i].setEditable(false);
             data[i] = new TextField();
             data[i].setEditable(false);
             V[i].setPrefWidth(25);
+            D[i].setPrefWidth(25);
             tag[i].setPrefWidth(80);
             data[i].setPrefWidth(100);
             textField.relocate(730, 430 + 25 * i);
             V[i].relocate(770, 430 + 25 * i);
-            tag[i].relocate(800, 430 + 25 * i);
-            data[i].relocate(885, 430 + 25 * i);
-            root.getChildren().addAll(textField, V[i], tag[i], data[i]);
+            D[i].relocate(800, 430 + 25 * i);
+            tag[i].relocate(830, 430 + 25 * i);
+            data[i].relocate(915, 430 + 25 * i);
+            root.getChildren().addAll(textField, V[i], tag[i], data[i], D[i]);
         }
     }
 
@@ -430,7 +446,12 @@ public class GUI extends Application {
                 shifter.appendText("  (right)");
             else
                 shifter.appendText("  (left)");
-
+            for (int i = 0; i < 8; i++) {
+                data[i].setText(cpu.getCache().getCache()[i].getData());
+                V[i].setText(Integer.toString(cpu.getCache().getCache()[i].getValid()));
+                D[i].setText(Integer.toString(cpu.getCache().getCache()[i].getDirty()));
+                tag[i].setText(utility.intToBinary(cpu.getCache().getCache()[i].getTag()));
+            }
         });
         root.add(chooseFile, 1, 15);
         root.add(run, 2, 15);
