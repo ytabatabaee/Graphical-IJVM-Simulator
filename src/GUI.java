@@ -48,6 +48,8 @@ public class GUI extends Application {
     TextField cpp = new TextField();
     TextField tos = new TextField();
     TextField h = new TextField();
+    TextField t = new TextField();
+    TextField ins = new TextField();
     Label z = new Label("Z");
     Label n = new Label("N");
     Label sp_sub4 = new Label("SP- 4");
@@ -62,6 +64,7 @@ public class GUI extends Application {
     Label lv_LD = new Label("LV_LD");
     Label cpp_LD = new Label("CPP_LD");
     Label tos_LD = new Label("TOS_LD");
+    Label h_LD = new Label("H_LD");
     Label ready = new Label("Ready");
     Label read = new Label("Read");
     Label write = new Label("Write");
@@ -91,23 +94,45 @@ public class GUI extends Application {
         mem.setFill(new ImagePattern(new Image("images/mem.png")));
         z.relocate(540, 470);
         n.relocate(620, 470);
-        sp_sub4.relocate(760, 80);
-        sp_add4.relocate(760, 100);
-        pc_inc.relocate(760, 120);
-        pc_inc2.relocate(760, 140);
+        sp_sub4.relocate(760, 60);
+        sp_add4.relocate(760, 80);
+        pc_inc.relocate(760, 100);
+        pc_inc2.relocate(760, 120);
+        tos_LD.relocate(760, 140);
+        h_LD.relocate(760, 160);
+        ar_LD.relocate(920, 60);
+        dr_LD.relocate(920, 80);
+        ir_LD.relocate(920, 100);
+        pc_LD.relocate(920, 120);
+        sp_LD.relocate(920, 140);
+        lv_LD.relocate(920, 160);
+        cpp_LD.relocate(920, 180);
         read.relocate(760, 255);
         fetch.relocate(760, 275);
         write.relocate(760, 295);
         ready.relocate(930, 275);
         Arrow arrow = new Arrow(580, 500, 580, 520);
         Label aluLabel = new Label("ALU");
+        Label micro = new Label("Instruction");
+        Label shiftLabel  = new Label("Shifter");
+        Label tLabel  = new Label("Counter(T)");
         aluLabel.relocate(450, 450);
+        shiftLabel.relocate(550, 550);
+        tLabel.relocate(30, 450);
+        micro.relocate(30, 480);
         aluLabel.setStyle(labelStyle);
+        micro.setStyle(labelStyle);
+        shiftLabel.setStyle(labelStyle);
+        tLabel.setStyle(labelStyle);
+        t.relocate(100, 450);
+        ins.relocate(100, 480);
         shifter.setEditable(false);
         shifter.relocate(500, 520);
         root.getChildren().addAll(buttonRoot, regRoot, bBus, alu,
                 shifter, cBus, aBus, aluLabel, arrow, cu, z, n, mem,
-                sp_add4, sp_sub4, write, read, fetch, ready, pc_inc, pc_inc2);
+                sp_add4, sp_sub4, write, read, fetch, ready, pc_inc,
+                pc_inc2, ar_LD, dr_LD, ir_LD, pc_LD, sp_LD, lv_LD,
+                cpp_LD, tos_LD, h_LD, micro, tLabel, shiftLabel, t, ins);
         Scene scene = new Scene(root, 1100, 650, Color.DARKGRAY);
         registers(regRoot, cpu);
         code(buttonRoot, cpu, primaryStage);
@@ -254,6 +279,7 @@ public class GUI extends Application {
             for (int i = 128; i <= 192 /*utility.binaryToInt(cpu.getDataPath().getLV().getData_out())*/ ; i += 4) {
                 varArea.appendText((i) + ". " + utility.binaryToInt(cpu.getMemory().getCell(i)) + "\n");
             }
+            t.setText(Integer.toString(cpu.getSC()));
             pc.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getPC().getData_out())));
             ar.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getAR().getData_out())));
             sp.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getSP().getData_out())));
@@ -287,6 +313,46 @@ public class GUI extends Application {
                 sp_add4.setTextFill(Color.RED);
             else
                 sp_add4.setTextFill(Color.BLACK);
+            if(cpu.getControlUnit().PC_LD())
+                pc_LD.setTextFill(Color.RED);
+            else
+                pc_LD.setTextFill(Color.BLACK);
+            if(cpu.getControlUnit().AR_LD())
+                ar_LD.setTextFill(Color.RED);
+            else
+                ar_LD.setTextFill(Color.BLACK);
+            if(cpu.getControlUnit().IR_LD())
+                ir_LD.setTextFill(Color.RED);
+            else
+                ir_LD.setTextFill(Color.BLACK);
+            if(cpu.getControlUnit().H_LD())
+                h_LD.setTextFill(Color.RED);
+            else
+                h_LD.setTextFill(Color.BLACK);
+            if(cpu.getControlUnit().H_LD())
+                h_LD.setTextFill(Color.RED);
+            else
+                h_LD.setTextFill(Color.BLACK);
+            if(cpu.getControlUnit().SP_LD())
+                sp_LD.setTextFill(Color.RED);
+            else
+                sp_LD.setTextFill(Color.BLACK);
+            if(cpu.getControlUnit().TOS_LD())
+                tos_LD.setTextFill(Color.RED);
+            else
+                tos_LD.setTextFill(Color.BLACK);
+            if(cpu.getControlUnit().CPP_LD())
+                cpp_LD.setTextFill(Color.RED);
+            else
+                cpp_LD.setTextFill(Color.BLACK);
+            if(cpu.getControlUnit().LV_LD())
+                lv_LD.setTextFill(Color.RED);
+            else
+                lv_LD.setTextFill(Color.BLACK);
+            if(cpu.getControlUnit().DR_LD(cpu.getDataPath().isZ(), cpu.getDataPath().isN()))
+                dr_LD.setTextFill(Color.RED);
+            else
+                dr_LD.setTextFill(Color.BLACK);
             if(cpu.getControlUnit().SP_SUB4())
                 sp_sub4.setTextFill(Color.RED);
             else
@@ -304,6 +370,7 @@ public class GUI extends Application {
                 shifter.appendText("  (right)");
             else
                 shifter.appendText("  (left)");
+
         });
         root.add(chooseFile, 1, 15);
         root.add(run, 2, 15);
@@ -332,7 +399,7 @@ public class GUI extends Application {
         stackArea.setEditable(false);
         constantArea.setEditable(false);
         varArea.setEditable(false);
-        Label codeLabel = new Label("Instructions");
+        Label codeLabel = new Label("Program");
         Label stackLabel = new Label("Stack");
         Label constLabel = new Label("Constant Pool");
         Label varLabel = new Label("Local Variables");
