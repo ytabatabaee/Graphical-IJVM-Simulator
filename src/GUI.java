@@ -78,6 +78,9 @@ public class GUI extends Application {
     TextField miss = new TextField();
     TextField hit = new TextField();
     CPU cpu = new CPU();
+    int[] evictionModes = {0, 1, 2, 3, 4};
+    ChoiceBox cb = new ChoiceBox(FXCollections.observableArrayList(
+            "FIFO", "LRU", "MRU", "Random", "LIP"));
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -94,11 +97,7 @@ public class GUI extends Application {
         Rectangle cu = new Rectangle(750, 40, 220, 170);
         Rectangle mem = new Rectangle(750, 220, 220, 100);
         Rectangle cache = new Rectangle(700, 380, 350, 260);
-        ChoiceBox cb = new ChoiceBox(FXCollections.observableArrayList(
-                "FIFO", "LRU", "MRU", "Random", "LIP"));
         cb.setTooltip(new Tooltip("Evicition Mode"));
-        cb.setValue("Eviction Mode");
-        cb.setAccessibleText("Eviction Mode");
         bBus.setFill(new ImagePattern(new Image("images/arrow1.png")));
         cBus.setFill(new ImagePattern(new Image("images/cbus.png")));
         aBus.setFill(new ImagePattern(new Image("images/abus.png")));
@@ -319,8 +318,8 @@ public class GUI extends Application {
     }
 
     public void code(GridPane root, CPU cpu, Stage stage) {
-        int[] numOfBytes = new int[64];
-        String[] lines = new String[64];
+        int[] numOfBytes = new int[256];
+        String[] lines = new String[256];
         chooseFile.setOnAction((ActionEvent event) -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setInitialDirectory(new File("src/tests"));
@@ -341,20 +340,28 @@ public class GUI extends Application {
                     codeArea.appendText((codeLines.size()) + ".     " + line + "   " + "\n");
                     count ++;
                 }
-                System.out.println(binaryCode);
                 cpu.getMemory().setCell(binaryCode.toString());
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         });
 
-        reset.setOnAction((ActionEvent event) -> {;
+        cb.getSelectionModel().selectedIndexProperty()
+                .addListener((ov, value, new_value) -> cpu.getCache().setEvictionMode(evictionModes[new_value.intValue()]));
+        reset.setOnAction((ActionEvent event) -> {
             cpu.runStep(true);
         });
         step.setOnAction((ActionEvent event) -> {
-            System.out.println(cpu.getSC());
+            int counter = 0;
+            int  lineNum = -1;
+            if(cpu.getSC() == 0){
+                while (counter <= utility.binaryToInt(cpu.getDataPath().getPC().getData_out())){
+                    lineNum +=1;
+                    counter += numOfBytes[lineNum];
+                }
+                ins.setText(lines[lineNum]);
+            }
             cpu.runStep(false);
-            System.out.println(cpu.getSC());
             stackArea.setText("");
             for (int i = 68; i <= utility.binaryToInt(cpu.getDataPath().getSP().getData_out()); i += 4)
                 stackArea.appendText((i) + ". " + utility.binaryToInt(cpu.getMemory().getCell(i)) + "\n");
@@ -376,13 +383,6 @@ public class GUI extends Application {
             cpp.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getCPP().getData_out())));
             ir.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getIR().getData_out())));
             tos.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getTOS().getData_out())));
-            int counter = 0;
-            int  lineNum = -1;
-            while (counter <= utility.binaryToInt(cpu.getDataPath().getPC().getData_out())){
-                lineNum +=1;
-                counter += numOfBytes[lineNum];
-            }
-            ins.setText(lines[lineNum]);
             ratio.setText(Double.toString(cpu.getCache().hitRate()));
             hit.setText(Long.toString(cpu.getCache().getNumOfHits()));
             miss.setText(Long.toString(cpu.getCache().getNumOfMisses()));
