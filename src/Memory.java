@@ -60,6 +60,10 @@ public class Memory {
         return cell[index];
     }
 
+    public String[] getCells() {
+        return cell;
+    }
+
     public void setCell(String cell, int index) {
         this.cell[index] = cell;
     }
