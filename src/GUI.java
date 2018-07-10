@@ -351,6 +351,7 @@ public class GUI extends Application {
         reset.setOnAction((ActionEvent event) -> {
             cpu.runStep(true);
         });
+        long clock = 0;
         step.setOnAction((ActionEvent event) -> {
             int counter = 0;
             int  lineNum = -1;
@@ -360,11 +361,11 @@ public class GUI extends Application {
                     counter += numOfBytes[lineNum];
                 }
                 ins.setText(lines[lineNum]);
+                double throughput = (1.0 * lineNum) / cpu.getClk();
+                throught.setText(Double.toString(throughput));
+                throught.setEditable(false);
+                util.setText(Double.toString(throughput / 3 * 100) + " %");
             }
-
-
-            double throughput = (1.0 * lineNum) / cpu.getClk();
-            double utilization = throughput / 3.0 * lineNum;
 
             cpu.runStep(false);
             stackArea.setText("");
