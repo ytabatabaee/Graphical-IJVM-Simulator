@@ -56,7 +56,7 @@ class Cache {
         int tag = address / (cacheSize / length);
 
         for (int i = index; i < index + length; i++)
-            if (tag == cache[i].getTag())
+            if (tag == cache[i].getTag() && cache[i].getValid() == 1)
                 return i;
         return -1;
     }
