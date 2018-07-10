@@ -2,6 +2,7 @@ public class CPU {
     private ControlUnit controlUnit = new ControlUnit();
     private DataPath dataPath = new DataPath();
     private Memory memory = new Memory();
+    private Cache cache = new Cache(256, 1, 1, 1, memory.getCells());
     private long clk = 0;
 
 
@@ -15,11 +16,16 @@ public class CPU {
     }
 
     public void signals(boolean reset) {
-        if (controlUnit.read())
+        Utility utility = new Utility();
+        if (controlUnit.read()) {
+            cache.read(utility.binaryToInt(dataPath.getAR().getData_out()));
             dataPath.getDR().signals(readWriteFetch(reset), controlUnit.DR_LD(dataPath.isZ(), dataPath.isN()), false, false, false,
                     false, false, reset);
-        if (controlUnit.write())
+        }
+        if (controlUnit.write()) {
+            cache.write(utility.binaryToInt(dataPath.getAR().getData_out()), dataPath.getDR().getData_out());
             readWriteFetch(reset);
+        }
         dataPath.signals(controlUnit.read(), memory.isReady(), reset, memory.getData_out(), controlUnit.DR_LD(dataPath.isZ(), dataPath.isN()),
                 controlUnit.IR_LD(), controlUnit.fetch(),
                 controlUnit.TOS_LD(), controlUnit.ALU_control(dataPath.isZ(), dataPath.isN()),
@@ -34,9 +40,12 @@ public class CPU {
     }
 
     public void signalsWithFetch(boolean reset) {
+        Utility utility = new Utility();
+        cache.read(utility.binaryToInt(dataPath.getPC().getData_out()));
         dataPath.getAR().signals(dataPath.getPC().getData_out(), controlUnit.AR_LD(), false, false, false,
                 false, false, reset);
         controlUnit.time_signals();
+        cache.read(utility.binaryToInt(dataPath.getAR().getData_out()));
         String d = readWriteFetch(reset);
         clk++;
         controlUnit.count(controlUnit.sc_reset(dataPath.isZ(), dataPath.isN()), true, reset);
