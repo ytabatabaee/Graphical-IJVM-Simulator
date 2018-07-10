@@ -417,11 +417,11 @@ public class GUI extends Application {
                 sp_sub4.setTextFill(Color.RED);
             else
                 sp_sub4.setTextFill(Color.BLACK);
-            if(cpu.getControlUnit().PC_INC(cpu.getDataPath().isZ(), cpu.getDataPath().isN()))
+            if(cpu.getControlUnit().PC_INC(utility.isZ(cpu.getDataPath().getH()), utility.isN(cpu.getDataPath().getH())))
                 pc_inc.setTextFill(Color.RED);
             else
                 pc_inc.setTextFill(Color.BLACK);
-            if(cpu.getControlUnit().PC_INC2(cpu.getDataPath().isZ(), cpu.getDataPath().isN()))
+            if(cpu.getControlUnit().PC_INC2(utility.isZ(cpu.getDataPath().getH()), utility.isN(cpu.getDataPath().getH())))
                 pc_inc2.setTextFill(Color.RED);
             else
                 pc_inc2.setTextFill(Color.BLACK);
