@@ -362,9 +362,9 @@ public class GUI extends Application {
                 ins.setText(lines[lineNum]);
             }
 
-            
-            double throughput = (1.0 * lineNum) / cpu.getClk();
 
+            double throughput = (1.0 * lineNum) / cpu.getClk();
+            double utilization = throughput / 3.0 * lineNum;
 
             cpu.runStep(false);
             stackArea.setText("");
