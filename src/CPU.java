@@ -35,7 +35,7 @@ public class CPU {
                 controlUnit.bus_sel(dataPath.isZ(), dataPath.isN()),
                 controlUnit.SP_SUB4(), controlUnit.SP_ADD4(), controlUnit.SP_LD(), controlUnit.H_LD());
         clk++;
-        controlUnit.count(controlUnit.sc_reset(dataPath.isZ(), dataPath.isN()), true, reset);
+        controlUnit.count(controlUnit.sc_reset(utility.isZ(dataPath.getH()), utility.isN(dataPath.getH())), true, reset);
         controlUnit.time_signals();
     }
 

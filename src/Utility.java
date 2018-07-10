@@ -144,4 +144,13 @@ public class Utility {
             return true;
         return false;
     }
+
+    public boolean isZ(Register register) {
+        System.out.println("H is Z: " + (binaryToInt(register.getData_out()) == 0));
+        return binaryToInt(register.getData_out()) == 0;
+    }
+
+    public boolean isN(Register register) {
+        return binaryToInt(register.getData_out()) < 0;
+    }
 }

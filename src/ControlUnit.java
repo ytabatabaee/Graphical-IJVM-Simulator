@@ -164,14 +164,23 @@ public class ControlUnit {
 
     public String ALU_control(boolean Z, boolean N) {
         boolean[] ALU_s = ALU(Z, N);
-        if(ALU_s[0])
+        if(ALU_s[0]) {
+            System.out.println(0);
             return "111100";
-        if(ALU_s[1])
+        }
+        if(ALU_s[1]) {
+            System.out.println(1);
             return "111111";
-        if(ALU_s[2])
+        }
+        if(ALU_s[2]) {
+            System.out.println(2);
             return "010100";
-        if (ALU_s[3])
+        }
+        if (ALU_s[3]) {
+            System.out.println(3);
             return "011000";
+        }
+        System.out.println(4);
         return "010100";
     }
 
@@ -232,8 +241,8 @@ public class ControlUnit {
                 (IR[7] & D[7] & T[5]) |
                 (IR[7] & D[1] & T[9]) |
                 (IR[7] & D[0] & T[9]) |
-                (IR[7] & D[0] & T[7] & Z) |
-                (IR[7] & D[1] & T[7] & N);
+                (IR[7] & D[0] & T[7]) |
+                (IR[7] & D[1] & T[7]);
         if (shift24)
             return 24;
         if (shift16)
@@ -332,8 +341,8 @@ public class ControlUnit {
                 (IR[7] & D[1] & T[5]) |
                 (IR[7] & D[0] & T[8]) |
                 (IR[7] & D[1] & T[8]) |
-                (IR[7] & D[0] & T[7] & Z) |
-                (IR[7] & D[1] & T[7] & N);
+                (IR[7] & D[0] & T[7]) |
+                (IR[7] & D[1] & T[7]);
     }
 
     public boolean AR_LD() {
