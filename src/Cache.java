@@ -1,7 +1,4 @@
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Random;
-import java.util.Scanner;
 
 class Cache {
 
@@ -9,6 +6,11 @@ class Cache {
     private int cacheSize = 8;
     private int cacheArch = -1;
     private long numOfHits = 0;
+
+    public CacheCell[] getCache() {
+        return cache;
+    }
+
     private long numOfMisses = 0;
     private int evictionMode = -1;
     private int writeMode = -1;

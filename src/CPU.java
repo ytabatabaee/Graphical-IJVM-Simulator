@@ -92,6 +92,10 @@ public class CPU {
         return clk;
     }
 
+    public Cache getCache() {
+        return cache;
+    }
+
     public int getSC() {
         Utility utility = new Utility();
         return utility.binaryToInt(controlUnit.sc_val());
