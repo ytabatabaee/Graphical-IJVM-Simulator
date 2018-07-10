@@ -159,7 +159,7 @@ public class ControlUnit {
         boolean ALU_data1 = (IR[7] & D[0] & T[6]) |
                 (IR[7] & D[1] & T[6]);
         boolean ALU_data2 = !(ALU_add | ALU_sub | ALU_data1);
-        return new boolean[]{ALU_add, ALU_sub, ALU_data2, false, false};
+        return new boolean[]{ALU_add, ALU_sub, ALU_data2, ALU_data1, false};
     }
 
     public String ALU_control(boolean Z, boolean N) {
@@ -170,7 +170,7 @@ public class ControlUnit {
             return "111111";
         if(ALU_s[2])
             return "010100";
-        if (ALU_s[2])
+        if (ALU_s[3])
             return "011000";
         return "010100";
     }
