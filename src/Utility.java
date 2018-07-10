@@ -151,6 +151,6 @@ public class Utility {
     }
 
     public boolean isN(Register register) {
-        return binaryToInt(register.getData_out()) < 0;
+        return binaryToInt(extend(register.getData_out().substring(24), true)) < 0;
     }
 }

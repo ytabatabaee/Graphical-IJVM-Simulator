@@ -29,8 +29,8 @@ public class CPU {
         dataPath.signals(controlUnit.read(), memory.isReady(), reset, memory.getData_out(), controlUnit.DR_LD(dataPath.isZ(), dataPath.isN()),
                 controlUnit.IR_LD(), controlUnit.fetch(),
                 controlUnit.TOS_LD(), controlUnit.ALU_control(dataPath.isZ(), dataPath.isN()),
-                controlUnit.LV_LD(), controlUnit.shifter_right(), controlUnit.PC_INC(dataPath.isZ(), dataPath.isN()),
-                controlUnit.PC_INC2(dataPath.isZ(), dataPath.isN()), controlUnit.PC_LD(),
+                controlUnit.LV_LD(), controlUnit.shifter_right(), controlUnit.PC_INC(utility.isZ(dataPath.getH()), utility.isN(dataPath.getH())),
+                controlUnit.PC_INC2(utility.isZ(dataPath.getH()), utility.isN(dataPath.getH())), controlUnit.PC_LD(),
                 controlUnit.shift_amt(dataPath.isZ(), dataPath.isN()), controlUnit.AR_LD(), controlUnit.CPP_LD(),
                 controlUnit.bus_sel(dataPath.isZ(), dataPath.isN()),
                 controlUnit.SP_SUB4(), controlUnit.SP_ADD4(), controlUnit.SP_LD(), controlUnit.H_LD());
@@ -45,6 +45,7 @@ public class CPU {
         dataPath.getAR().signals(dataPath.getPC().getData_out(), controlUnit.AR_LD(), false, false, false,
                 false, false, reset);
         controlUnit.time_signals();
+        //
         cache.read(utility.binaryToInt(dataPath.getAR().getData_out()));
         String d = readWriteFetch(reset);
         clk++;
@@ -57,6 +58,7 @@ public class CPU {
         clk++;
         controlUnit.count(controlUnit.sc_reset(dataPath.isZ(), dataPath.isN()), true, reset);
         controlUnit.time_signals();
+        //
         controlUnit.instruction_decoding(dataPath.IR());
         clk++;
         controlUnit.count(controlUnit.sc_reset(dataPath.isZ(), dataPath.isN()), true, reset);

@@ -120,8 +120,8 @@ public class ControlUnit {
                 (IR[7] & D[7] & T[5]) |
                 (IR[7] & D[0] & T[9]) |
                 (IR[7] & D[1] & T[8]) |
-                (IR[7] & D[0] & T[7] & Z) |
-                (IR[7] & D[1] & T[7] & N);
+                (IR[7] & D[0] & T[7]) |
+                (IR[7] & D[1] & T[7]);
         if (bus_tos)
             return "001";
         if (bus_lv)
