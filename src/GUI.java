@@ -446,7 +446,7 @@ public class GUI extends Application {
                 lv_LD.setTextFill(Color.RED);
             else
                 lv_LD.setTextFill(Color.BLACK);
-            if(cpu.getControlUnit().DR_LD(cpu.getDataPath().isZ(), cpu.getDataPath().isN()))
+            if(cpu.getControlUnit().DR_LD(utility.isZ(cpu.getDataPath().getH()), utility.isN(cpu.getDataPath().getH())))
                 dr_LD.setTextFill(Color.RED);
             else
                 dr_LD.setTextFill(Color.BLACK);

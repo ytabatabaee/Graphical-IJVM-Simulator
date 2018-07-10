@@ -174,6 +174,9 @@ class Cache {
         return numOfMisses;
     }
 
+    public void setEvictionMode(int evictionMode) {
+        this.evictionMode = evictionMode;
+    }
     //    void handleCache() {
 //        for (int i = 0; i < cacheSize; i++) {
 //            if (cache[i].getDirty() == 1) {
