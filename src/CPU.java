@@ -19,20 +19,24 @@ public class CPU {
         Utility utility = new Utility();
         if (controlUnit.read()) {
             cache.read(utility.binaryToInt(dataPath.getAR().getData_out()));
-            dataPath.getDR().signals(readWriteFetch(reset), controlUnit.DR_LD(dataPath.isZ(), dataPath.isN()), false, false, false,
-                    false, false, reset);
+            dataPath.getDR().signals(readWriteFetch(reset),
+                    controlUnit.DR_LD(utility.isZ(dataPath.getH()), utility.isN(dataPath.getH())),
+                    false, false, false, false, false, reset);
         }
         if (controlUnit.write()) {
             cache.write(utility.binaryToInt(dataPath.getAR().getData_out()), dataPath.getDR().getData_out());
             readWriteFetch(reset);
         }
-        dataPath.signals(controlUnit.read(), memory.isReady(), reset, memory.getData_out(), controlUnit.DR_LD(dataPath.isZ(), dataPath.isN()),
+        dataPath.signals(controlUnit.read(), memory.isReady(), reset, memory.getData_out(),
+                controlUnit.DR_LD(utility.isZ(dataPath.getH()), utility.isN(dataPath.getH())),
                 controlUnit.IR_LD(), controlUnit.fetch(),
                 controlUnit.TOS_LD(), controlUnit.ALU_control(dataPath.isZ(), dataPath.isN()),
-                controlUnit.LV_LD(), controlUnit.shifter_right(), controlUnit.PC_INC(utility.isZ(dataPath.getH()), utility.isN(dataPath.getH())),
+                controlUnit.LV_LD(), controlUnit.shifter_right(),
+                controlUnit.PC_INC(utility.isZ(dataPath.getH()), utility.isN(dataPath.getH())),
                 controlUnit.PC_INC2(utility.isZ(dataPath.getH()), utility.isN(dataPath.getH())), controlUnit.PC_LD(),
-                controlUnit.shift_amt(dataPath.isZ(), dataPath.isN()), controlUnit.AR_LD(), controlUnit.CPP_LD(),
-                controlUnit.bus_sel(dataPath.isZ(), dataPath.isN()),
+                controlUnit.shift_amt(utility.isZ(dataPath.getH()), utility.isN(dataPath.getH())),
+                controlUnit.AR_LD(), controlUnit.CPP_LD(),
+                controlUnit.bus_sel(utility.isZ(dataPath.getH()), utility.isN(dataPath.getH())),
                 controlUnit.SP_SUB4(), controlUnit.SP_ADD4(), controlUnit.SP_LD(), controlUnit.H_LD());
         clk++;
         controlUnit.count(controlUnit.sc_reset(utility.isZ(dataPath.getH()), utility.isN(dataPath.getH())), true, reset);

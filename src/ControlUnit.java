@@ -128,10 +128,10 @@ public class ControlUnit {
                 (IR[7] & D[7] & T[5]) |
                 (IR[7] & D[0] & T[9]) |
                 (IR[7] & D[1] & T[8]) |
-                (IR[7] & D[0] & T[7]) |
-                (IR[7] & D[1] & T[7]) |
+                (IR[7] & D[0] & T[7] & Z) |
+                (IR[7] & D[1] & T[7] & N) |
                 (IR[7] & D[3] & T[11]) |
-                (IR[7] & D[3] & T[9] & (Z));
+                (IR[7] & D[3] & T[9] & Z);
         if (bus_tos)
             return "001";
         if (bus_lv)
@@ -260,10 +260,10 @@ public class ControlUnit {
                 (IR[7] & D[7] & T[5]) |
                 (IR[7] & D[1] & T[9]) |
                 (IR[7] & D[0] & T[9]) |
-                (IR[7] & D[0] & T[7]) |
-                (IR[7] & D[1] & T[7]) |
+                (IR[7] & D[0] & T[7] & Z) |
+                (IR[7] & D[1] & T[7] & N) |
                 (IR[7] & D[3] & T[11]) |
-                (IR[7] & D[3] & T[9] & (Z));
+                (IR[7] & D[3] & T[9] & Z);
         if (shift24)
             return 24;
         if (shift16)
@@ -362,8 +362,8 @@ public class ControlUnit {
                 (IR[7] & D[1] & T[5]) |
                 (IR[7] & D[0] & T[8]) |
                 (IR[7] & D[1] & T[8]) |
-                (IR[7] & D[0] & T[7]) |
-                (IR[7] & D[1] & T[7]) |
+                (IR[7] & D[0] & T[7] & Z) |
+                (IR[7] & D[1] & T[7] & N) |
                 (IR[7] & D[3] & T[10]) |
                 (IR[7] & D[3] & T[5]) |
                 (IR[7] & D[3] & T[9] & Z) |
