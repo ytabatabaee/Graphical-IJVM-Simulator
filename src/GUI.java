@@ -50,6 +50,7 @@ public class GUI extends Application {
     TextField ins = new TextField();
     TextField util = new TextField();
     TextField throught = new TextField();
+    TextField ratio = new TextField();
     Label z = new Label("Z");
     Label n = new Label("N");
     Label sp_sub4 = new Label("SP- 4");
@@ -74,6 +75,8 @@ public class GUI extends Application {
     TextField[] D = new TextField[8];
     TextField[] tag = new TextField[8];
     TextField[] data = new TextField[8];
+    TextField miss = new TextField();
+    TextField hit = new TextField();
     CPU cpu = new CPU();
 
     @Override
@@ -83,7 +86,7 @@ public class GUI extends Application {
         GridPane regRoot = new GridPane();
         GridPane buttonRoot = new GridPane();
         gridpanePlacement(regRoot, 310, 10);
-        gridpanePlacement(buttonRoot, 20, 430);
+        gridpanePlacement(buttonRoot, 20, 440);
         Rectangle bBus = new Rectangle(640, 30, 30, 400);
         Rectangle cBus = new Rectangle(360, 30, 28, 500);
         Rectangle aBus = new Rectangle(500, 345, 28, 90);
@@ -130,22 +133,26 @@ public class GUI extends Application {
         Label tLabel  = new Label("Counter(T)");
         Label utilization  = new Label("Utilization");
         Label tput  = new Label("Throughput");
+        Label hrate  = new Label("Hit Rate");
         aluLabel.relocate(450, 450);
         shiftLabel.relocate(550, 550);
-        tLabel.relocate(30, 450);
-        micro.relocate(30, 480);
-        utilization.relocate(30, 510);
-        tput.relocate(30, 540);
+        tLabel.relocate(30, 430);
+        micro.relocate(30, 460);
+        utilization.relocate(30, 490);
+        tput.relocate(30, 520);
+        hrate.relocate(30, 550);
         aluLabel.setStyle(labelStyle);
         micro.setStyle(labelStyle);
         shiftLabel.setStyle(labelStyle);
         tLabel.setStyle(labelStyle);
         utilization.setStyle(labelStyle);
         tput.setStyle(labelStyle);
-        t.relocate(110, 450);
-        ins.relocate(110, 480);
-        util.relocate(110, 510);
-        throught.relocate(110, 540);
+        hrate.setStyle(labelStyle);
+        t.relocate(110, 430);
+        ins.relocate(110, 460);
+        util.relocate(110, 490);
+        throught.relocate(110, 520);
+        ratio.relocate(110, 550);
         shifter.setEditable(false);
         shifter.relocate(500, 520);
         root.getChildren().addAll(buttonRoot, regRoot, bBus, alu,
@@ -153,7 +160,7 @@ public class GUI extends Application {
                 sp_add4, sp_sub4, write, read, fetch, ready, pc_inc,
                 pc_inc2, ar_LD, dr_LD, ir_LD, pc_LD, sp_LD, lv_LD,
                 cpp_LD, tos_LD, h_LD, micro, tLabel, shiftLabel, t, ins,
-                throught, util, utilization, tput, cache, cb);
+                throught, util, utilization, tput, cache, cb, hrate, ratio);
         cacheArea(root, cpu);
         Scene scene = new Scene(root, 1100, 650, Color.DARKGRAY);
         registers(regRoot, cpu);
@@ -269,12 +276,23 @@ public class GUI extends Application {
         Label VLabel = new Label("V");
         Label DLabel = new Label("D");
         Label DataLabel = new Label("Data");
+        Label num_miss = new Label("#misses");
+        Label num_hit = new Label("#hits");
         indexLabel.relocate(730, 415);
         VLabel.relocate(780, 415);
         DLabel.relocate(810, 415);
         tagLabel.relocate(860, 415);
         DataLabel.relocate(950, 415);
-        root.getChildren().addAll(indexLabel, VLabel, tagLabel, DLabel, DataLabel);
+        num_miss.relocate(800, 350);
+        num_hit.relocate(935, 350);
+        miss.relocate(850, 350);
+        hit.relocate(970, 350);
+        miss.setPrefWidth(70);
+        hit.setPrefWidth(70);
+        root.getChildren().addAll(indexLabel, VLabel, tagLabel, DLabel, DataLabel,
+                num_miss, num_hit, miss, hit);
+        num_miss.setStyle(labelStyle);
+        num_hit.setStyle(labelStyle);
         for (int i = 0; i < 8; i++) {
             TextField textField = new TextField("" + ((i / 4) % 2) + ((i / 2) % 2) + (i % 2));
             textField.setEditable(false);
@@ -365,6 +383,9 @@ public class GUI extends Application {
                 counter += numOfBytes[lineNum];
             }
             ins.setText(lines[lineNum]);
+            ratio.setText(Double.toString(cpu.getCache().hitRate()));
+            hit.setText(Long.toString(cpu.getCache().getNumOfHits()));
+            miss.setText(Long.toString(cpu.getCache().getNumOfMisses()));
             if(cpu.getDataPath().isZ())
                 z.setStyle(redStyle);
             else
