@@ -350,6 +350,9 @@ public class GUI extends Application {
                 .addListener((ov, value, new_value) -> cpu.getCache().setEvictionMode(evictionModes[new_value.intValue()]));
         reset.setOnAction((ActionEvent event) -> {
             cpu.runStep(true);
+            stackArea.setText("");
+            varArea.setText("");
+            constantArea.setText("");
         });
         long clock = 0;
         step.setOnAction((ActionEvent event) -> {
@@ -373,11 +376,11 @@ public class GUI extends Application {
                 stackArea.appendText((i) + ". " + utility.binaryToInt(cpu.getMemory().getCell(i)) + "\n");
             varArea.setText("");
             for (int i = 128; i < 192 /*utility.binaryToInt(cpu.getDataPath().getLV().getData_out())*/ ; i += 4) {
-                varArea.appendText((i) + ". " + utility.binaryToInt(cpu.getMemory().getCell(i)) + "\n");
+                varArea.appendText((i) + ". " + utility.binaryToInt(utility.extend(cpu.getMemory().getCell(i), true)) + "\n");
             }
             constantArea.setText("");
             for (int i = 192; i < 256 /*utility.binaryToInt(cpu.getDataPath().getLV().getData_out())*/ ; i += 4) {
-                constantArea.appendText((i) + ". " + utility.binaryToInt(cpu.getMemory().getCell(i)) + "\n");
+                constantArea.appendText((i) + ". " + utility.binaryToInt(utility.extend(cpu.getMemory().getCell(i), true)) + "\n");
             }
             t.setText(Integer.toString(cpu.getSC()));
             pc.setText(String.valueOf(utility.binaryToInt(cpu.getDataPath().getPC().getData_out())));
