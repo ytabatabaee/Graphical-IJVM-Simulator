@@ -42,16 +42,12 @@ The assembler/parser in this project supports:
 
 ```text
 src/
-  GUI.java             # JavaFX application and simulator UI
-  CPU.java             # High-level CPU orchestration
-  DataPath.java        # Datapath logic and register wiring
-  ControlUnit.java     # Micro-control logic and timing
-  Memory.java          # Main memory model
-  Cache.java           # Cache model and eviction policies
-  Utility.java         # Instruction encoding and helper methods
-  tests/               # Sample IJVM programs (.txt)
-  images/              # UI assets
-  styleSheets/         # UI style snippets
+  main/
+    java/              # Java source files
+    assets/
+      images/          # UI assets
+      styles/          # UI style snippets
+  examples/            # Sample IJVM programs (.txt)
 ```
 
 ## Requirements
@@ -66,9 +62,8 @@ src/
 From the repository root:
 
 ```bash
-cd src
-javac *.java
-java GUI
+javac src/main/java/*.java
+java -cp src/main/java GUI
 ```
 
 If your JDK requires explicit JavaFX modules, use `--module-path` and `--add-modules javafx.controls,javafx.graphics` for both `javac` and `java`.
@@ -76,7 +71,7 @@ If your JDK requires explicit JavaFX modules, use `--module-path` and `--add-mod
 ## Using the Simulator
 
 1. Launch the app.
-2. Click **Input Code** and select a program from `src/tests/` (or your own `.txt` file in the same format).
+2. Click **Input Code** and select a program from `src/examples/` (or your own `.txt` file in the same format).
 3. Use **Step** to execute micro-operations/instructions progressively.
 4. Use **Reset** to clear processor/memory state.
 5. Optionally change cache eviction mode from the dropdown.
@@ -85,8 +80,8 @@ If your JDK requires explicit JavaFX modules, use `--module-path` and `--add-mod
 
 Example inputs are available in:
 
-- `src/tests/test1.txt`
-- `src/tests/test2.txt`
-- `src/tests/test3.txt`
-- `src/tests/test4.txt`
-- `src/tests/test5.txt`
+- `src/examples/test1.txt`
+- `src/examples/test2.txt`
+- `src/examples/test3.txt`
+- `src/examples/test4.txt`
+- `src/examples/test5.txt`

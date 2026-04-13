@@ -1,0 +1,3 @@
+# Runtime requirements
+Java JDK 8+ (or JDK 11+ with OpenJFX)
+JavaFX (bundled in JDK 8, external OpenJFX modules for newer JDKs)

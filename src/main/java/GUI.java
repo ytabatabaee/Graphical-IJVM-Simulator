@@ -98,13 +98,13 @@ public class GUI extends Application {
         Rectangle mem = new Rectangle(750, 220, 220, 100);
         Rectangle cache = new Rectangle(700, 380, 350, 260);
         cb.setTooltip(new Tooltip("Evicition Mode"));
-        bBus.setFill(new ImagePattern(new Image("images/arrow1.png")));
-        cBus.setFill(new ImagePattern(new Image("images/cbus.png")));
-        aBus.setFill(new ImagePattern(new Image("images/abus.png")));
-        alu.setFill(new ImagePattern(new Image("images/alu.png")));
-        cu.setFill(new ImagePattern(new Image("images/rect.png")));
-        mem.setFill(new ImagePattern(new Image("images/mem.png")));
-        cache.setFill(new ImagePattern(new Image("images/cache.png")));
+        bBus.setFill(new ImagePattern(new Image("src/main/assets/images/arrow1.png")));
+        cBus.setFill(new ImagePattern(new Image("src/main/assets/images/cbus.png")));
+        aBus.setFill(new ImagePattern(new Image("src/main/assets/images/abus.png")));
+        alu.setFill(new ImagePattern(new Image("src/main/assets/images/alu.png")));
+        cu.setFill(new ImagePattern(new Image("src/main/assets/images/rect.png")));
+        mem.setFill(new ImagePattern(new Image("src/main/assets/images/mem.png")));
+        cache.setFill(new ImagePattern(new Image("src/main/assets/images/cache.png")));
         z.relocate(540, 470);
         n.relocate(620, 470);
         cb.relocate(710, 350);
@@ -165,7 +165,7 @@ public class GUI extends Application {
         registers(regRoot, cpu);
         code(buttonRoot, cpu, primaryStage);
         codeArea(root, cpu, primaryStage);
-        primaryStage.getIcons().add(new Image("images/icon.png"));
+        primaryStage.getIcons().add(new Image("src/main/assets/images/icon.png"));
         primaryStage.setTitle("JVM Emulator");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -173,9 +173,9 @@ public class GUI extends Application {
 
     public void setStyleSheets() {
         try {
-            labelStyle = new String(Files.readAllBytes(Paths.get("src/styleSheets/label.txt")));
-            buttonStyle = new String(Files.readAllBytes(Paths.get("src/styleSheets/button.txt")));
-            redStyle = new String(Files.readAllBytes(Paths.get("src/styleSheets/red.txt")));
+            labelStyle = new String(Files.readAllBytes(Paths.get("src/main/assets/styles/label.txt")));
+            buttonStyle = new String(Files.readAllBytes(Paths.get("src/main/assets/styles/button.txt")));
+            redStyle = new String(Files.readAllBytes(Paths.get("src/main/assets/styles/red.txt")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -322,7 +322,7 @@ public class GUI extends Application {
         String[] lines = new String[256];
         chooseFile.setOnAction((ActionEvent event) -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setInitialDirectory(new File("src/tests"));
+            fileChooser.setInitialDirectory(new File("src/examples"));
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
             fileChooser.getExtensionFilters().add(extFilter);
             File file = fileChooser.showOpenDialog(stage);
