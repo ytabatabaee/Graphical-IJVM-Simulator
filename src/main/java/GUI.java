@@ -15,7 +15,10 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -98,13 +101,13 @@ public class GUI extends Application {
         Rectangle mem = new Rectangle(750, 220, 220, 100);
         Rectangle cache = new Rectangle(700, 380, 350, 260);
         cb.setTooltip(new Tooltip("Evicition Mode"));
-        bBus.setFill(new ImagePattern(new Image("images/arrow1.png")));
-        cBus.setFill(new ImagePattern(new Image("images/cbus.png")));
-        aBus.setFill(new ImagePattern(new Image("images/abus.png")));
-        alu.setFill(new ImagePattern(new Image("images/alu.png")));
-        cu.setFill(new ImagePattern(new Image("images/rect.png")));
-        mem.setFill(new ImagePattern(new Image("images/mem.png")));
-        cache.setFill(new ImagePattern(new Image("images/cache.png")));
+        bBus.setFill(new ImagePattern(loadImage("/images/arrow1.png", "src/main/resources/images/arrow1.png")));
+        cBus.setFill(new ImagePattern(loadImage("/images/cbus.png", "src/main/resources/images/cbus.png")));
+        aBus.setFill(new ImagePattern(loadImage("/images/abus.png", "src/main/resources/images/abus.png")));
+        alu.setFill(new ImagePattern(loadImage("/images/alu.png", "src/main/resources/images/alu.png")));
+        cu.setFill(new ImagePattern(loadImage("/images/rect.png", "src/main/resources/images/rect.png")));
+        mem.setFill(new ImagePattern(loadImage("/images/mem.png", "src/main/resources/images/mem.png")));
+        cache.setFill(new ImagePattern(loadImage("/images/cache.png", "src/main/resources/images/cache.png")));
         z.relocate(540, 470);
         n.relocate(620, 470);
         cb.relocate(710, 350);
@@ -165,7 +168,7 @@ public class GUI extends Application {
         registers(regRoot, cpu);
         code(buttonRoot, cpu, primaryStage);
         codeArea(root, cpu, primaryStage);
-        primaryStage.getIcons().add(new Image("images/icon.png"));
+        primaryStage.getIcons().add(loadImage("/images/icon.png", "src/main/resources/images/icon.png"));
         primaryStage.setTitle("JVM Emulator");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -173,9 +176,9 @@ public class GUI extends Application {
 
     public void setStyleSheets() {
         try {
-            labelStyle = new String(Files.readAllBytes(Paths.get("src/styleSheets/label.txt")));
-            buttonStyle = new String(Files.readAllBytes(Paths.get("src/styleSheets/button.txt")));
-            redStyle = new String(Files.readAllBytes(Paths.get("src/styleSheets/red.txt")));
+            labelStyle = readTextResource("/styles/label.txt", "src/main/resources/styles/label.txt");
+            buttonStyle = readTextResource("/styles/button.txt", "src/main/resources/styles/button.txt");
+            redStyle = readTextResource("/styles/red.txt", "src/main/resources/styles/red.txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -322,7 +325,10 @@ public class GUI extends Application {
         String[] lines = new String[256];
         chooseFile.setOnAction((ActionEvent event) -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setInitialDirectory(new File("src/tests"));
+            File examplesDir = new File("src/examples");
+            if (examplesDir.isDirectory()) {
+                fileChooser.setInitialDirectory(examplesDir);
+            }
             FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
             fileChooser.getExtensionFilters().add(extFilter);
             File file = fileChooser.showOpenDialog(stage);
@@ -528,5 +534,23 @@ public class GUI extends Application {
 
     public static void main(String args[]) {
         launch(args);
+    }
+
+    private Image loadImage(String resourcePath, String fallbackPath) {
+        java.net.URL url = getClass().getResource(resourcePath);
+        if (url != null) {
+            return new Image(url.toExternalForm());
+        }
+        return new Image(Path.of(fallbackPath).toUri().toString());
+    }
+
+    private String readTextResource(String resourcePath, String fallbackPath) throws IOException {
+        InputStream stream = getClass().getResourceAsStream(resourcePath);
+        if (stream != null) {
+            try (InputStream in = stream) {
+                return new String(in.readAllBytes(), StandardCharsets.UTF_8);
+            }
+        }
+        return Files.readString(Paths.get(fallbackPath));
     }
 }
