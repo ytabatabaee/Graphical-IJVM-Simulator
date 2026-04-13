@@ -56,10 +56,10 @@ src/
 
 ## Requirements
 
-- Java (JDK 8+)
-- JavaFX runtime  
-  - JDK 8 includes JavaFX by default.
-  - For newer JDKs, install OpenJFX and run with JavaFX module options.
+- Java:
+  - JDK 8 (includes JavaFX), or
+  - JDK 11+ with OpenJFX installed and configured
+- JavaFX runtime/module setup as needed by your JDK distribution
 
 ## Run
 
