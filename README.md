@@ -44,7 +44,7 @@ The assembler/parser in this project supports:
 src/
   main/
     java/              # Java source files
-    assets/
+    resources/
       images/          # UI assets
       styles/          # UI style snippets
   examples/            # Sample IJVM programs (.txt)
@@ -63,7 +63,7 @@ From the repository root:
 
 ```bash
 javac src/main/java/*.java
-java -cp src/main/java GUI
+java -cp "src/main/java:src/main/resources" GUI
 ```
 
 If your JDK requires explicit JavaFX modules, use `--module-path` and `--add-modules javafx.controls,javafx.graphics` for both `javac` and `java`.
